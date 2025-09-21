@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -171,16 +171,24 @@ const MemberRow = ({ member, currentUserRole }: { member: (typeof myAlliance.mem
 
 type Alliance = typeof otherAlliances[0];
 
-const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
+const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void, hasAlliance: boolean }) => {
     const [view, setView] = useState<'details' | 'members'>('details');
+    const [requestSent, setRequestSent] = useState(false);
 
     if (!alliance) return null;
 
     const handleClose = (isOpen: boolean) => {
         if (!isOpen) {
-            setTimeout(() => setView('details'), 300); // reset view after dialog closes
+            setTimeout(() => {
+                setView('details');
+                setRequestSent(false); // Reset on close
+            }, 300); // reset view after dialog closes
         }
         onOpenChange(isOpen);
+    }
+    
+    const handleRequestJoin = () => {
+        setRequestSent(true);
     }
 
     const DetailsView = () => (
@@ -211,9 +219,20 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: All
                     <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
                 </div>
             </div>
-            <DialogFooter className="grid grid-cols-2 gap-2">
+            <DialogFooter className={cn("grid gap-2", !hasAlliance ? "grid-cols-2" : "grid-cols-1")}>
                 <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
-                <Button>Request to Join</Button>
+                {!hasAlliance && (
+                    <Button onClick={handleRequestJoin} disabled={requestSent}>
+                        {requestSent ? (
+                            <>
+                                <Check className="mr-2 h-4 w-4" />
+                                Request Sent
+                            </>
+                        ) : (
+                            "Request to Join"
+                        )}
+                    </Button>
+                )}
             </DialogFooter>
         </>
     );
@@ -309,7 +328,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: All
 };
 
 
-const FindAlliancesDialog = () => {
+const FindAlliancesDialog = ({ hasAlliance }: { hasAlliance: boolean }) => {
     const [selectedAlliance, setSelectedAlliance] = useState<Alliance | null>(null);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
@@ -368,7 +387,7 @@ const FindAlliancesDialog = () => {
                 </Table>
             </DialogContent>
         </Dialog>
-        <AllianceDetailsDialog alliance={selectedAlliance} open={isDetailsOpen} onOpenChange={setIsDetailsOpen} />
+        <AllianceDetailsDialog alliance={selectedAlliance} open={isDetailsOpen} onOpenChange={setIsDetailsOpen} hasAlliance={hasAlliance} />
     </>
     )
 }
@@ -439,7 +458,7 @@ const LeaveAllianceDialog = () => (
 
 
 export default function AlliancesPage() {
-  const [hasAlliance] = useState(false); // Toggle this to see the 'no alliance' state
+  const [hasAlliance, setHasAlliance] = useState(false); // Toggle this to see the 'no alliance' state
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
   const isLeader = currentUser?.role === 'Leader';
@@ -454,7 +473,7 @@ export default function AlliancesPage() {
               <CardDescription>You are not currently in an alliance. Find one to join or create your own!</CardDescription>
             </CardHeader>
             <CardContent>
-              <FindAlliancesDialog />
+              <FindAlliancesDialog hasAlliance={hasAlliance} />
             </CardContent>
           </Card>
           <Card>
@@ -563,7 +582,7 @@ export default function AlliancesPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <Button variant="outline" className="w-full">Invite Members</Button>
-                    {!isLeader && <LeaveAllianceDialog />}
+                    <LeaveAllianceDialog />
                 </CardContent>
             </Card>
         </div>

@@ -83,24 +83,27 @@ export default function AlliancesPage() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Member</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="text-right">Power Score</TableHead>
+                  <TableHead className="text-right">Role</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {myAlliance.membersList.map((member) => (
                   <TableRow key={member.name}>
-                    <TableCell className="font-medium flex items-center gap-3">
-                       <Avatar className="h-8 w-8">
-                        <AvatarImage src={member.avatar} alt={member.name}/>
-                        <AvatarFallback>{member.name.substring(0,2)}</AvatarFallback>
-                      </Avatar>
-                      {member.name}
+                    <TableCell className="font-medium">
+                      <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                          <AvatarImage src={member.avatar} alt={member.name}/>
+                          <AvatarFallback>{member.name.substring(0,2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="font-semibold">{member.name}</p>
+                          <p className="text-sm text-muted-foreground">{member.powerScore.toLocaleString()} Power</p>
+                        </div>
+                      </div>
                     </TableCell>
-                    <TableCell>
+                    <TableCell className="text-right">
                       <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
                     </TableCell>
-                    <TableCell className="text-right font-semibold">{member.powerScore.toLocaleString()}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

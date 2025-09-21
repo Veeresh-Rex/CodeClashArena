@@ -92,11 +92,11 @@ const dummyMembers = [
 ];
 
 const usersWithoutAlliance = [
-    { id: 'u1', name: 'Quantum Coder', avatar: 'https://picsum.photos/seed/41/100/100', powerScore: 3100 },
-    { id: 'u2', name: 'Bit-Stream Belle', avatar: 'https://picsum.photos/seed/42/100/100', powerScore: 2850 },
-    { id: 'u3', name: 'Stack Overlord', avatar: 'https://picsum.photos/seed/43/100/100', powerScore: 2700 },
-    { id: 'u4', name: 'Logic Lancer', avatar: 'https://picsum.photos/seed/44/100/100', powerScore: 2650 },
-    { id: 'u5', name: 'Array Archer', avatar: 'https://picsum.photos/seed/45/100/100', powerScore: 2300 },
+    { id: 'u1', name: 'Quantum Coder', username: 'quantum_coder', avatar: 'https://picsum.photos/seed/41/100/100', powerScore: 3100 },
+    { id: 'u2', name: 'Bit-Stream Belle', username: 'bit_belle', avatar: 'https://picsum.photos/seed/42/100/100', powerScore: 2850 },
+    { id: 'u3', name: 'Stack Overlord', username: 'stack_overlord', avatar: 'https://picsum.photos/seed/43/100/100', powerScore: 2700 },
+    { id: 'u4', name: 'Logic Lancer', username: 'logic_lancer', avatar: 'https://picsum.photos/seed/44/100/100', powerScore: 2650 },
+    { id: 'u5', name: 'Array Archer', username: 'array_archer', avatar: 'https://picsum.photos/seed/45/100/100', powerScore: 2300 },
 ];
 
 
@@ -191,8 +191,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
         if (!isOpen) {
             setTimeout(() => {
                 setView('details');
-                // Don't reset requestSent on close to preserve state within session
-            }, 300); // reset view after dialog closes
+            }, 300); 
         }
         onOpenChange(isOpen);
     }
@@ -250,32 +249,30 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
     const roleOrder: { [key: string]: number } = { 'Leader': 1, 'Co-Leader': 2, 'Member': 3 };
 
     const OtherAllianceMemberRow = ({ member }: { member: (typeof dummyMembers)[0] }) => {
-        const content = (
-            <TableRow className="cursor-pointer">
-                <TableCell className="font-medium">
-                    <div className="flex items-center gap-3">
-                        <Avatar className="h-10 w-10">
-                            <AvatarImage src={member.avatar} alt={member.name} />
-                            <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <p className="font-semibold">{member.name}</p>
-                            <div className="flex items-center text-sm text-muted-foreground">
-                            <Star className="w-4 h-4 mr-1 text-primary" />
-                            <span>{member.powerScore.toLocaleString()}</span>
-                            </div>
-                        </div>
-                    </div>
-                </TableCell>
-                <TableCell className="text-right">
-                    <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
-                </TableCell>
-            </TableRow>
-        );
-
         return (
             <DropdownMenu>
-                <DropdownMenuTrigger asChild>{content}</DropdownMenuTrigger>
+                <DropdownMenuTrigger asChild>
+                    <TableRow className="cursor-pointer">
+                        <TableCell className="font-medium">
+                            <div className="flex items-center gap-3">
+                                <Avatar className="h-10 w-10">
+                                    <AvatarImage src={member.avatar} alt={member.name} />
+                                    <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p className="font-semibold">{member.name}</p>
+                                    <div className="flex items-center text-sm text-muted-foreground">
+                                    <Star className="w-4 h-4 mr-1 text-primary" />
+                                    <span>{member.powerScore.toLocaleString()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                            <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
+                        </TableCell>
+                    </TableRow>
+                </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem asChild>
                         <Link href={`/dashboard/chat?user=${encodeURIComponent(member.name)}`}>
@@ -550,7 +547,10 @@ const InviteMembersDialog = () => {
                                             <AvatarImage src={user.avatar} alt={user.name} />
                                             <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
                                         </Avatar>
-                                        <span className="font-medium">{user.name}</span>
+                                        <div>
+                                            <p className="font-medium">{user.name}</p>
+                                            <p className="text-sm text-muted-foreground">@{user.username}</p>
+                                        </div>
                                     </div>
                                 </TableCell>
                                 <TableCell>{user.powerScore.toLocaleString()}</TableCell>
@@ -721,9 +721,3 @@ export default function AlliancesPage() {
     </div>
   );
 }
-
-    
-
-    
-
-    

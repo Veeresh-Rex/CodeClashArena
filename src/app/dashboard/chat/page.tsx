@@ -256,7 +256,7 @@ const ChatPageContent = () => {
 
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('worldwide');
-  const [hasAlliance] = useState(false); // Toggle this to see the 'no alliance' state
+  const [hasAlliance] = useState(true); // Toggle this to see the 'no alliance' state
 
   useEffect(() => {
     if (user) {

@@ -66,8 +66,8 @@ const myAlliance = {
   noticeLastModifiedTime: "2 hours ago",
   avatar: "https://picsum.photos/seed/1/100/100",
   membersList: [
-    { name: "Syntax Slayer", role: "Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
-    { name: "Cody Clash", role: "Member", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
+    { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
+    { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
     { name: "Algo Queen", role: "Member", avatar: "https://picsum.photos/seed/3/100/100", powerScore: 2600, online: true },
     { name: "Byte Baron", role: "Member", avatar: "https://picsum.photos/seed/4/100/100", powerScore: 2550, online: false },
     { name: "Pixel Pioneer", role: "Member", avatar: "https://picsum.photos/seed/5/100/100", powerScore: 2400, online: true },
@@ -458,7 +458,7 @@ const LeaveAllianceDialog = () => (
 
 
 export default function AlliancesPage() {
-  const [hasAlliance, setHasAlliance] = useState(false); // Toggle this to see the 'no alliance' state
+  const [hasAlliance, setHasAlliance] = useState(true); // Toggle this to see the 'no alliance' state
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
   const isLeader = currentUser?.role === 'Leader';
@@ -590,3 +590,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

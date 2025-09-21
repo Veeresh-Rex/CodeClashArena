@@ -56,6 +56,10 @@ export function RecommendationsForm() {
     try {
       const response = await recommendProblems(values);
       setResult(response.problemRecommendations);
+      toast({
+        title: "Success!",
+        description: "Your AI-powered recommendations are ready.",
+      });
     } catch (error) {
       console.error("Error getting recommendations:", error);
       toast({

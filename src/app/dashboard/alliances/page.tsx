@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus, Ban } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -502,7 +502,6 @@ const EditNoticeDialog = ({ notice, onSave }: { notice: string, onSave: (newNoti
 
 const InviteMembersDialog = () => {
     const [invited, setInvited] = useState<string[]>([]);
-    const router = useRouter();
     
     const handleToggleInvite = (userId: string) => {
         setInvited(prev => 
@@ -511,9 +510,63 @@ const InviteMembersDialog = () => {
                 : [...prev, userId]
         );
     }
-
-    const handleRowClick = (userId: string) => {
-        router.push(`/dashboard/profile?user=${userId}`);
+    
+    const UserRow = ({ user }: { user: typeof usersWithoutAlliance[0] }) => {
+        return (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <TableRow className="cursor-pointer">
+                        <TableCell>
+                            <div className="flex items-center gap-3">
+                                <Avatar className="h-10 w-10">
+                                    <AvatarImage src={user.avatar} alt={user.name} />
+                                    <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <p className="font-medium">{user.name}</p>
+                                    <p className="text-sm text-muted-foreground">@{user.username}</p>
+                                </div>
+                            </div>
+                        </TableCell>
+                        <TableCell>{user.powerScore.toLocaleString()}</TableCell>
+                        <TableCell className="text-right">
+                             <Button 
+                                variant={invited.includes(user.id) ? "secondary" : "outline"} 
+                                size="sm" 
+                                onClick={(e) => { e.stopPropagation(); handleToggleInvite(user.id); }}
+                            >
+                                {invited.includes(user.id) ? (
+                                    <>
+                                        <Check className="mr-2 h-4 w-4" />
+                                        Invited
+                                    </>
+                                ) : (
+                                    "Invite"
+                                )}
+                            </Button>
+                        </TableCell>
+                    </TableRow>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/chat?user=${encodeURIComponent(user.name)}`}>
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            <span>Chat</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/profile?user=${user.id}`}>
+                            <User className="mr-2 h-4 w-4" />
+                            <span>See Profile</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
+                        <Ban className="mr-2 h-4 w-4" />
+                        <span>Block user to join</span>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        );
     };
 
     return (
@@ -540,37 +593,7 @@ const InviteMembersDialog = () => {
                     </TableHeader>
                     <TableBody>
                         {usersWithoutAlliance.map((user) => (
-                            <TableRow key={user.id} onClick={() => handleRowClick(user.id)} className="cursor-pointer">
-                                <TableCell>
-                                    <div className="flex items-center gap-3">
-                                        <Avatar className="h-10 w-10">
-                                            <AvatarImage src={user.avatar} alt={user.name} />
-                                            <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-medium">{user.name}</p>
-                                            <p className="text-sm text-muted-foreground">@{user.username}</p>
-                                        </div>
-                                    </div>
-                                </TableCell>
-                                <TableCell>{user.powerScore.toLocaleString()}</TableCell>
-                                <TableCell className="text-right">
-                                    <Button 
-                                        variant={invited.includes(user.id) ? "secondary" : "outline"} 
-                                        size="sm" 
-                                        onClick={(e) => { e.stopPropagation(); handleToggleInvite(user.id); }}
-                                    >
-                                        {invited.includes(user.id) ? (
-                                            <>
-                                                <Check className="mr-2 h-4 w-4" />
-                                                Invited
-                                            </>
-                                        ) : (
-                                            "Invite"
-                                        )}
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
+                           <UserRow key={user.id} user={user} />
                         ))}
                     </TableBody>
                 </Table>
@@ -721,3 +744,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

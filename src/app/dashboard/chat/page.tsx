@@ -61,7 +61,6 @@ const allianceChat = [
     avatar: "https://picsum.photos/seed/2/100/100",
     time: "10:00 AM",
     isFriend: true,
-    allianceCode: "TCC",
   },
   {
     sender: "Cody Clash",
@@ -69,7 +68,6 @@ const allianceChat = [
     avatar: "https://picsum.photos/seed/1/100/100",
     time: "10:01 AM",
     isCurrentUser: true,
-    allianceCode: "TCC",
   },
   {
     sender: "Algo Queen",
@@ -77,7 +75,6 @@ const allianceChat = [
     avatar: "https://picsum.photos/seed/3/100/100",
     time: "10:02 AM",
     isFriend: true,
-    allianceCode: "TCC",
   },
 ];
 
@@ -298,3 +295,5 @@ export default function ChatPage() {
     </Suspense>
   )
 }
+
+    

@@ -23,7 +23,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Github, Linkedin, MessageCircle, Monitor, Moon, Sun, Trash2, Twitter, Upload, Users, X } from "lucide-react";
+import { Code, Github, Gitlab, Linkedin, MessageCircle, Monitor, Moon, Sun, Trash2, Twitter, Upload, Users, X } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,8 +41,13 @@ import { cn } from "@/lib/utils";
 export default function SettingsPage() {
     const { setTheme, theme } = useTheme();
 
-    const socialAccounts = [
+    const codingAccounts = [
         { name: 'GitHub', icon: Github, handle: 'cody-clash-gh', connected: true },
+        { name: 'LeetCode', icon: Code, handle: 'cody_clash', connected: true },
+        { name: 'GitLab', icon: Gitlab, handle: null, connected: false },
+    ]
+
+    const socialAccounts = [
         { name: 'LinkedIn', icon: Linkedin, handle: 'cody-clash-li', connected: true },
         { name: 'Twitter', icon: Twitter, handle: null, connected: false },
     ]
@@ -53,6 +58,21 @@ export default function SettingsPage() {
         { id: 'allianceAnnouncements', label: 'Alliance Announcements', icon: Users, description: 'Get notifications for announcements in my alliance.' },
         { id: 'directMessages', label: 'Direct Messages', icon: MessageCircle, description: 'Notify me when I receive a new direct message.' },
     ]
+
+    const AccountConnection = ({ account }: { account: { name: string, icon: React.ElementType, handle: string | null, connected: boolean } }) => (
+         <div className="flex items-center justify-between p-3 rounded-lg border">
+            <div className="flex items-center gap-3">
+                <account.icon className="h-6 w-6" />
+                <div>
+                    <p className="font-medium">{account.name}</p>
+                    {account.handle && <p className="text-sm text-muted-foreground">{account.handle}</p>}
+                </div>
+            </div>
+            <Button variant={account.connected ? "secondary" : "default"}>
+                {account.connected ? 'Disconnect' : 'Connect'}
+            </Button>
+        </div>
+    );
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -115,31 +135,32 @@ export default function SettingsPage() {
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
+                                <Label htmlFor="email">Email Address</Label>
                                 <Input id="email" type="email" defaultValue="cody.clash@example.com" />
                             </div>
+                             <Separator />
                              <div className="space-y-2">
                                 <Label>Password</Label>
+                                <p className="text-sm text-muted-foreground">For security, you may be logged out of other sessions when you change your password.</p>
                                 <Button variant="outline">Change Password</Button>
                             </div>
                             <Separator />
                             <div>
-                                <h3 className="text-lg font-medium">Connected Accounts</h3>
+                                <h3 className="text-lg font-medium">Coding Platforms</h3>
+                                <p className="text-sm text-muted-foreground">Connect your accounts from various coding platforms.</p>
+                                <div className="space-y-4 mt-4">
+                                    {codingAccounts.map(account => (
+                                       <AccountConnection key={account.name} account={account} />
+                                    ))}
+                                </div>
+                            </div>
+                            <Separator />
+                            <div>
+                                <h3 className="text-lg font-medium">Social Media</h3>
                                 <p className="text-sm text-muted-foreground">Connect your social accounts to display on your profile.</p>
                                 <div className="space-y-4 mt-4">
                                     {socialAccounts.map(account => (
-                                        <div key={account.name} className="flex items-center justify-between p-3 rounded-lg border">
-                                            <div className="flex items-center gap-3">
-                                                <account.icon className="h-6 w-6" />
-                                                <div>
-                                                    <p className="font-medium">{account.name}</p>
-                                                    {account.handle && <p className="text-sm text-muted-foreground">{account.handle}</p>}
-                                                </div>
-                                            </div>
-                                            <Button variant={account.connected ? "secondary" : "default"}>
-                                                {account.connected ? 'Disconnect' : 'Connect'}
-                                            </Button>
-                                        </div>
+                                        <AccountConnection key={account.name} account={account} />
                                     ))}
                                 </div>
                             </div>
@@ -160,7 +181,7 @@ export default function SettingsPage() {
                                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                     <AlertDialogDescription>
                                         This action cannot be undone. This will permanently delete your account and remove your data from our servers.
-                                    </AlertDialogDescription>
+                                    </CardDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>

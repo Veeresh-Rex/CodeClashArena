@@ -64,11 +64,11 @@ const myAlliance = {
 };
 
 const otherAlliances = [
-  { name: "Binary Brigade", members: 42, powerScore: 210500, description: "Masters of the bit, we operate in 0s and 1s.", rank: 2, avatar: "https://picsum.photos/seed/20/100/100" },
-  { name: "Java Jesters", members: 15, powerScore: 98200, description: "Coding with a smile, one cup at a time.", rank: 4, avatar: "https://picsum.photos/seed/21/100/100" },
-  { name: "Python Phantoms", members: 33, powerScore: 180300, description: "Elegant code that strikes from the shadows.", rank: 3, avatar: "https://picsum.photos/seed/22/100/100" },
-  { name: "Recursive Renegades", members: 50, powerScore: 250000, description: "To understand us, you must first understand us.", rank: 1, avatar: "https://picsum.photos/seed/23/100/100" },
-  { name: "CSS Sorcerers", members: 18, powerScore: 85400, description: "Weaving magic into the web's visual fabric.", rank: 5, avatar: "https://picsum.photos/seed/24/100/100" },
+  { name: "Binary Brigade", members: 42, powerScore: 210500, description: "Masters of the bit, we operate in 0s and 1s.", rank: 2, avatar: "https://picsum.photos/seed/20/100/100", code: "BINB" },
+  { name: "Java Jesters", members: 15, powerScore: 98200, description: "Coding with a smile, one cup at a time.", rank: 4, avatar: "https://picsum.photos/seed/21/100/100", code: "JAVA" },
+  { name: "Python Phantoms", members: 33, powerScore: 180300, description: "Elegant code that strikes from the shadows.", rank: 3, avatar: "https://picsum.photos/seed/22/100/100", code: "PYPH" },
+  { name: "Recursive Renegades", members: 50, powerScore: 250000, description: "To understand us, you must first understand us.", rank: 1, avatar: "https://picsum.photos/seed/23/100/100", code: "RECR" },
+  { name: "CSS Sorcerers", members: 18, powerScore: 85400, description: "Weaving magic into the web's visual fabric.", rank: 5, avatar: "https://picsum.photos/seed/24/100/100", code: "CSSS" },
 ];
 
 const dummyMembers = [
@@ -181,7 +181,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: All
                         <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
                     </Avatar>
                     <div>
-                        <DialogTitle className="text-2xl">{alliance.name}</DialogTitle>
+                        <DialogTitle className="text-2xl flex items-center gap-2">{alliance.name} <span className="text-base font-mono text-muted-foreground bg-muted px-2 py-1 rounded-md">{alliance.code}</span></DialogTitle>
                         <DialogDescription>{alliance.description}</DialogDescription>
                     </div>
                 </div>
@@ -285,7 +285,7 @@ const FindAlliancesDialog = () => {
                 </DialogHeader>
                 <div className="relative">
                     <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search by name..." className="pl-8" />
+                    <Input placeholder="Search by name or code..." className="pl-8" />
                 </div>
                 <Table>
                     <TableHeader>
@@ -305,7 +305,10 @@ const FindAlliancesDialog = () => {
                                         <AvatarImage src={alliance.avatar} alt={alliance.name} />
                                         <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
                                     </Avatar>
-                                    <span>{alliance.name}</span>
+                                    <div className="flex items-center gap-2">
+                                        <span>{alliance.name}</span>
+                                        <span className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm">[{alliance.code}]</span>
+                                    </div>
                                 </div>
                             </TableCell>
                             <TableCell>{alliance.members}</TableCell>

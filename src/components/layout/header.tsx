@@ -132,8 +132,8 @@ export function Header() {
                 </DropdownMenuSub>
             ))}
              <DropdownMenuSeparator />
-             <DropdownMenuItem asChild className="justify-center text-sm text-muted-foreground hover:text-primary">
-                <Link href="/dashboard/social">
+             <DropdownMenuItem className="justify-center text-sm text-muted-foreground hover:text-primary">
+                <Link href="#">
                     See Friend Requests
                 </Link>
              </DropdownMenuItem>

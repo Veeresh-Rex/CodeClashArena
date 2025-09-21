@@ -109,7 +109,7 @@ const allianceData = [
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
     return (
         <TableRow className={cn(
-            isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))] hover:bg-secondary'
+            isSticky && 'bg-secondary hover:bg-secondary'
         )}>
             <TableCell className="font-medium text-lg w-[80px]">#{user.rank}</TableCell>
             <TableCell>
@@ -125,7 +125,7 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
             <TableCell className="text-right">{user.problems}</TableCell>
             <TableCell className="text-right font-semibold">{user.powerScore.toLocaleString()}</TableCell>
             <TableCell className="text-right w-[50px]">
-                {!user.isCurrentUser && !isSticky && (
+                {!user.isCurrentUser && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -156,11 +156,14 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
 type Alliance = typeof allianceData[0];
 
 const AllianceRow = ({ alliance, isSticky = false, onViewDetails }: { alliance: Alliance, isSticky?: boolean, onViewDetails: (alliance: Alliance) => void }) => {
-    const content = (
-         <TableRow className={cn(
-            "cursor-pointer",
-            isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))] hover:bg-secondary'
-        )} onClick={() => onViewDetails(alliance)}>
+    return (
+        <TableRow
+            className={cn(
+                "cursor-pointer",
+                isSticky && 'bg-secondary hover:bg-secondary'
+            )}
+            onClick={() => onViewDetails(alliance)}
+        >
             <TableCell className="font-medium text-lg w-[80px]">#{alliance.rank}</TableCell>
             <TableCell>
                 <div className="flex items-center gap-3">
@@ -176,27 +179,6 @@ const AllianceRow = ({ alliance, isSticky = false, onViewDetails }: { alliance: 
             <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
         </TableRow>
     );
-
-    if (alliance.isCurrentAlliance) {
-        return content;
-    }
-
-    return (
-        <TableRow className="cursor-pointer" onClick={() => onViewDetails(alliance)}>
-            <TableCell className="font-medium text-lg w-[80px]">#{alliance.rank}</TableCell>
-            <TableCell>
-                 <div className="flex items-center gap-3">
-                    <Avatar className="h-8 w-8">
-                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
-                        <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
-                    </Avatar>
-                    <span className="font-medium">{alliance.name}</span>
-                </div>
-            </TableCell>
-            <TableCell className="text-right">{alliance.members}</TableCell>
-            <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
-        </TableRow>
-    )
 }
 
 const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
@@ -232,9 +214,11 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: All
                     </div>
                 </div>
                  <DialogFooter>
-                    <Button asChild variant="outline">
-                        <Link href="/dashboard/alliance">View Alliance Page</Link>
-                    </Button>
+                    {alliance.isCurrentAlliance && (
+                        <Button asChild variant="outline">
+                            <Link href="/dashboard/alliance">View Alliance Page</Link>
+                        </Button>
+                    )}
                 </DialogFooter>
             </DialogContent>
         </Dialog>
@@ -286,7 +270,7 @@ export default function LeaderboardsPage() {
                 </TableBody>
                 </Table>
                  {currentUser && (
-                    <div className="sticky bottom-0 -mx-6 -mb-6 mt-4">
+                    <div className="sticky bottom-0 -mx-6 -mb-6 mt-4 shadow-[0_-8px_16px_-4px_hsl(var(--background))]">
                         <Table>
                             <TableBody>
                                  <IndividualUserRow user={currentUser} isSticky />
@@ -312,7 +296,7 @@ export default function LeaderboardsPage() {
                 </TableBody>
                 </Table>
                 {currentAlliance && (
-                    <div className="sticky bottom-0 -mx-6 -mb-6 mt-4">
+                     <div className="sticky bottom-0 -mx-6 -mb-6 mt-4 shadow-[0_-8px_16px_-4px_hsl(var(--background))]">
                         <Table>
                             <TableBody>
                                  <AllianceRow alliance={currentAlliance} isSticky onViewDetails={handleViewAllianceDetails} />
@@ -328,3 +312,5 @@ export default function LeaderboardsPage() {
     </div>
   );
 }
+
+    

@@ -52,6 +52,12 @@ export function Header() {
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
+  const sortedFriends = [...friendsList].sort((a, b) => {
+    if (a.online && !b.online) return -1;
+    if (!a.online && b.online) return 1;
+    return a.name.localeCompare(b.name);
+  });
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
@@ -80,7 +86,7 @@ export function Header() {
           <DropdownMenuContent align="end" className="w-80">
             <DropdownMenuLabel>Friends</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {friendsList.map(friend => (
+            {sortedFriends.map(friend => (
                 <DropdownMenuSub key={friend.name}>
                     <DropdownMenuSubTrigger>
                         <div className="flex items-center justify-between w-full">
@@ -106,7 +112,7 @@ export function Header() {
                                </Link>
                              </DropdownMenuItem>
                              <DropdownMenuItem asChild>
-                               <Link href="/dashboard/profile">
+                               <Link href={`/dashboard/profile?user=${friend.username}`}>
                                  <User className="mr-2 h-4 w-4" />
                                  <span>See Profile</span>
                                </Link>

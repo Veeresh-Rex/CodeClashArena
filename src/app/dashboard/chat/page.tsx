@@ -220,7 +220,6 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
                     </div>
                     <div className="flex-1 overflow-hidden">
                         <p className="font-semibold truncate">
-                           {contact.allianceCode && <span className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm mr-1">[{contact.allianceCode}]</span>}
                            {contact.name}
                         </p>
                         <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>

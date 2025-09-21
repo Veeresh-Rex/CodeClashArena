@@ -168,7 +168,7 @@ const ChatMessage = ({ msg, showAllianceCode = true }: ChatMessageProps) => {
       <div className={cn("rounded-lg p-3 max-w-[75%]", msg.isCurrentUser ? "bg-primary text-primary-foreground" : "bg-muted")}>
         {!msg.isCurrentUser && (
             <p className="font-semibold text-sm mb-1">
-                {showAllianceCode && msg.allianceCode && <span className="text-muted-foreground mr-1">[{msg.allianceCode}]</span>}
+                {showAllianceCode && msg.allianceCode && <span className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm mr-1">[{msg.allianceCode}]</span>}
                 {msg.sender}
             </p>
         )}
@@ -220,10 +220,9 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
                     </div>
                     <div className="flex-1 overflow-hidden">
                         <p className="font-semibold truncate">
-                           {contact.allianceCode && <span className="text-muted-foreground mr-1">[{contact.allianceCode}]</span>}
+                           {contact.allianceCode && <span className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm mr-1">[{contact.allianceCode}]</span>}
                            {contact.name}
                         </p>
-                        <p className="text-sm text-muted-foreground truncate">@{contact.username}</p>
                         <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
                     </div>
                     <div className="text-xs text-muted-foreground">{contact.time}</div>
@@ -312,5 +311,3 @@ export default function ChatPage() {
     </Suspense>
   )
 }
-
-    

@@ -1,7 +1,6 @@
 
 "use client";
 
-import { useState } from "react";
 import { useTheme } from "next-themes";
 import {
   Card,
@@ -23,7 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Code, Github, Gitlab, Linkedin, MessageCircle, Monitor, Moon, Sun, Trash2, Twitter, Upload, Users, X } from "lucide-react";
+import { Code, Github, Gitlab, Linkedin, MessageCircle, Moon, Sun, Trash2, Twitter, Upload, Users } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -35,7 +34,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { cn } from "@/lib/utils";
 
 
 export default function SettingsPage() {
@@ -181,7 +179,7 @@ export default function SettingsPage() {
                                     <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                                     <AlertDialogDescription>
                                         This action cannot be undone. This will permanently delete your account and remove your data from our servers.
-                                    </CardDescription>
+                                    </AlertDialogDescription>
                                     </AlertDialogHeader>
                                     <AlertDialogFooter>
                                     <AlertDialogCancel>Cancel</AlertDialogCancel>

@@ -145,12 +145,6 @@ const UserAvatar = ({ msg }: {msg: { sender: string; avatar: string; isCurrentUs
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{content}</DropdownMenuTrigger>
       <DropdownMenuContent>
-        {!msg.isFriend && (
-          <DropdownMenuItem>
-            <UserPlus className="mr-2 h-4 w-4" />
-            <span>Send Friend Request</span>
-          </DropdownMenuItem>
-        )}
         <DropdownMenuItem asChild>
             <Link href="/dashboard/profile">
                 <User className="mr-2 h-4 w-4" />
@@ -314,5 +308,3 @@ export default function ChatPage() {
     </Suspense>
   )
 }
-
-    

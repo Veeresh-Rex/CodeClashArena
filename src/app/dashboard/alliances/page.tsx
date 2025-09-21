@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +38,17 @@ import {
   DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
@@ -368,6 +379,29 @@ const ManageAllianceDialog = ({ alliance }: { alliance: typeof myAlliance }) => 
     </Dialog>
 );
 
+const LeaveAllianceDialog = () => (
+    <AlertDialog>
+        <AlertDialogTrigger asChild>
+             <Button variant="destructive" className="w-full">
+                <LogOut className="mr-2 h-4 w-4" />
+                Leave Alliance
+            </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+                This action cannot be undone. You will be removed from the alliance and will lose any alliance-specific roles or permissions.
+            </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction className="bg-destructive text-destructive-foreground hover:bg-destructive/90">Leave</AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+);
+
 
 export default function AlliancesPage() {
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
@@ -462,8 +496,9 @@ export default function AlliancesPage() {
                 <CardHeader>
                     <CardTitle>Alliance Actions</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="space-y-4">
                     <FindAlliancesDialog />
+                    {!isLeader && <LeaveAllianceDialog />}
                 </CardContent>
             </Card>
             <Card>
@@ -483,4 +518,5 @@ export default function AlliancesPage() {
   );
 }
 
+    
     

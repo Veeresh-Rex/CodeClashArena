@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from "next/link";
@@ -38,11 +37,11 @@ const pageTitles: { [key: string]: string } = {
 };
 
 const friendsList = [
-    { name: "Byte Baron", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/4/100/100", online: true },
-    { name: "Syntax Slayer", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/2/100/100", online: false },
-    { name: "Algo Queen", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/3/100/100", online: true },
-    { name: "Pixel Pioneer", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/5/100/100", online: false },
-    { name: "Data Diva", alliance: "Binary Brigade", avatar: "https://picsum.photos/seed/14/100/100", online: true },
+    { name: "Byte Baron", allianceCode: "TCC", avatar: "https://picsum.photos/seed/4/100/100", online: true },
+    { name: "Syntax Slayer", allianceCode: "TCC", avatar: "https://picsum.photos/seed/2/100/100", online: false },
+    { name: "Algo Queen", allianceCode: "TCC", avatar: "https://picsum.photos/seed/3/100/100", online: true },
+    { name: "Pixel Pioneer", allianceCode: "TCC", avatar: "https://picsum.photos/seed/5/100/100", online: false },
+    { name: "Data Diva", allianceCode: "PYPH", avatar: "https://picsum.photos/seed/14/100/100", online: true },
 ];
 
 export function Header() {
@@ -91,7 +90,7 @@ export function Header() {
                                     <AvatarFallback>{friend.name.substring(0,2)}</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <span className="font-medium text-sm text-muted-foreground">[{friend.alliance.substring(0,5)}]</span>
+                                    <span className="text-muted-foreground mr-1 text-sm">[{friend.allianceCode}]</span>
                                     <span className="font-medium ml-1">{friend.name}</span>
                                 </div>
                             </div>

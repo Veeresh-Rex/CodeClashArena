@@ -59,6 +59,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const myAllianceData = {
   name: "The Code Crusaders",
+  code: "TCC",
   members: 24,
   rank: 12,
   powerScore: 125800,
@@ -414,7 +415,7 @@ const ManageAllianceDialog = ({ alliance }: { alliance: typeof myAllianceData })
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="alliance-code">Alliance Code</Label>
-                        <Input id="alliance-code" defaultValue={alliance.name.substring(0,5).toUpperCase()} maxLength={5} />
+                        <Input id="alliance-code" defaultValue={alliance.code} maxLength={5} />
                     </div>
                 </div>
                 <div className="space-y-2">
@@ -725,7 +726,7 @@ export default function AlliancePage() {
             <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
-                <CardTitle className="text-2xl">{myAlliance.name}</CardTitle>
+                <CardTitle className="text-2xl flex items-center gap-2">{myAlliance.name} <span className="text-base font-mono text-muted-foreground bg-muted px-2 py-1 rounded-md">{myAlliance.code}</span></CardTitle>
                 <CardDescription>{myAlliance.description}</CardDescription>
                 </div>
                 {currentUser?.role === 'Leader' && <ManageAllianceDialog alliance={myAlliance} />}
@@ -797,5 +798,7 @@ export default function AlliancePage() {
     </div>
   );
 }
+
+    
 
     

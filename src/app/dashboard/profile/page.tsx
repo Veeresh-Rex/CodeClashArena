@@ -34,6 +34,7 @@ const userProfileData = {
         problemsSolved: 573,
         dailyStreak: 128,
         alliance: 'The Code Crusaders',
+        allianceCode: 'TCC',
         codingStats: {
             easy: 250,
             medium: 200,
@@ -63,6 +64,7 @@ const userProfileData = {
         problemsSolved: 550,
         dailyStreak: 90,
         alliance: 'The Code Crusaders',
+        allianceCode: 'TCC',
         codingStats: { easy: 200, medium: 250, hard: 100 },
         achievements: [ { icon: Medal, title: 'Top 5% Rank', description: 'Achieved a global rank in the top 5%.' } ],
         connectedAccounts: [ { icon: Github, handle: 'syntax-slayer', url: '#' } ],
@@ -79,6 +81,7 @@ const userProfileData = {
         problemsSolved: 620,
         dailyStreak: 45,
         alliance: null,
+        allianceCode: null,
         codingStats: { easy: 250, medium: 250, hard: 120 },
         achievements: [ { icon: Trophy, title: 'Contest Finalist', description: 'Reached the finals in a major contest.' } ],
         connectedAccounts: [ { icon: Github, handle: 'quantum_coder', url: '#' } ],
@@ -174,7 +177,10 @@ const ProfileContent = () => {
                         <CardContent className="space-y-4">
                             <div className="flex items-center gap-3">
                                 <Users className="h-6 w-6 text-primary flex-shrink-0" />
-                                <span className="font-semibold">{userProfile.alliance}</span>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-semibold">{userProfile.alliance}</span>
+                                  {userProfile.allianceCode && <span className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm">[{userProfile.allianceCode}]</span>}
+                                </div>
                             </div>
                             <Button asChild variant="outline" size="sm" className="w-full">
                                 <Link href="/dashboard/alliance">View Alliance</Link>
@@ -275,3 +281,5 @@ export default function ProfilePage() {
         </Suspense>
     )
 }
+
+    

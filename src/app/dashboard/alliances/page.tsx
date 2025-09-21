@@ -507,8 +507,12 @@ const InviteMembersDialog = () => {
     const [invited, setInvited] = useState<string[]>([]);
     const router = useRouter();
     
-    const handleInvite = (userId: string) => {
-        setInvited(prev => [...prev, userId]);
+    const handleToggleInvite = (userId: string) => {
+        setInvited(prev => 
+            prev.includes(userId) 
+                ? prev.filter(id => id !== userId) 
+                : [...prev, userId]
+        );
     }
 
     const handleRowClick = (userId: string) => {
@@ -551,14 +555,20 @@ const InviteMembersDialog = () => {
                                 </TableCell>
                                 <TableCell>{user.powerScore.toLocaleString()}</TableCell>
                                 <TableCell className="text-right">
-                                    {invited.includes(user.id) ? (
-                                        <Button variant="secondary" disabled onClick={(e) => e.stopPropagation()}>
-                                            <Check className="mr-2 h-4 w-4" />
-                                            Invited
-                                        </Button>
-                                    ) : (
-                                        <Button variant="outline" size="sm" onClick={(e) => { e.stopPropagation(); handleInvite(user.id); }}>Invite</Button>
-                                    )}
+                                    <Button 
+                                        variant={invited.includes(user.id) ? "secondary" : "outline"} 
+                                        size="sm" 
+                                        onClick={(e) => { e.stopPropagation(); handleToggleInvite(user.id); }}
+                                    >
+                                        {invited.includes(user.id) ? (
+                                            <>
+                                                <Check className="mr-2 h-4 w-4" />
+                                                Invited
+                                            </>
+                                        ) : (
+                                            "Invite"
+                                        )}
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -711,6 +721,8 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    
 
     
 

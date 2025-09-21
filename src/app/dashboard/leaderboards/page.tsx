@@ -101,12 +101,12 @@ const allianceData = [
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
     return (
         <TableRow className={cn(
-            user.isCurrentUser && 'bg-primary/10', 
-            isSticky && 'sticky bottom-0 z-10 bg-primary/20 shadow-lg shadow-primary/20'
+            user.isCurrentUser && !isSticky && 'bg-primary/10', 
+            isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))]'
         )}>
             <TableCell className="font-medium text-lg">#{user.rank}</TableCell>
             <TableCell>
-                <Link href={`/dashboard/profile?user=${user.name}`} className="flex items-center gap-3 hover:underline">
+                <Link href={`/dashboard/profile?user=${user.id}`} className="flex items-center gap-3 hover:underline">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
@@ -133,7 +133,7 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/profile?user=${user.name}`}>
+                                <Link href={`/dashboard/profile?user=${user.id}`}>
                                     <User className="mr-2 h-4 w-4" />
                                     <span>See Profile</span>
                                 </Link>

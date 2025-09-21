@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -299,19 +299,29 @@ const FindAlliancesDialog = () => {
 }
 
 export default function AlliancesPage() {
+  const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
+  const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
+
   return (
     <div className="p-4 md:p-6 lg:p-8">
         <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
              <Card className="bg-primary/10 border-primary/30">
-                <CardHeader className="flex flex-row items-start gap-4">
-                    <div className="p-2 bg-primary/20 rounded-full">
-                        <Megaphone className="h-6 w-6 text-primary" />
+                <CardHeader className="flex flex-row items-start justify-between">
+                    <div className="flex items-start gap-4">
+                        <div className="p-2 bg-primary/20 rounded-full">
+                            <Megaphone className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                            <CardTitle>Alliance Notice</CardTitle>
+                            <CardDescription className="text-primary-foreground/80">Last updated by {myAlliance.noticeLastModifiedBy}</CardDescription>
+                        </div>
                     </div>
-                    <div>
-                        <CardTitle>Alliance Notice</CardTitle>
-                        <CardDescription className="text-primary-foreground/80">Last updated by {myAlliance.noticeLastModifiedBy}</CardDescription>
-                    </div>
+                    {canEditNotice && (
+                         <Button variant="ghost" size="icon">
+                            <Pencil className="h-5 w-5 text-primary" />
+                        </Button>
+                    )}
                 </CardHeader>
                 <CardContent>
                     <p className="text-lg font-medium">{myAlliance.notice}</p>
@@ -400,3 +410,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

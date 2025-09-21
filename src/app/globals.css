@@ -74,4 +74,9 @@
   body {
     @apply bg-background text-foreground;
   }
+  .auth-background {
+    background-image: url('https://images.unsplash.com/photo-1550439062-609e1531270e?q=80&w=2070&auto=format&fit=crop');
+    background-size: cover;
+    background-position: center;
+  }
 }

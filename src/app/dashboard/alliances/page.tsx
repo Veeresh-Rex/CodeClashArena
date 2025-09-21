@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -188,7 +188,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
     }
     
     const handleRequestJoin = () => {
-        setRequestSent(true);
+        setRequestSent(prev => !prev);
     }
 
     const DetailsView = () => (
@@ -222,11 +222,11 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
             <DialogFooter className={cn("grid gap-2", !hasAlliance ? "grid-cols-2" : "grid-cols-1")}>
                 <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
                 {!hasAlliance && (
-                    <Button onClick={handleRequestJoin} disabled={requestSent}>
+                    <Button onClick={handleRequestJoin}>
                         {requestSent ? (
                             <>
-                                <Check className="mr-2 h-4 w-4" />
-                                Request Sent
+                                <X className="mr-2 h-4 w-4" />
+                                Withdraw Request
                             </>
                         ) : (
                             "Request to Join"
@@ -582,7 +582,7 @@ export default function AlliancesPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <Button variant="outline" className="w-full">Invite Members</Button>
-                    <LeaveAllianceDialog />
+                    {!isLeader && <LeaveAllianceDialog />}
                 </CardContent>
             </Card>
         </div>

@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,6 +47,8 @@ const myAlliance = {
   rank: 12,
   powerScore: 125800,
   description: "A group of dedicated coders aiming for the top.",
+  notice: "The next Alliance War starts this Friday! Be ready to crush it. We will be focusing on graph problems.",
+  noticeLastModifiedBy: "Syntax Slayer",
   membersList: [
     { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
     { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
@@ -301,6 +303,20 @@ export default function AlliancesPage() {
     <div className="p-4 md:p-6 lg:p-8">
         <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
+             <Card className="bg-primary/10 border-primary/30">
+                <CardHeader className="flex flex-row items-start gap-4">
+                    <div className="p-2 bg-primary/20 rounded-full">
+                        <Megaphone className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                        <CardTitle>Alliance Notice</CardTitle>
+                        <CardDescription className="text-primary-foreground/80">Last updated by {myAlliance.noticeLastModifiedBy}</CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-lg font-medium">{myAlliance.notice}</p>
+                </CardContent>
+            </Card>
             <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
@@ -378,3 +394,4 @@ export default function AlliancesPage() {
 }
 
     
+

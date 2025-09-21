@@ -134,7 +134,7 @@ export default function SettingsPage() {
                         <CardContent className="space-y-6">
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email Address</Label>
-                                <Input id="email" type="email" defaultValue="cody.clash@example.com" />
+                                <Input id="email" type="email" defaultValue="cody.clash@example.com" disabled />
                             </div>
                              <Separator />
                              <div className="space-y-2">
@@ -237,4 +237,5 @@ export default function SettingsPage() {
         </div>
     </div>
   );
-}
+
+    

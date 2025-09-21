@@ -61,12 +61,12 @@ export default function ProfilePage() {
                     <CardTitle>Alliance</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                     <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <Users className="h-6 w-6 text-primary" />
-                            <span className="font-semibold">{userProfile.alliance}</span>
+                     <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-3 min-w-0">
+                            <Users className="h-6 w-6 text-primary flex-shrink-0" />
+                            <span className="font-semibold truncate">{userProfile.alliance}</span>
                         </div>
-                        <Button asChild variant="outline" size="sm">
+                        <Button asChild variant="outline" size="sm" className="flex-shrink-0">
                             <Link href="/dashboard/alliances">View Alliance</Link>
                         </Button>
                     </div>

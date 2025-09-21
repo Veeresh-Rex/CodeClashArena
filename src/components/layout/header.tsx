@@ -100,10 +100,26 @@ export function Header() {
                     </DropdownMenuSubTrigger>
                      <DropdownMenuPortal>
                         <DropdownMenuSubContent>
-                             <DropdownMenuItem asChild><Link href={`/dashboard/chat?user=${encodeURIComponent(friend.name)}`}><MessageSquare className="mr-2 h-4 w-4" />Chat</Link></DropdownMenuItem>
-                             <DropdownMenuItem asChild><Link href="/dashboard/profile"><User className="mr-2 h-4 w-4" />See Profile</Link></DropdownMenuItem>
-                             <DropdownMenuItem className="text-red-500 focus:text-red-500"><UserX className="mr-2 h-4 w-4" />Unfriend</DropdownMenuItem>
-                             <DropdownMenuItem className="text-red-500 focus:text-red-500"><ShieldX className="mr-2 h-4 w-4" />Block</DropdownMenuItem>
+                             <DropdownMenuItem asChild>
+                               <Link href={`/dashboard/chat?user=${encodeURIComponent(friend.name)}`}>
+                                 <MessageSquare className="mr-2 h-4 w-4" />
+                                 <span>Chat</span>
+                               </Link>
+                             </DropdownMenuItem>
+                             <DropdownMenuItem asChild>
+                               <Link href="/dashboard/profile">
+                                 <User className="mr-2 h-4 w-4" />
+                                 <span>See Profile</span>
+                               </Link>
+                             </DropdownMenuItem>
+                             <DropdownMenuItem className="text-red-500 focus:text-red-500">
+                               <UserX className="mr-2 h-4 w-4" />
+                               <span>Unfriend</span>
+                              </DropdownMenuItem>
+                             <DropdownMenuItem className="text-red-500 focus:text-red-500">
+                                <ShieldX className="mr-2 h-4 w-4" />
+                                <span>Block</span>
+                              </DropdownMenuItem>
                         </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                 </DropdownMenuSub>

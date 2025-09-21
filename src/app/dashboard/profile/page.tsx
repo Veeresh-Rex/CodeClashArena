@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import { Suspense } from 'react';
@@ -106,7 +105,7 @@ const ProfileContent = () => {
                                 <AvatarImage src={userProfile.avatar} alt={userProfile.name} />
                                 <AvatarFallback>{userProfile.name.substring(0,2)}</AvatarFallback>
                             </Avatar>
-                            {userProfile.online && (
+                            {userProfile.online && (userProfile.isCurrentUser || userProfile.isFriend) && (
                                 <div className="absolute bottom-4 right-4 w-5 h-5 bg-green-500 rounded-full border-4 border-card" />
                             )}
                         </div>
@@ -116,7 +115,7 @@ const ProfileContent = () => {
                             {userProfile.isCurrentUser ? (
                                 <Button>Edit Profile</Button>
                             ) : userProfile.isFriend ? (
-                                <div className="flex gap-2 justify-center">
+                                <div className="flex flex-wrap gap-2 justify-center">
                                     <Button asChild variant="outline">
                                         <Link href={`/dashboard/chat?user=${encodeURIComponent(userProfile.name)}`}><MessageSquare className="mr-2 h-4 w-4" />Chat</Link>
                                     </Button>
@@ -137,7 +136,7 @@ const ProfileContent = () => {
                                     </AlertDialog>
                                 </div>
                             ) : (
-                                <div className="flex gap-2 justify-center">
+                                <div className="flex flex-wrap gap-2 justify-center">
                                     <Button><UserPlus className="mr-2 h-4 w-4" />Send Friend Request</Button>
                                     <Button asChild variant="secondary">
                                         <Link href={`/dashboard/chat?user=${encodeURIComponent(userProfile.name)}`}><MessageSquare className="mr-2 h-4 w-4" />Chat</Link>

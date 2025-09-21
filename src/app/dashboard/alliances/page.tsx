@@ -26,11 +26,11 @@ const myAlliance = {
   powerScore: 125800,
   description: "A group of dedicated coders aiming for the top.",
   membersList: [
-    { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100" },
-    { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100" },
-    { name: "Algo Queen", role: "Member", avatar: "https://picsum.photos/seed/3/100/100" },
-    { name: "Byte Baron", role: "Member", avatar: "https://picsum.photos/seed/4/100/100" },
-    { name: "Pixel Pioneer", role: "Member", avatar: "https://picsum.photos/seed/5/100/100" },
+    { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900 },
+    { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750 },
+    { name: "Algo Queen", role: "Member", avatar: "https://picsum.photos/seed/3/100/100", powerScore: 2600 },
+    { name: "Byte Baron", role: "Member", avatar: "https://picsum.photos/seed/4/100/100", powerScore: 2550 },
+    { name: "Pixel Pioneer", role: "Member", avatar: "https://picsum.photos/seed/5/100/100", powerScore: 2400 },
   ],
 };
 
@@ -84,6 +84,7 @@ export default function AlliancesPage() {
                 <TableRow>
                   <TableHead>Member</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead className="text-right">Power Score</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -99,6 +100,7 @@ export default function AlliancesPage() {
                     <TableCell>
                       <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
                     </TableCell>
+                    <TableCell className="text-right font-semibold">{member.powerScore.toLocaleString()}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

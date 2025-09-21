@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus, Ban } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus, Ban, UserCheck, UserXIcon } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -99,6 +99,11 @@ const usersWithoutAlliance = [
     { id: 'u5', name: 'Array Archer', username: 'array_archer', avatar: 'https://picsum.photos/seed/45/100/100', powerScore: 2300 },
 ];
 
+const initialJoinRequests = [
+    { id: 'u6', name: 'Kernel Hacker', username: 'kernel_hacker', avatar: 'https://picsum.photos/seed/51/100/100', powerScore: 2950 },
+    { id: 'u7', name: 'Recursive Root', username: 'recursive_root', avatar: 'https://picsum.photos/seed/52/100/100', powerScore: 2800 },
+];
+
 
 const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData.membersList)[0], currentUserRole?: string }) => {
   const content = (
@@ -153,16 +158,16 @@ const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData
                 <ShieldX className="mr-2 h-4 w-4" />
                 <span>Block</span>
             </DropdownMenuItem>
-            {currentUserRole === 'Leader' && member.role !== 'Leader' && (
+            {(currentUserRole === 'Leader' || currentUserRole === 'Co-Leader') && member.role !== 'Leader' && (
                 <>
                     <DropdownMenuSeparator />
-                    {member.role === 'Member' && (
+                    {member.role === 'Member' && currentUserRole === 'Leader' && (
                         <DropdownMenuItem>
                             <ArrowUpCircle className="mr-2 h-4 w-4" />
                             <span>Promote to Co-Leader</span>
                         </DropdownMenuItem>
                     )}
-                    {member.role === 'Co-Leader' && (
+                    {member.role === 'Co-Leader' && currentUserRole === 'Leader' && (
                          <DropdownMenuItem>
                             <ArrowDownCircle className="mr-2 h-4 w-4" />
                             <span>Demote to Member</span>
@@ -231,11 +236,11 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
             <DialogFooter className={cn("grid gap-2", !hasAlliance ? "grid-cols-2" : "grid-cols-1")}>
                 <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
                 {!hasAlliance && (
-                    <Button onClick={handleRequestJoin}>
+                    <Button onClick={handleRequestJoin} variant={requestSent ? "secondary" : "default"}>
                         {requestSent ? (
                             <>
-                                <X className="mr-2 h-4 w-4" />
-                                Withdraw Request
+                                <Check className="mr-2 h-4 w-4" />
+                                Request Sent
                             </>
                         ) : (
                              "Request to Join"
@@ -250,44 +255,26 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
 
     const OtherAllianceMemberRow = ({ member }: { member: (typeof dummyMembers)[0] }) => {
         return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <TableRow className="cursor-pointer">
-                        <TableCell className="font-medium">
-                            <div className="flex items-center gap-3">
-                                <Avatar className="h-10 w-10">
-                                    <AvatarImage src={member.avatar} alt={member.name} />
-                                    <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-semibold">{member.name}</p>
-                                    <div className="flex items-center text-sm text-muted-foreground">
-                                    <Star className="w-4 h-4 mr-1 text-primary" />
-                                    <span>{member.powerScore.toLocaleString()}</span>
-                                    </div>
-                                </div>
+            <TableRow className="cursor-pointer">
+                <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                            <AvatarImage src={member.avatar} alt={member.name} />
+                            <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <p className="font-semibold">{member.name}</p>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                            <Star className="w-4 h-4 mr-1 text-primary" />
+                            <span>{member.powerScore.toLocaleString()}</span>
                             </div>
-                        </TableCell>
-                        <TableCell className="text-right">
-                            <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
-                        </TableCell>
-                    </TableRow>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/chat?user=${encodeURIComponent(member.name)}`}>
-                            <MessageSquare className="mr-2 h-4 w-4" />
-                            <span>Chat</span>
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href="/dashboard/profile">
-                            <User className="mr-2 h-4 w-4" />
-                            <span>See Profile</span>
-                        </Link>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+                        </div>
+                    </div>
+                </TableCell>
+                <TableCell className="text-right">
+                    <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
+                </TableCell>
+            </TableRow>
         );
     };
 
@@ -317,7 +304,26 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
                         }
                         return a.name.localeCompare(b.name);
                     }).map(member => (
-                        <OtherAllianceMemberRow key={member.name} member={member} />
+                        <TableRow key={member.name}>
+                          <TableCell className="font-medium">
+                              <div className="flex items-center gap-3">
+                                  <Avatar className="h-10 w-10">
+                                      <AvatarImage src={member.avatar} alt={member.name} />
+                                      <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                                  </Avatar>
+                                  <div>
+                                      <p className="font-semibold">{member.name}</p>
+                                      <div className="flex items-center text-sm text-muted-foreground">
+                                          <Star className="w-4 h-4 mr-1 text-primary" />
+                                          <span>{member.powerScore.toLocaleString()}</span>
+                                      </div>
+                                  </div>
+                              </div>
+                          </TableCell>
+                          <TableCell className="text-right">
+                              <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
+                          </TableCell>
+                        </TableRow>
                     ))}
                 </TableBody>
             </Table>
@@ -512,6 +518,8 @@ const InviteMembersDialog = () => {
     }
     
     const UserRow = ({ user }: { user: typeof usersWithoutAlliance[0] }) => {
+        const isInvited = invited.includes(user.id);
+
         return (
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -531,17 +539,20 @@ const InviteMembersDialog = () => {
                         <TableCell>{user.powerScore.toLocaleString()}</TableCell>
                         <TableCell className="text-right">
                              <Button 
-                                variant={invited.includes(user.id) ? "secondary" : "outline"} 
+                                variant={isInvited ? "secondary" : "outline"} 
                                 size="sm" 
                                 onClick={(e) => { e.stopPropagation(); handleToggleInvite(user.id); }}
                             >
-                                {invited.includes(user.id) ? (
+                                {isInvited ? (
                                     <>
                                         <Check className="mr-2 h-4 w-4" />
                                         Invited
                                     </>
                                 ) : (
-                                    "Invite"
+                                    <>
+                                     <UserPlus className="mr-2 h-4 w-4" />
+                                     Invite
+                                    </>
                                 )}
                             </Button>
                         </TableCell>
@@ -602,13 +613,63 @@ const InviteMembersDialog = () => {
     );
 }
 
+const JoinRequestsCard = () => {
+    const [requests, setRequests] = useState(initialJoinRequests);
+
+    const handleRequest = (userId: string, accepted: boolean) => {
+        setRequests(prev => prev.filter(req => req.id !== userId));
+        // Here you would typically call an API to handle the request
+    };
+
+    if (requests.length === 0) {
+        return null; // Or a placeholder message
+    }
+
+    return (
+        <Card>
+            <CardHeader>
+                <CardTitle>Join Requests</CardTitle>
+                <CardDescription>Review and approve new members.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+                {requests.map(req => (
+                    <div key={req.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                        <Link href={`/dashboard/profile?user=${req.id}`} className="flex items-center gap-3">
+                            <Avatar className="h-10 w-10">
+                                <AvatarImage src={req.avatar} alt={req.name} />
+                                <AvatarFallback>{req.name.substring(0, 2)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                                <p className="font-semibold">{req.name}</p>
+                                <p className="text-sm text-muted-foreground">@{req.username}</p>
+                                <div className="flex items-center text-xs text-muted-foreground">
+                                    <Star className="w-3 h-3 mr-1 text-primary" />
+                                    <span>{req.powerScore.toLocaleString()}</span>
+                                </div>
+                            </div>
+                        </Link>
+                        <div className="flex gap-2">
+                            <Button size="icon" variant="outline" className="h-8 w-8 bg-green-500/10 text-green-600 hover:bg-green-500/20 hover:text-green-700 border-green-500/20" onClick={() => handleRequest(req.id, true)}>
+                                <UserCheck className="h-4 w-4" />
+                            </Button>
+                            <Button size="icon" variant="outline" className="h-8 w-8 bg-red-500/10 text-red-600 hover:bg-red-500/20 hover:text-red-700 border-red-500/20" onClick={() => handleRequest(req.id, false)}>
+                                <UserXIcon className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                ))}
+            </CardContent>
+        </Card>
+    );
+};
+
+
 export default function AlliancesPage() {
   const [hasAlliance, setHasAlliance] = useState(true);
   const [myAlliance, setMyAlliance] = useState(myAllianceData);
 
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
-  const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
-  const isLeader = currentUser?.role === 'Leader';
+  const canManage = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
   
   const handleUpdateNotice = (newNotice: string) => {
     setMyAlliance(prev => ({
@@ -663,7 +724,7 @@ export default function AlliancesPage() {
                             <CardDescription className="text-primary-foreground/80">Last updated by {myAlliance.noticeLastModifiedBy} &bull; {myAlliance.noticeLastModifiedTime}</CardDescription>
                         </div>
                     </div>
-                    {canEditNotice && (
+                    {canManage && (
                         <EditNoticeDialog notice={myAlliance.notice} onSave={handleUpdateNotice} />
                     )}
                 </CardHeader>
@@ -677,7 +738,7 @@ export default function AlliancesPage() {
                 <CardTitle className="text-2xl">{myAlliance.name}</CardTitle>
                 <CardDescription>{myAlliance.description}</CardDescription>
                 </div>
-                {isLeader && <ManageAllianceDialog alliance={myAlliance} />}
+                {currentUser?.role === 'Leader' && <ManageAllianceDialog alliance={myAlliance} />}
             </CardHeader>
             <CardContent>
                 <div className="grid gap-4 md:grid-cols-3 mb-6">
@@ -717,8 +778,8 @@ export default function AlliancesPage() {
                         if (b.isCurrentUser) return 1;
                         if (a.role === 'Leader') return -1;
                         if (b.role === 'Leader') return 1;
-                        if (a.role === 'Co-Leader') return -1;
-                        if (b.role === 'Co-Leader') return 1;
+                        if (a.role === 'Co-Leader' && b.role === 'Member') return -1;
+                        if (b.role === 'Co-Leader' && a.role === 'Member') return 1;
                         return 0;
                     }).map((member) => (
                         <MemberRow key={member.name} member={member} currentUserRole={currentUser?.role} />
@@ -730,13 +791,14 @@ export default function AlliancesPage() {
         </div>
 
         <div className="space-y-6">
+            {canManage && <JoinRequestsCard />}
              <Card>
                 <CardHeader>
                     <CardTitle>Alliance Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <InviteMembersDialog />
-                    {!isLeader && <LeaveAllianceDialog />}
+                    {canManage && <InviteMembersDialog />}
+                    {! (currentUser?.role === 'Leader') && <LeaveAllianceDialog />}
                 </CardContent>
             </Card>
         </div>

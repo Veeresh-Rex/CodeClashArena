@@ -255,7 +255,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
 
     const OtherAllianceMemberRow = ({ member }: { member: (typeof dummyMembers)[0] }) => {
         return (
-            <TableRow className="cursor-pointer">
+             <TableRow>
                 <TableCell className="font-medium">
                     <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
@@ -304,26 +304,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
                         }
                         return a.name.localeCompare(b.name);
                     }).map(member => (
-                        <TableRow key={member.name}>
-                          <TableCell className="font-medium">
-                              <div className="flex items-center gap-3">
-                                  <Avatar className="h-10 w-10">
-                                      <AvatarImage src={member.avatar} alt={member.name} />
-                                      <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
-                                  </Avatar>
-                                  <div>
-                                      <p className="font-semibold">{member.name}</p>
-                                      <div className="flex items-center text-sm text-muted-foreground">
-                                          <Star className="w-4 h-4 mr-1 text-primary" />
-                                          <span>{member.powerScore.toLocaleString()}</span>
-                                      </div>
-                                  </div>
-                              </div>
-                          </TableCell>
-                          <TableCell className="text-right">
-                              <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
-                          </TableCell>
-                        </TableRow>
+                        <OtherAllianceMemberRow key={member.name} member={member} />
                     ))}
                 </TableBody>
             </Table>
@@ -633,7 +614,7 @@ const JoinRequestsCard = () => {
             </CardHeader>
             <CardContent className="space-y-4">
                 {requests.map(req => (
-                    <div key={req.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/50">
+                    <div key={req.id} className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-lg hover:bg-muted/50">
                         <Link href={`/dashboard/profile?user=${req.id}`} className="flex items-center gap-3">
                             <Avatar className="h-10 w-10">
                                 <AvatarImage src={req.avatar} alt={req.name} />

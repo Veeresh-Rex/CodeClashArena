@@ -14,6 +14,7 @@ import {
   Trophy,
   User,
   Users,
+  Heart,
 } from "lucide-react";
 
 import {
@@ -33,6 +34,7 @@ const menuItems = [
   { href: "/dashboard/leaderboards", label: "Leaderboards", icon: Trophy },
   { href: "/dashboard/alliance", label: "Alliance", icon: Users },
   { href: "/dashboard/chat", label: "Chat", icon: MessageSquare },
+  { href: "/dashboard/social", label: "Social", icon: Heart },
   { href: "/dashboard/recommendations", label: "AI Mentor", icon: BrainCircuit },
 ];
 

@@ -1,8 +1,9 @@
 
+
 "use client";
 
 import Link from "next/link";
-import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare } from "lucide-react";
+import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare, Heart } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -31,17 +32,18 @@ const pageTitles: { [key: string]: string } = {
   '/dashboard/leaderboards': 'Leaderboards',
   '/dashboard/alliance': 'Alliance',
   '/dashboard/chat': 'Chat',
+  '/dashboard/social': 'Social',
   '/dashboard/recommendations': 'AI Mentor',
   '/dashboard/profile': 'My Profile',
   '/dashboard/notifications': 'Notifications',
 };
 
 const friendsList = [
-    { name: "Byte Baron", allianceCode: "TCC", avatar: "https://picsum.photos/seed/4/100/100", online: true },
-    { name: "Syntax Slayer", allianceCode: "TCC", avatar: "https://picsum.photos/seed/2/100/100", online: false },
-    { name: "Algo Queen", allianceCode: "TCC", avatar: "https://picsum.photos/seed/3/100/100", online: true },
-    { name: "Pixel Pioneer", allianceCode: "TCC", avatar: "https://picsum.photos/seed/5/100/100", online: false },
-    { name: "Data Diva", allianceCode: "PYPH", avatar: "https://picsum.photos/seed/14/100/100", online: true },
+    { name: "Byte Baron", username: 'byte_baron', allianceCode: "TCC", avatar: "https://picsum.photos/seed/4/100/100", online: true },
+    { name: "Syntax Slayer", username: 'syntax_slayer', allianceCode: "TCC", avatar: "https://picsum.photos/seed/2/100/100", online: false },
+    { name: "Algo Queen", username: 'algo_queen', allianceCode: "TCC", avatar: "https://picsum.photos/seed/3/100/100", online: true },
+    { name: "Pixel Pioneer", username: 'pixel_pioneer', allianceCode: "TCC", avatar: "https://picsum.photos/seed/5/100/100", online: false },
+    { name: "Data Diva", username: 'data_diva', allianceCode: "PYPH", avatar: "https://picsum.photos/seed/14/100/100", online: true },
 ];
 
 export function Header() {
@@ -79,7 +81,7 @@ export function Header() {
          <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
-              <Users className="h-5 w-5" />
+              <Heart className="h-5 w-5" />
               <span className="sr-only">Toggle friends list</span>
             </Button>
           </DropdownMenuTrigger>
@@ -131,7 +133,7 @@ export function Header() {
             ))}
              <DropdownMenuSeparator />
              <DropdownMenuItem asChild className="justify-center text-sm text-muted-foreground hover:text-primary">
-                <Link href="/dashboard/notifications">
+                <Link href="/dashboard/social">
                     See Friend Requests
                 </Link>
              </DropdownMenuItem>

@@ -62,9 +62,9 @@ export default function ProfilePage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                      <div className="flex items-center justify-between gap-2">
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center gap-3 flex-shrink min-w-0">
                             <Users className="h-6 w-6 text-primary flex-shrink-0" />
-                            <span className="font-semibold truncate">{userProfile.alliance}</span>
+                            <span className="font-semibold">{userProfile.alliance}</span>
                         </div>
                         <Button asChild variant="outline" size="sm" className="flex-shrink-0">
                             <Link href="/dashboard/alliances">View Alliance</Link>

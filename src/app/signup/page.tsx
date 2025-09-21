@@ -28,6 +28,10 @@ export default function SignupPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input id="name" placeholder="Cody Clash" required />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="username">Username</Label>
               <Input id="username" placeholder="cody_clash" required />
             </div>

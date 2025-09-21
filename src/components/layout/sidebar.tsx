@@ -91,14 +91,6 @@ export function AppSidebar() {
       <SidebarFooter className="flex flex-col gap-4">
         <SidebarSeparator />
          <SidebarMenu>
-            <SidebarMenuItem>
-                 <SidebarMenuButton asChild isActive={pathname === "/dashboard/settings"} tooltip="Settings">
-                    <Link href="/dashboard/settings">
-                        <Settings />
-                        <span>Settings</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
              <SidebarMenuItem>
                 <SidebarMenuButton asChild isActive={pathname.startsWith("/dashboard/profile")} tooltip="My Profile">
                     <Link href="/dashboard/profile">
@@ -120,3 +112,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+    

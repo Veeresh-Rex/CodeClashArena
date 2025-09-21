@@ -3,7 +3,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare, Check, X, Sun, Moon } from "lucide-react";
+import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare, Check, X, Sun, Moon, Settings } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
@@ -306,8 +306,18 @@ export function Header() {
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild><Link href="/dashboard/profile">Profile</Link></DropdownMenuItem>
-            <DropdownMenuItem asChild><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/profile">
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href="/dashboard/settings">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <Sun className="h-4 w-4 mr-2 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -333,3 +343,5 @@ export function Header() {
     </header>
   );
 }
+
+    

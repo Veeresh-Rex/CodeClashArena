@@ -210,26 +210,28 @@ export function Header() {
                             Accept or decline requests from other coders.
                         </DialogDescription>
                     </DialogHeader>
-                    <div className="space-y-4 py-4">
-                        {requests.length > 0 ? requests.map(req => (
-                            <div key={req.id} className="flex items-center justify-between">
-                                 <div className="flex items-center gap-3">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarImage src={req.avatar} alt={req.name} />
-                                        <AvatarFallback>{req.name.substring(0,2)}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <p className="font-semibold">{req.name}</p>
-                                        <p className="text-sm text-muted-foreground">@{req.username}</p>
+                    <ScrollArea className="h-96">
+                        <div className="space-y-4 py-4 pr-6">
+                            {requests.length > 0 ? requests.map(req => (
+                                <div key={req.id} className="flex items-center justify-between">
+                                     <div className="flex items-center gap-3">
+                                        <Avatar className="h-10 w-10">
+                                            <AvatarImage src={req.avatar} alt={req.name} />
+                                            <AvatarFallback>{req.name.substring(0,2)}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <p className="font-semibold">{req.name}</p>
+                                            <p className="text-sm text-muted-foreground">@{req.username}</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <Button size="sm" variant="outline" onClick={() => handleRequest(req.id)}><Check className="h-4 w-4 mr-1" /> Accept</Button>
+                                        <Button size="icon" variant="ghost" onClick={() => handleRequest(req.id)}><X className="h-4 w-4" /></Button>
                                     </div>
                                 </div>
-                                <div className="flex gap-2">
-                                    <Button size="sm" variant="outline" onClick={() => handleRequest(req.id)}><Check className="h-4 w-4 mr-1" /> Accept</Button>
-                                    <Button size="icon" variant="ghost" onClick={() => handleRequest(req.id)}><X className="h-4 w-4" /></Button>
-                                </div>
-                            </div>
-                        )) : <p className="text-sm text-muted-foreground text-center">No new friend requests.</p>}
-                    </div>
+                            )) : <p className="text-sm text-muted-foreground text-center">No new friend requests.</p>}
+                        </div>
+                    </ScrollArea>
                 </DialogContent>
              </Dialog>
           </DropdownMenuContent>

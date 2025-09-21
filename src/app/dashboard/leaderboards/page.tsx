@@ -106,6 +106,13 @@ const allianceData = [
   { rank: 10, name: "Stack Survivors", powerScore: 68000, members: 35, avatar: "https://picsum.photos/seed/64/100/100", description: "Overflowing with knowledge." },
 ].sort((a,b) => a.rank - b.rank);
 
+const dummyMembers = [
+    { name: "Gadget Guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
+    { name: "Loop Legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
+    { name: "Function Fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
+    { name: "Pointer Prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
+];
+
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
     return (
         <TableRow className={cn(
@@ -181,45 +188,127 @@ const AllianceRow = ({ alliance, isSticky = false, onViewDetails }: { alliance: 
     );
 }
 
-const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
+const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void, hasAlliance: boolean }) => {
+    const [view, setView] = useState<'details' | 'members'>('details');
+    
     if (!alliance) return null;
 
-    return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-md">
-                 <DialogHeader>
-                     <div className="flex items-center gap-4">
-                        <Avatar className="h-16 w-16">
-                            <AvatarImage src={alliance.avatar} alt={alliance.name} />
-                            <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <DialogTitle className="text-2xl flex items-center gap-2">{alliance.name}</DialogTitle>
-                            <DialogDescription>{alliance.description}</DialogDescription>
-                        </div>
-                    </div>
-                </DialogHeader>
-                <div className="grid grid-cols-3 gap-4 text-center my-4">
+    const handleClose = (isOpen: boolean) => {
+        if (!isOpen) {
+            setTimeout(() => {
+                setView('details');
+            }, 300);
+        }
+        onOpenChange(isOpen);
+    }
+    
+    const DetailsView = () => (
+        <>
+            <DialogHeader>
+                 <div className="flex items-center gap-4">
+                    <Avatar className="h-16 w-16">
+                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                        <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
+                    </Avatar>
                     <div>
-                        <p className="text-sm text-muted-foreground">Rank</p>
-                        <p className="text-lg font-bold">#{alliance.rank}</p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-muted-foreground">Members</p>
-                        <p className="text-lg font-bold">{alliance.members}</p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-muted-foreground">Total Power</p>
-                        <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
+                        <DialogTitle className="text-2xl flex items-center gap-2">{alliance.name}</DialogTitle>
+                        <DialogDescription>{alliance.description}</DialogDescription>
                     </div>
                 </div>
-                 <DialogFooter>
-                    {alliance.isCurrentAlliance && (
-                        <Button asChild variant="outline">
-                            <Link href="/dashboard/alliance">View Alliance Page</Link>
-                        </Button>
-                    )}
-                </DialogFooter>
+            </DialogHeader>
+            <div className="grid grid-cols-3 gap-4 text-center my-4">
+                <div>
+                    <p className="text-sm text-muted-foreground">Rank</p>
+                    <p className="text-lg font-bold">#{alliance.rank}</p>
+                </div>
+                <div>
+                    <p className="text-sm text-muted-foreground">Members</p>
+                    <p className="text-lg font-bold">{alliance.members}</p>
+                </div>
+                <div>
+                    <p className="text-sm text-muted-foreground">Total Power</p>
+                    <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
+                </div>
+            </div>
+             <DialogFooter className="grid grid-cols-2 gap-2">
+                 <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
+                {alliance.isCurrentAlliance ? (
+                    <Button asChild>
+                        <Link href="/dashboard/alliance">View Alliance Page</Link>
+                    </Button>
+                ) : !hasAlliance ? (
+                    <Button>Request to Join</Button>
+                ) : null }
+            </DialogFooter>
+        </>
+    );
+
+    const roleOrder: { [key: string]: number } = { 'Leader': 1, 'Co-Leader': 2, 'Member': 3 };
+
+    const OtherAllianceMemberRow = ({ member }: { member: (typeof dummyMembers)[0] }) => {
+        return (
+             <TableRow>
+                <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                            <AvatarImage src={member.avatar} alt={member.name} />
+                            <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <p className="font-semibold">{member.name}</p>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                            <Star className="w-4 h-4 mr-1 text-primary" />
+                            <span>{member.powerScore.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                </TableCell>
+                <TableCell className="text-right">
+                    <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
+                </TableCell>
+            </TableRow>
+        );
+    };
+
+    const MembersView = () => (
+        <>
+            <DialogHeader>
+                 <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={() => setView('details')}>
+                        <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <DialogTitle>Members of {alliance.name}</DialogTitle>
+                 </div>
+            </DialogHeader>
+            <div className="max-h-[50vh] overflow-y-auto">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Member</TableHead>
+                            <TableHead className="text-right">Role</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {dummyMembers.slice().sort((a, b) => {
+                            const roleA = roleOrder[a.role] || 99;
+                            const roleB = roleOrder[b.role] || 99;
+                            if (roleA !== roleB) {
+                                return roleA - roleB;
+                            }
+                            return a.name.localeCompare(b.name);
+                        }).map(member => (
+                            <OtherAllianceMemberRow key={member.name} member={member} />
+                        ))}
+                    </TableBody>
+                </Table>
+            </div>
+        </>
+    );
+
+    return (
+        <Dialog open={open} onOpenChange={handleClose}>
+            <DialogContent className="sm:max-w-md">
+                {view === 'details' ? <DetailsView /> : <MembersView />}
             </DialogContent>
         </Dialog>
     );
@@ -308,9 +397,7 @@ export default function LeaderboardsPage() {
             </Tabs>
         </CardContent>
         </Card>
-        <AllianceDetailsDialog alliance={selectedAlliance} open={isAllianceDetailsOpen} onOpenChange={setIsAllianceDetailsOpen} />
+        <AllianceDetailsDialog alliance={selectedAlliance} open={isAllianceDetailsOpen} onOpenChange={setIsAllianceDetailsOpen} hasAlliance={!!currentAlliance} />
     </div>
   );
 }
-
-    

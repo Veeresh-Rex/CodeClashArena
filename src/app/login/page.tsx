@@ -1,14 +1,19 @@
 
+"use client";
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Shield } from 'lucide-react';
+import { Shield, Eye, EyeOff } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className={cn("flex min-h-screen items-center justify-center px-4 py-12", "auth-background")}>
       <div className="absolute inset-0 bg-black/60 z-0" />
@@ -34,7 +39,18 @@ export default function LoginPage() {
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" required />
+              <div className="relative">
+                <Input id="password" type={showPassword ? 'text' : 'password'} required />
+                <Button 
+                  type="button" 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 text-muted-foreground"
+                  onClick={() => setShowPassword(prev => !prev)}
+                >
+                  {showPassword ? <EyeOff /> : <Eye />}
+                </Button>
+              </div>
               <Link href="#" className="inline-block text-sm underline text-muted-foreground hover:text-primary">
                   Forgot your password?
               </Link>

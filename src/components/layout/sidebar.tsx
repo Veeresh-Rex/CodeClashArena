@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from "next/link";
@@ -46,16 +47,16 @@ export function AppSidebar() {
         <SidebarMenu>
           {menuItems.map((item) => (
             <SidebarMenuItem key={item.href}>
-              <Link href={item.href} passHref legacyBehavior>
+              <Link href={item.href} passHref>
                 <SidebarMenuButton
                   asChild
                   isActive={pathname === item.href}
                   tooltip={item.label}
                 >
-                  <a>
+                  <div>
                     <item.icon />
                     <span>{item.label}</span>
-                  </a>
+                  </div>
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>

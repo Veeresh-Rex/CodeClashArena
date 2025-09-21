@@ -97,7 +97,10 @@ export default function AlliancesPage() {
                         </Avatar>
                         <div>
                           <p className="font-semibold">{member.name}</p>
-                          <p className="text-sm text-muted-foreground">{member.powerScore.toLocaleString()} Power</p>
+                          <div className="flex items-center text-sm text-muted-foreground">
+                            <Star className="w-4 h-4 mr-1 text-primary" />
+                            <span>{member.powerScore.toLocaleString()}</span>
+                          </div>
                         </div>
                       </div>
                     </TableCell>

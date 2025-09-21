@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import {
   BrainCircuit,
   LayoutDashboard,
+  PanelLeftClose,
+  PanelRightClose,
   Terminal,
   Trophy,
   User,
@@ -20,11 +22,9 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
   SidebarFooter,
-  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const menuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -48,6 +48,7 @@ function Brand() {
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const { state, toggleSidebar } = useSidebar();
 
   return (
     <Sidebar collapsible="icon">
@@ -73,21 +74,10 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-         <div className="flex items-center justify-between p-2">
-            <Link href="/dashboard/profile" className="flex-1">
-              <div className="flex items-center gap-3 rounded-lg hover:bg-sidebar-accent cursor-pointer group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src="https://picsum.photos/seed/1/100/100" data-ai-hint="profile avatar" alt="User Avatar" />
-                  <AvatarFallback>CA</AvatarFallback>
-                </Avatar>
-                <div className="overflow-hidden group-data-[collapsible=icon]:hidden">
-                  <p className="font-semibold truncate">Cody Clash</p>
-                  <Badge variant="outline" className="border-primary/50 text-primary">Pro</Badge>
-                </div>
-              </div>
-            </Link>
-            <SidebarTrigger className="hidden md:flex group-data-[collapsible=icon]:hidden" />
-          </div>
+        <Button variant="ghost" onClick={toggleSidebar} className="w-full justify-center group-data-[collapsible=icon]:justify-center">
+            {state === 'expanded' ? <PanelLeftClose /> : <PanelRightClose />}
+            <span className="group-data-[collapsible=icon]:hidden pl-2">Collapse</span>
+        </Button>
       </SidebarFooter>
     </Sidebar>
   );

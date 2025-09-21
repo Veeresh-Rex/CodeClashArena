@@ -205,7 +205,14 @@ export function Header() {
                         onSelect={(e) => { e.preventDefault(); setIsFriendRequestsOpen(true); }} 
                         className="justify-center text-sm text-muted-foreground hover:text-primary focus:bg-accent focus:text-primary"
                     >
-                        See Friend Requests
+                        <div className="relative flex items-center gap-2">
+                           <span>See Friend Requests</span>
+                           {requests.length > 0 && (
+                             <div className="bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                               {requests.length}
+                             </div>
+                           )}
+                        </div>
                     </DropdownMenuItem>
                 </DialogTrigger>
                 <DialogContent>
@@ -243,9 +250,12 @@ export function Header() {
         </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <Bell className="h-5 w-5" />
-              <span className="sr-only">Toggle notifications</span>
+            <Button variant="ghost" size="icon" className="rounded-full relative">
+                <Bell className="h-5 w-5" />
+                <div className="absolute top-0 right-0 h-3 w-3">
+                  <div className="bg-red-500 text-white text-[9px] rounded-full h-4 w-4 flex items-center justify-center">3</div>
+                </div>
+                <span className="sr-only">Toggle notifications</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-80">

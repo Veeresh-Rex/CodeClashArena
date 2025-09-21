@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -88,6 +88,14 @@ const dummyMembers = [
     { name: "Loop Legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
     { name: "Function Fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
     { name: "Pointer Prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
+];
+
+const usersWithoutAlliance = [
+    { id: 'u1', name: 'Quantum Coder', avatar: 'https://picsum.photos/seed/41/100/100', powerScore: 3100 },
+    { id: 'u2', name: 'Bit-Stream Belle', avatar: 'https://picsum.photos/seed/42/100/100', powerScore: 2850 },
+    { id: 'u3', name: 'Stack Overlord', avatar: 'https://picsum.photos/seed/43/100/100', powerScore: 2700 },
+    { id: 'u4', name: 'Logic Lancer', avatar: 'https://picsum.photos/seed/44/100/100', powerScore: 2650 },
+    { id: 'u5', name: 'Array Archer', avatar: 'https://picsum.photos/seed/45/100/100', powerScore: 2300 },
 ];
 
 
@@ -223,7 +231,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
             <DialogFooter className={cn("grid gap-2", !hasAlliance ? "grid-cols-2" : "grid-cols-1")}>
                 <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
                 {!hasAlliance && (
-                    <Button onClick={handleRequestJoin} variant={requestSent ? "secondary" : "default"}>
+                    <Button onClick={handleRequestJoin}>
                         {requestSent ? (
                             <>
                                 <X className="mr-2 h-4 w-4" />
@@ -494,6 +502,66 @@ const EditNoticeDialog = ({ notice, onSave }: { notice: string, onSave: (newNoti
     );
 };
 
+const InviteMembersDialog = () => {
+    const [invited, setInvited] = useState<string[]>([]);
+    
+    const handleInvite = (userId: string) => {
+        setInvited(prev => [...prev, userId]);
+    }
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="outline" className="w-full"><UserPlus className="mr-2 h-4 w-4" /> Invite Members</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle>Invite Members</DialogTitle>
+                    <DialogDescription>Search for users to invite to your alliance.</DialogDescription>
+                </DialogHeader>
+                <div className="relative my-4">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search by username..." className="pl-8" />
+                </div>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>User</TableHead>
+                            <TableHead>Power Score</TableHead>
+                            <TableHead className="text-right">Action</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {usersWithoutAlliance.map((user) => (
+                            <TableRow key={user.id}>
+                                <TableCell>
+                                    <div className="flex items-center gap-3">
+                                        <Avatar className="h-10 w-10">
+                                            <AvatarImage src={user.avatar} alt={user.name} />
+                                            <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+                                        </Avatar>
+                                        <span className="font-medium">{user.name}</span>
+                                    </div>
+                                </TableCell>
+                                <TableCell>{user.powerScore.toLocaleString()}</TableCell>
+                                <TableCell className="text-right">
+                                    {invited.includes(user.id) ? (
+                                        <Button variant="secondary" disabled>
+                                            <Check className="mr-2 h-4 w-4" />
+                                            Invited
+                                        </Button>
+                                    ) : (
+                                        <Button variant="outline" size="sm" onClick={() => handleInvite(user.id)}>Invite</Button>
+                                    )}
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </DialogContent>
+        </Dialog>
+    );
+}
 
 export default function AlliancesPage() {
   const [hasAlliance, setHasAlliance] = useState(true);
@@ -525,7 +593,7 @@ export default function AlliancesPage() {
               <FindAlliancesDialog hasAlliance={hasAlliance} />
             </CardContent>
           </Card>
-          <Card>
+           <Card>
             <CardHeader>
               <CardTitle>Create Alliance</CardTitle>
               <CardDescription>Can't find one? Create your own!</CardDescription>
@@ -628,7 +696,7 @@ export default function AlliancesPage() {
                     <CardTitle>Alliance Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <Button variant="outline" className="w-full">Invite Members</Button>
+                    <InviteMembersDialog />
                     {!isLeader && <LeaveAllianceDialog />}
                 </CardContent>
             </Card>
@@ -637,3 +705,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

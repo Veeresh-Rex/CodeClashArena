@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -20,7 +21,15 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { MoreVertical, MessageSquare, User } from "lucide-react";
+import { MoreVertical, MessageSquare, User, Users, Flame, Star, ArrowLeft } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -73,29 +82,28 @@ const individualData = [
   { id: 'u49', rank: 40, name: 'Git Gladiator', powerScore: 3050, problems: 500, avatar: 'https://picsum.photos/seed/49/100/100' },
   { id: 'u50', rank: 41, name: 'Version Voyager', powerScore: 3000, problems: 490, avatar: 'https://picsum.photos/seed/50/100/100' },
   { id: 'u51', rank: 42, name: 'Shell Shaman', powerScore: 2950, problems: 480, avatar: 'https://picsum.photos/seed/51/100/100' },
-  { id: 'u1', rank: 1234, name: "Cody Clash", powerScore: 2900, problems: 573, isCurrentUser: true, avatar: "https://picsum.photos/seed/1/100/100" },
-  { id: 'u52', rank: 43, name: 'PowerShell Paladin', powerScore: 2850, problems: 470, avatar: 'https://picsum.photos/seed/52/100/100' },
-  { id: 'u53', rank: 44, name: 'Regex Ruler', powerScore: 2800, problems: 460, avatar: 'https://picsum.photos/seed/53/100/100' },
-  { id: 'u54', rank: 45, name: 'Markup Master', powerScore: 2750, problems: 450, avatar: 'https://picsum.photos/seed/54/100/100' },
-  { id: 'u55', rank: 46, name: 'CSS Centurion', powerScore: 2700, problems: 440, avatar: 'https://picsum.photos/seed/55/100/100' },
-  { id: 'u56', rank: 47, name: 'Sass Specialist', powerScore: 2650, problems: 430, avatar: 'https://picsum.photos/seed/56/100/100' },
-  { id: 'u57', rank: 48, name: 'LESS Leader', powerScore: 2600, problems: 420, avatar: 'https://picsum.photos/seed/57/100/100' },
-  { id: 'u58', rank: 49, name: 'Web Wizard', powerScore: 2550, problems: 410, avatar: 'https://picsum.photos/seed/58/100/100' },
-  { id: 'u59', rank: 50, name: 'Pixel Perfect', powerScore: 2500, problems: 400, avatar: 'https://picsum.photos/seed/59/100/100' },
+  { id: 'u1', rank: 43, name: "Cody Clash", powerScore: 2900, problems: 573, isCurrentUser: true, avatar: "https://picsum.photos/seed/1/100/100" },
+  { id: 'u52', rank: 44, name: 'PowerShell Paladin', powerScore: 2850, problems: 470, avatar: 'https://picsum.photos/seed/52/100/100' },
+  { id: 'u53', rank: 45, name: 'Regex Ruler', powerScore: 2800, problems: 460, avatar: 'https://picsum.photos/seed/53/100/100' },
+  { id: 'u54', rank: 46, name: 'Markup Master', powerScore: 2750, problems: 450, avatar: 'https://picsum.photos/seed/54/100/100' },
+  { id: 'u55', rank: 47, name: 'CSS Centurion', powerScore: 2700, problems: 440, avatar: 'https://picsum.photos/seed/55/100/100' },
+  { id: 'u56', rank: 48, name: 'Sass Specialist', powerScore: 2650, problems: 430, avatar: 'https://picsum.photos/seed/56/100/100' },
+  { id: 'u57', rank: 49, name: 'LESS Leader', powerScore: 2600, problems: 420, avatar: 'https://picsum.photos/seed/57/100/100' },
+  { id: 'u58', rank: 50, name: 'Web Wizard', powerScore: 2550, problems: 410, avatar: 'https://picsum.photos/seed/58/100/100' },
 ].sort((a,b) => a.rank - b.rank);
 
 const allianceData = [
-  { rank: 1, name: "Recursive Renegades", powerScore: 250000, members: 50, avatar: "https://picsum.photos/seed/23/100/100" },
-  { rank: 2, name: "Binary Brigade", powerScore: 210500, members: 42, avatar: "https://picsum.photos/seed/20/100/100" },
-  { rank: 3, name: "Python Phantoms", powerScore: 180300, members: 33, avatar: "https://picsum.photos/seed/22/100/100" },
-  { rank: 12, name: "The Code Crusaders", powerScore: 125800, members: 24, isCurrentAlliance: true, avatar: "https://picsum.photos/seed/1/100/100" },
-  { rank: 4, name: "Java Jesters", powerScore: 98200, members: 15, avatar: "https://picsum.photos/seed/21/100/100" },
-  { rank: 5, name: "CSS Sorcerers", powerScore: 85400, members: 18, avatar: "https://picsum.photos/seed/24/100/100" },
-  { rank: 6, name: "Terminal Titans", powerScore: 82000, members: 20, avatar: "https://picsum.photos/seed/60/100/100" },
-  { rank: 7, name: "Git Gurus", powerScore: 79500, members: 22, avatar: "https://picsum.photos/seed/61/100/100" },
-  { rank: 8, name: "API Avengers", powerScore: 75000, members: 12, avatar: "https://picsum.photos/seed/62/100/100" },
-  { rank: 9, name: "Data Dragons", powerScore: 72300, members: 28, avatar: "https://picsum.photos/seed/63/100/100" },
-  { rank: 10, name: "Stack Survivors", powerScore: 68000, members: 35, avatar: "https://picsum.photos/seed/64/100/100" },
+  { rank: 1, name: "Recursive Renegades", powerScore: 250000, members: 50, avatar: "https://picsum.photos/seed/23/100/100", description: "To understand us, you must first understand us." },
+  { rank: 2, name: "Binary Brigade", powerScore: 210500, members: 42, avatar: "https://picsum.photos/seed/20/100/100", description: "Masters of the bit, we operate in 0s and 1s." },
+  { rank: 3, name: "Python Phantoms", powerScore: 180300, members: 33, avatar: "https://picsum.photos/seed/22/100/100", description: "Elegant code that strikes from the shadows." },
+  { rank: 12, name: "The Code Crusaders", powerScore: 125800, members: 24, isCurrentAlliance: true, avatar: "https://picsum.photos/seed/1/100/100", description: "A group of dedicated coders aiming for the top." },
+  { rank: 4, name: "Java Jesters", powerScore: 98200, members: 15, avatar: "https://picsum.photos/seed/21/100/100", description: "Coding with a smile, one cup at a time." },
+  { rank: 5, name: "CSS Sorcerers", powerScore: 85400, members: 18, avatar: "https://picsum.photos/seed/24/100/100", description: "Weaving magic into the web's visual fabric." },
+  { rank: 6, name: "Terminal Titans", powerScore: 82000, members: 20, avatar: "https://picsum.photos/seed/60/100/100", description: "Commanding the command line." },
+  { rank: 7, name: "Git Gurus", powerScore: 79500, members: 22, avatar: "https://picsum.photos/seed/61/100/100", description: "Masters of version control." },
+  { rank: 8, name: "API Avengers", powerScore: 75000, members: 12, avatar: "https://picsum.photos/seed/62/100/100", description: "Connecting the world, one endpoint at a time." },
+  { rank: 9, name: "Data Dragons", powerScore: 72300, members: 28, avatar: "https://picsum.photos/seed/63/100/100", description: "Taming big data with fire." },
+  { rank: 10, name: "Stack Survivors", powerScore: 68000, members: 35, avatar: "https://picsum.photos/seed/64/100/100", description: "Overflowing with knowledge." },
 ].sort((a,b) => a.rank - b.rank);
 
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
@@ -145,21 +153,45 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
     );
 }
 
-const AllianceRow = ({ alliance, isSticky = false }: { alliance: typeof allianceData[0], isSticky?: boolean }) => {
-    return (
+type Alliance = typeof allianceData[0];
+
+const AllianceRow = ({ alliance, isSticky = false, onViewDetails }: { alliance: Alliance, isSticky?: boolean, onViewDetails: (alliance: Alliance) => void }) => {
+    const content = (
          <TableRow className={cn(
+            "cursor-pointer",
             isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))] hover:bg-secondary'
-        )}>
+        )} onClick={() => onViewDetails(alliance)}>
             <TableCell className="font-medium text-lg w-[80px]">#{alliance.rank}</TableCell>
             <TableCell>
-                <Link href="/dashboard/alliance" className="flex items-center gap-3 hover:underline">
+                <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={alliance.avatar} alt={alliance.name} />
                         <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
                     </Avatar>
                     <span className="font-medium">{alliance.name}</span>
                     {alliance.isCurrentAlliance && <Badge>Your Alliance</Badge>}
-                </Link>
+                </div>
+            </TableCell>
+            <TableCell className="text-right">{alliance.members}</TableCell>
+            <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
+        </TableRow>
+    );
+
+    if (alliance.isCurrentAlliance) {
+        return content;
+    }
+
+    return (
+        <TableRow className="cursor-pointer" onClick={() => onViewDetails(alliance)}>
+            <TableCell className="font-medium text-lg w-[80px]">#{alliance.rank}</TableCell>
+            <TableCell>
+                 <div className="flex items-center gap-3">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                        <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium">{alliance.name}</span>
+                </div>
             </TableCell>
             <TableCell className="text-right">{alliance.members}</TableCell>
             <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
@@ -167,9 +199,59 @@ const AllianceRow = ({ alliance, isSticky = false }: { alliance: typeof alliance
     )
 }
 
+const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
+    if (!alliance) return null;
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md">
+                 <DialogHeader>
+                     <div className="flex items-center gap-4">
+                        <Avatar className="h-16 w-16">
+                            <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                            <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <DialogTitle className="text-2xl flex items-center gap-2">{alliance.name}</DialogTitle>
+                            <DialogDescription>{alliance.description}</DialogDescription>
+                        </div>
+                    </div>
+                </DialogHeader>
+                <div className="grid grid-cols-3 gap-4 text-center my-4">
+                    <div>
+                        <p className="text-sm text-muted-foreground">Rank</p>
+                        <p className="text-lg font-bold">#{alliance.rank}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-muted-foreground">Members</p>
+                        <p className="text-lg font-bold">{alliance.members}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-muted-foreground">Total Power</p>
+                        <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
+                    </div>
+                </div>
+                 <DialogFooter>
+                    <Button asChild variant="outline">
+                        <Link href="/dashboard/alliance">View Alliance Page</Link>
+                    </Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 export default function LeaderboardsPage() {
     const currentUser = individualData.find(user => user.isCurrentUser);
     const currentAlliance = allianceData.find(alliance => alliance.isCurrentAlliance);
+
+    const [selectedAlliance, setSelectedAlliance] = useState<Alliance | null>(null);
+    const [isAllianceDetailsOpen, setIsAllianceDetailsOpen] = useState(false);
+
+    const handleViewAllianceDetails = (alliance: Alliance) => {
+        setSelectedAlliance(alliance);
+        setIsAllianceDetailsOpen(true);
+    };
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -225,7 +307,7 @@ export default function LeaderboardsPage() {
                 </TableHeader>
                 <TableBody>
                     {allianceData.filter(a => !a.isCurrentAlliance).map((alliance) => (
-                        <AllianceRow key={alliance.rank} alliance={alliance} />
+                        <AllianceRow key={alliance.rank} alliance={alliance} onViewDetails={handleViewAllianceDetails}/>
                     ))}
                 </TableBody>
                 </Table>
@@ -233,7 +315,7 @@ export default function LeaderboardsPage() {
                     <div className="sticky bottom-0 -mx-6 -mb-6 mt-4">
                         <Table>
                             <TableBody>
-                                 <AllianceRow alliance={currentAlliance} isSticky />
+                                 <AllianceRow alliance={currentAlliance} isSticky onViewDetails={handleViewAllianceDetails} />
                             </TableBody>
                         </Table>
                     </div>
@@ -242,6 +324,7 @@ export default function LeaderboardsPage() {
             </Tabs>
         </CardContent>
         </Card>
+        <AllianceDetailsDialog alliance={selectedAlliance} open={isAllianceDetailsOpen} onOpenChange={setIsAllianceDetailsOpen} />
     </div>
   );
 }

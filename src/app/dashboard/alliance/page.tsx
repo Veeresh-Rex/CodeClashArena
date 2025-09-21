@@ -121,12 +121,14 @@ const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData
           <div>
             <p className="font-semibold">{member.name}</p>
             <p className="text-sm text-muted-foreground">@{member.username}</p>
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Star className="w-4 h-4 mr-1 text-primary" />
-              <span>{member.powerScore.toLocaleString()}</span>
-            </div>
           </div>
         </Link>
+      </TableCell>
+      <TableCell className="text-right font-medium">
+          <div className="flex items-center justify-end gap-1">
+            <Star className="w-4 h-4 text-primary" />
+            <span>{member.powerScore.toLocaleString()}</span>
+          </div>
       </TableCell>
       <TableCell className="text-right">
         <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
@@ -760,6 +762,7 @@ export default function AlliancePage() {
                 <TableHeader>
                     <TableRow>
                     <TableHead>Member</TableHead>
+                    <TableHead className="text-right">Power Score</TableHead>
                     <TableHead className="text-right">Role</TableHead>
                     <TableHead className="w-[50px]"></TableHead>
                     </TableRow>

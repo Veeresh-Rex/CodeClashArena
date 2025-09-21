@@ -439,9 +439,39 @@ const LeaveAllianceDialog = () => (
 
 
 export default function AlliancesPage() {
+  const [hasAlliance] = useState(true); // Toggle this to see the 'no alliance' state
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
   const isLeader = currentUser?.role === 'Leader';
+
+  if (!hasAlliance) {
+    return (
+      <div className="p-4 md:p-6 lg:p-8 flex items-center justify-center h-full">
+        <div className="w-full max-w-md space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Join an Alliance</CardTitle>
+              <CardDescription>You are not currently in an alliance. Find one to join or create your own!</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <FindAlliancesDialog />
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Create Alliance</CardTitle>
+              <CardDescription>Can't find one? Create your own!</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <Input placeholder="Alliance Name (max 20 chars)" maxLength={20} />
+              <Input placeholder="Alliance Code (max 5 chars)" maxLength={5} />
+              <Button className="w-full">Create</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -532,25 +562,12 @@ export default function AlliancesPage() {
                     <CardTitle>Alliance Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <FindAlliancesDialog />
+                    <Button variant="outline" className="w-full">Invite Members</Button>
                     {!isLeader && <LeaveAllianceDialog />}
                 </CardContent>
-            </Card>
-            <Card>
-            <CardHeader>
-                <CardTitle>Create Alliance</CardTitle>
-                <CardDescription>Can't find one? Create your own!</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                <Input placeholder="Alliance Name (max 20 chars)" maxLength={20} />
-                <Input placeholder="Alliance Code (max 5 chars)" maxLength={5} />
-                <Button className="w-full">Create</Button>
-            </CardContent>
             </Card>
         </div>
         </div>
     </div>
   );
 }
-
-    

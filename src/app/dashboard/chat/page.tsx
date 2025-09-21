@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 const worldChat = [
   {
@@ -78,16 +79,16 @@ const allianceChat = [
   },
 ];
 
-const contacts = [
-    { name: "Byte Baron", username: 'byte_baron', avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM", allianceCode: "TCC" },
-    { name: "Syntax Slayer", username: 'syntax_slayer', avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday", allianceCode: "TCC" },
-    { name: "Algo Queen", username: 'algo_queen', avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday", allianceCode: "TCC" },
-    { name: "Pixel Pioneer", username: 'pixel_pioneer', avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday", allianceCode: "TCC" },
-    { name: "Data Diva", username: 'data_diva', avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24", allianceCode: "PYPH" },
+const initialContacts = [
+    { name: "Byte Baron", username: 'byte_baron', avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM", allianceCode: "TCC", newMessageCount: 1 },
+    { name: "Syntax Slayer", username: 'syntax_slayer', avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday", allianceCode: "TCC", newMessageCount: 0 },
+    { name: "Algo Queen", username: 'algo_queen', avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday", allianceCode: "TCC", newMessageCount: 3 },
+    { name: "Pixel Pioneer", username: 'pixel_pioneer', avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday", allianceCode: "TCC", newMessageCount: 0 },
+    { name: "Data Diva", username: 'data_diva', avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24", allianceCode: "PYPH", newMessageCount: 0 },
 ];
 
 const getPersonalChat = (contactName: string) => {
-    const contact = contacts.find(c => c.name === contactName);
+    const contact = initialContacts.find(c => c.name === contactName);
     if (contactName === 'Byte Baron') {
         return [
             {
@@ -106,6 +107,13 @@ const getPersonalChat = (contactName: string) => {
                 isFriend: true,
                 allianceCode: contact?.allianceCode,
             },
+        ]
+    }
+     if (contactName === 'Algo Queen') {
+        return [
+            { sender: contactName, message: "Hey, are you joining the contest tonight?", avatar: contact?.avatar || '', time: "Mon 9:00 AM", isFriend: true, allianceCode: contact?.allianceCode },
+            { sender: contactName, message: "The problem set looks interesting.", avatar: contact?.avatar || '', time: "Mon 9:01 AM", isFriend: true, allianceCode: contact?.allianceCode },
+            { sender: contactName, message: "Let me know!", avatar: contact?.avatar || '', time: "Mon 9:01 AM", isFriend: true, allianceCode: contact?.allianceCode },
         ]
     }
     return [
@@ -224,7 +232,12 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
                         </p>
                         <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
                     </div>
-                    <div className="text-xs text-muted-foreground">{contact.time}</div>
+                    <div className="flex flex-col items-end gap-1">
+                        <span className="text-xs text-muted-foreground">{contact.time}</span>
+                        {contact.newMessageCount > 0 && (
+                            <Badge className="bg-red-500 text-white hover:bg-red-500/80">{contact.newMessageCount}</Badge>
+                        )}
+                    </div>
                 </div>
             ))}
         </div>
@@ -250,14 +263,15 @@ const ChatPageContent = () => {
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('worldwide');
   const [hasAlliance] = useState(true);
-  const [hasNewMessages, setHasNewMessages] = useState(true);
+  const [contacts, setContacts] = useState(initialContacts);
+  
+  const hasNewMessages = contacts.some(c => c.newMessageCount > 0);
 
   useEffect(() => {
     if (user) {
       const contact = contacts.find(c => c.name === user || c.username === user);
       if (contact) {
-        setSelectedContact(contact.name);
-        setActiveTab('personal');
+        handleSelectContact(contact.name);
       }
     }
   }, [user]);
@@ -270,7 +284,9 @@ const ChatPageContent = () => {
 
   const handleSelectContact = (name: string) => {
     setSelectedContact(name);
-    setHasNewMessages(false);
+    setContacts(prevContacts => prevContacts.map(c => 
+        c.name === name ? { ...c, newMessageCount: 0 } : c
+    ));
   };
 
   const handleBack = () => {
@@ -279,7 +295,7 @@ const ChatPageContent = () => {
   
   const handleTabChange = (value: string) => {
     if(value === 'personal') {
-        setHasNewMessages(false);
+       setSelectedContact(null);
     }
     setActiveTab(value);
   }
@@ -292,7 +308,7 @@ const ChatPageContent = () => {
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
                 <TabsTrigger value="alliance" disabled={!hasAlliance}>Alliance</TabsTrigger>
-                <TabsTrigger value="personal" onClick={() => setSelectedContact(null)} className="relative">
+                <TabsTrigger value="personal" className="relative">
                     Personal
                     {hasNewMessages && <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />}
                 </TabsTrigger>

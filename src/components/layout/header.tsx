@@ -3,7 +3,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare, Heart } from "lucide-react";
+import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare, Check, X } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -24,6 +24,14 @@ import {
   DropdownMenuSubContent,
   DropdownMenuPortal
 } from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -40,10 +48,17 @@ const pageTitles: { [key: string]: string } = {
   '/dashboard/notifications': 'Notifications',
 };
 
+const friendRequests = [
+    { id: 'fr1', name: 'Syntax Samurai', username: 'syntax_samurai', avatar: 'https://picsum.photos/seed/11/100/100', allianceCode: 'BINB' },
+    { id: 'fr2', name: 'Boolean Bard', username: 'boolean_bard', avatar: 'https://picsum.photos/seed/12/100/100', allianceCode: 'PYPH' },
+    { id: 'fr3', name: 'Kernel Knight', username: 'kernel_knight', avatar: 'https://picsum.photos/seed/15/100/100', allianceCode: 'JAVA' },
+];
+
 export function Header() {
   const pathname = usePathname();
   const title = pageTitles[pathname] || 'CodeClash Arena';
   const [isClient, setIsClient] = useState(false);
+  const [requests, setRequests] = useState(friendRequests);
 
   useEffect(() => {
     setIsClient(true);
@@ -54,6 +69,10 @@ export function Header() {
     if (!a.online && b.online) return 1;
     return a.name.localeCompare(b.name);
   });
+
+  const handleRequest = (requestId: string) => {
+    setRequests(prev => prev.filter(r => r.id !== requestId));
+  }
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
@@ -75,7 +94,7 @@ export function Header() {
          <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">
-              <Heart className="h-5 w-5" />
+              <Users className="h-5 w-5" />
               <span className="sr-only">Toggle friends list</span>
             </Button>
           </DropdownMenuTrigger>
@@ -128,11 +147,44 @@ export function Header() {
               ))}
             </ScrollArea>
              <DropdownMenuSeparator />
-             <DropdownMenuItem className="justify-center text-sm text-muted-foreground hover:text-primary">
-                <Link href="#">
-                    See Friend Requests
-                </Link>
-             </DropdownMenuItem>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <DropdownMenuItem 
+                        onSelect={(e) => e.preventDefault()} 
+                        className="justify-center text-sm text-muted-foreground hover:text-primary focus:bg-accent focus:text-primary"
+                    >
+                        See Friend Requests
+                    </DropdownMenuItem>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Friend Requests</DialogTitle>
+                        <DialogDescription>
+                            Accept or decline requests from other coders.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                        {requests.length > 0 ? requests.map(req => (
+                            <div key={req.id} className="flex items-center justify-between">
+                                 <div className="flex items-center gap-3">
+                                    <Avatar className="h-10 w-10">
+                                        <AvatarImage src={req.avatar} alt={req.name} />
+                                        <AvatarFallback>{req.name.substring(0,2)}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold">{req.name}</p>
+                                        <p className="text-sm text-muted-foreground">@{req.username}</p>
+                                    </div>
+                                </div>
+                                <div className="flex gap-2">
+                                    <Button size="sm" variant="outline" onClick={() => handleRequest(req.id)}><Check className="h-4 w-4 mr-1" /> Accept</Button>
+                                    <Button size="icon" variant="ghost" onClick={() => handleRequest(req.id)}><X className="h-4 w-4" /></Button>
+                                </div>
+                            </div>
+                        )) : <p className="text-sm text-muted-foreground text-center">No new friend requests.</p>}
+                    </div>
+                </DialogContent>
+             </Dialog>
           </DropdownMenuContent>
         </DropdownMenu>
         <DropdownMenu>

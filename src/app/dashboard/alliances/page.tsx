@@ -49,6 +49,7 @@ const myAlliance = {
   description: "A group of dedicated coders aiming for the top.",
   notice: "The next Alliance War starts this Friday! Be ready to crush it. We will be focusing on graph problems.",
   noticeLastModifiedBy: "Syntax Slayer",
+  noticeLastModifiedTime: "2 hours ago",
   membersList: [
     { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
     { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
@@ -314,7 +315,7 @@ export default function AlliancesPage() {
                         </div>
                         <div>
                             <CardTitle>Alliance Notice</CardTitle>
-                            <CardDescription className="text-primary-foreground/80">Last updated by {myAlliance.noticeLastModifiedBy}</CardDescription>
+                            <CardDescription className="text-primary-foreground/80">Last updated by {myAlliance.noticeLastModifiedBy} &bull; {myAlliance.noticeLastModifiedTime}</CardDescription>
                         </div>
                     </div>
                     {canEditNotice && (
@@ -410,5 +411,3 @@ export default function AlliancesPage() {
     </div>
   );
 }
-
-    

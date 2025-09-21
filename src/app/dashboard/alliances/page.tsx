@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, Info } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -57,11 +57,18 @@ const myAlliance = {
 };
 
 const otherAlliances = [
-  { name: "Binary Brigade", members: 42, powerScore: 210500, description: "Masters of the bit, we operate in 0s and 1s.", rank: 2 },
-  { name: "Java Jesters", members: 15, powerScore: 98200, description: "Coding with a smile, one cup at a time.", rank: 4 },
-  { name: "Python Phantoms", members: 33, powerScore: 180300, description: "Elegant code that strikes from the shadows.", rank: 3 },
-  { name: "Recursive Renegades", members: 50, powerScore: 250000, description: "To understand us, you must first understand us.", rank: 1 },
-  { name: "CSS Sorcerers", members: 18, powerScore: 85400, description: "Weaving magic into the web's visual fabric.", rank: 5 },
+  { name: "Binary Brigade", members: 42, powerScore: 210500, description: "Masters of the bit, we operate in 0s and 1s.", rank: 2, avatar: "https://picsum.photos/seed/20/100/100" },
+  { name: "Java Jesters", members: 15, powerScore: 98200, description: "Coding with a smile, one cup at a time.", rank: 4, avatar: "https://picsum.photos/seed/21/100/100" },
+  { name: "Python Phantoms", members: 33, powerScore: 180300, description: "Elegant code that strikes from the shadows.", rank: 3, avatar: "https://picsum.photos/seed/22/100/100" },
+  { name: "Recursive Renegades", members: 50, powerScore: 250000, description: "To understand us, you must first understand us.", rank: 1, avatar: "https://picsum.photos/seed/23/100/100" },
+  { name: "CSS Sorcerers", members: 18, powerScore: 85400, description: "Weaving magic into the web's visual fabric.", rank: 5, avatar: "https://picsum.photos/seed/24/100/100" },
+];
+
+const dummyMembers = [
+    { name: "Gadget Guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
+    { name: "Loop Legend", role: "Member", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
+    { name: "Function Fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
+    { name: "Pointer Prodigy", role: "Member", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
 ];
 
 
@@ -126,33 +133,102 @@ const MemberRow = ({ member }: { member: (typeof myAlliance.membersList)[0] }) =
 type Alliance = typeof otherAlliances[0];
 
 const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
+    const [view, setView] = useState<'details' | 'members'>('details');
+
     if (!alliance) return null;
 
-    return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                    <DialogTitle>{alliance.name}</DialogTitle>
-                    <DialogDescription>{alliance.description}</DialogDescription>
-                </DialogHeader>
-                <div className="grid grid-cols-3 gap-4 text-center my-4">
+    const handleClose = (isOpen: boolean) => {
+        if (!isOpen) {
+            setTimeout(() => setView('details'), 300); // reset view after dialog closes
+        }
+        onOpenChange(isOpen);
+    }
+
+    const DetailsView = () => (
+        <>
+            <DialogHeader>
+                 <div className="flex items-center gap-4">
+                    <Avatar className="h-16 w-16">
+                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                        <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
+                    </Avatar>
                     <div>
-                        <p className="text-sm text-muted-foreground">Rank</p>
-                        <p className="text-lg font-bold">#{alliance.rank}</p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-muted-foreground">Members</p>
-                        <p className="text-lg font-bold">{alliance.members}</p>
-                    </div>
-                    <div>
-                        <p className="text-sm text-muted-foreground">Total Power</p>
-                        <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
+                        <DialogTitle className="text-2xl">{alliance.name}</DialogTitle>
+                        <DialogDescription>{alliance.description}</DialogDescription>
                     </div>
                 </div>
-                <DialogFooter className="grid grid-cols-2 gap-2">
-                    <Button variant="outline">See Members</Button>
-                    <Button>Request to Join</Button>
-                </DialogFooter>
+            </DialogHeader>
+            <div className="grid grid-cols-3 gap-4 text-center my-4">
+                <div>
+                    <p className="text-sm text-muted-foreground">Rank</p>
+                    <p className="text-lg font-bold">#{alliance.rank}</p>
+                </div>
+                <div>
+                    <p className="text-sm text-muted-foreground">Members</p>
+                    <p className="text-lg font-bold">{alliance.members}</p>
+                </div>
+                <div>
+                    <p className="text-sm text-muted-foreground">Total Power</p>
+                    <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
+                </div>
+            </div>
+            <DialogFooter className="grid grid-cols-2 gap-2">
+                <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
+                <Button>Request to Join</Button>
+            </DialogFooter>
+        </>
+    );
+
+    const MembersView = () => (
+        <>
+            <DialogHeader>
+                 <div className="flex items-center gap-3">
+                    <Button variant="ghost" size="icon" onClick={() => setView('details')}>
+                        <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                    <DialogTitle>Members of {alliance.name}</DialogTitle>
+                 </div>
+            </DialogHeader>
+            <Table>
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Member</TableHead>
+                        <TableHead className="text-right">Role</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {dummyMembers.map(member => (
+                         <TableRow key={member.name}>
+                            <TableCell className="font-medium">
+                                <div className="flex items-center gap-3">
+                                    <Avatar className="h-10 w-10">
+                                        <AvatarImage src={member.avatar} alt={member.name} />
+                                        <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                                    </Avatar>
+                                    <div>
+                                        <p className="font-semibold">{member.name}</p>
+                                        <div className="flex items-center text-sm text-muted-foreground">
+                                        <Star className="w-4 h-4 mr-1 text-primary" />
+                                        <span>{member.powerScore.toLocaleString()}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <Badge variant="secondary">{member.role}</Badge>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </>
+    );
+
+
+    return (
+        <Dialog open={open} onOpenChange={handleClose}>
+            <DialogContent className="sm:max-w-md">
+                {view === 'details' ? <DetailsView /> : <MembersView />}
             </DialogContent>
         </Dialog>
     );
@@ -174,7 +250,7 @@ const FindAlliancesDialog = () => {
             <DialogTrigger asChild>
                 <Button variant="outline" className="w-full">Find an Alliance</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-2xl">
+            <DialogContent className="sm:max-w-3xl">
                  <DialogHeader>
                     <DialogTitle>Find Alliances</DialogTitle>
                     <DialogDescription>Search for an alliance to join or browse the list.</DialogDescription>
@@ -195,7 +271,15 @@ const FindAlliancesDialog = () => {
                     <TableBody>
                         {otherAlliances.map((alliance) => (
                         <TableRow key={alliance.name}>
-                            <TableCell className="font-medium">{alliance.name}</TableCell>
+                            <TableCell className="font-medium">
+                                <div className="flex items-center gap-3">
+                                    <Avatar className="h-10 w-10">
+                                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                                        <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
+                                    </Avatar>
+                                    <span>{alliance.name}</span>
+                                </div>
+                            </TableCell>
                             <TableCell>{alliance.members}</TableCell>
                             <TableCell>{alliance.powerScore.toLocaleString()}</TableCell>
                             <TableCell className="text-right">
@@ -292,3 +376,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

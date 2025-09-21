@@ -498,7 +498,7 @@ export default function AlliancesPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <FindAlliancesDialog />
-                    {!isLeader && <LeaveAllianceDialog />}
+                    <LeaveAllianceDialog />
                 </CardContent>
             </Card>
             <Card>
@@ -517,6 +517,3 @@ export default function AlliancesPage() {
     </div>
   );
 }
-
-    
-    

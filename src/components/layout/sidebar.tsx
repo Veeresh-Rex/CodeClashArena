@@ -90,20 +90,6 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter className="flex flex-col gap-4">
         <SidebarSeparator />
-         <SidebarMenu>
-             <SidebarMenuItem>
-                <SidebarMenuButton asChild isActive={pathname.startsWith("/dashboard/profile")} tooltip="My Profile">
-                    <Link href="/dashboard/profile">
-                        <Avatar className="h-8 w-8">
-                            <AvatarImage src="https://picsum.photos/seed/1/100/100" />
-                            <AvatarFallback>CC</AvatarFallback>
-                        </Avatar>
-                        <span>My Profile</span>
-                    </Link>
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-         </SidebarMenu>
-
         <Button variant="ghost" onClick={toggleSidebar} className="w-full justify-center group-data-[collapsible=icon]:justify-center">
             {state === 'expanded' ? <PanelLeftClose /> : <PanelRightClose />}
             <span className="group-data-[collapsible=icon]:hidden pl-2">Collapse</span>

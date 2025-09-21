@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -20,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, Info } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +35,7 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -55,11 +57,11 @@ const myAlliance = {
 };
 
 const otherAlliances = [
-  { name: "Binary Brigade", members: 42, powerScore: 210500 },
-  { name: "Java Jesters", members: 15, powerScore: 98200 },
-  { name: "Python Phantoms", members: 33, powerScore: 180300 },
-  { name: "Recursive Renegades", members: 50, powerScore: 250000 },
-  { name: "CSS Sorcerers", members: 18, powerScore: 85400 },
+  { name: "Binary Brigade", members: 42, powerScore: 210500, description: "Masters of the bit, we operate in 0s and 1s.", rank: 2 },
+  { name: "Java Jesters", members: 15, powerScore: 98200, description: "Coding with a smile, one cup at a time.", rank: 4 },
+  { name: "Python Phantoms", members: 33, powerScore: 180300, description: "Elegant code that strikes from the shadows.", rank: 3 },
+  { name: "Recursive Renegades", members: 50, powerScore: 250000, description: "To understand us, you must first understand us.", rank: 1 },
+  { name: "CSS Sorcerers", members: 18, powerScore: 85400, description: "Weaving magic into the web's visual fabric.", rank: 5 },
 ];
 
 
@@ -121,45 +123,94 @@ const MemberRow = ({ member }: { member: (typeof myAlliance.membersList)[0] }) =
   )
 }
 
-const FindAlliancesDialog = () => (
-    <Dialog>
-        <DialogTrigger asChild>
-            <Button variant="outline" className="w-full">Find an Alliance</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-2xl">
-             <DialogHeader>
-                <DialogTitle>Find Alliances</DialogTitle>
-                <DialogDescription>Search for an alliance to join or browse the list.</DialogDescription>
-            </DialogHeader>
-            <div className="relative">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search by name..." className="pl-8" />
-            </div>
-            <Table>
-                <TableHeader>
-                    <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Members</TableHead>
-                    <TableHead>Power Score</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {otherAlliances.map((alliance) => (
-                    <TableRow key={alliance.name}>
-                        <TableCell className="font-medium">{alliance.name}</TableCell>
-                        <TableCell>{alliance.members}</TableCell>
-                        <TableCell>{alliance.powerScore.toLocaleString()}</TableCell>
-                        <TableCell className="text-right">
-                        <Button variant="outline" size="sm">View Details</Button>
-                        </TableCell>
-                    </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </DialogContent>
-    </Dialog>
-)
+type Alliance = typeof otherAlliances[0];
+
+const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: Alliance | null, open: boolean, onOpenChange: (open: boolean) => void }) => {
+    if (!alliance) return null;
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                    <DialogTitle>{alliance.name}</DialogTitle>
+                    <DialogDescription>{alliance.description}</DialogDescription>
+                </DialogHeader>
+                <div className="grid grid-cols-3 gap-4 text-center my-4">
+                    <div>
+                        <p className="text-sm text-muted-foreground">Rank</p>
+                        <p className="text-lg font-bold">#{alliance.rank}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-muted-foreground">Members</p>
+                        <p className="text-lg font-bold">{alliance.members}</p>
+                    </div>
+                    <div>
+                        <p className="text-sm text-muted-foreground">Total Power</p>
+                        <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
+                    </div>
+                </div>
+                <DialogFooter className="grid grid-cols-2 gap-2">
+                    <Button variant="outline">See Members</Button>
+                    <Button>Request to Join</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
+
+const FindAlliancesDialog = () => {
+    const [selectedAlliance, setSelectedAlliance] = useState<Alliance | null>(null);
+    const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+
+    const handleViewDetails = (alliance: Alliance) => {
+        setSelectedAlliance(alliance);
+        setIsDetailsOpen(true);
+    };
+
+    return (
+    <>
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="outline" className="w-full">Find an Alliance</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-2xl">
+                 <DialogHeader>
+                    <DialogTitle>Find Alliances</DialogTitle>
+                    <DialogDescription>Search for an alliance to join or browse the list.</DialogDescription>
+                </DialogHeader>
+                <div className="relative">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input placeholder="Search by name..." className="pl-8" />
+                </div>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Members</TableHead>
+                        <TableHead>Power Score</TableHead>
+                        <TableHead className="text-right">Action</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {otherAlliances.map((alliance) => (
+                        <TableRow key={alliance.name}>
+                            <TableCell className="font-medium">{alliance.name}</TableCell>
+                            <TableCell>{alliance.members}</TableCell>
+                            <TableCell>{alliance.powerScore.toLocaleString()}</TableCell>
+                            <TableCell className="text-right">
+                                <Button variant="outline" size="sm" onClick={() => handleViewDetails(alliance)}>View Details</Button>
+                            </TableCell>
+                        </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </DialogContent>
+        </Dialog>
+        <AllianceDetailsDialog alliance={selectedAlliance} open={isDetailsOpen} onOpenChange={setIsDetailsOpen} />
+    </>
+    )
+}
 
 export default function AlliancesPage() {
   return (

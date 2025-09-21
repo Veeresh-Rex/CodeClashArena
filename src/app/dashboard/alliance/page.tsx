@@ -131,7 +131,7 @@ const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData
           </div>
       </TableCell>
       <TableCell className="text-right">
-        <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
+        <Badge variant={member.role === "Member" ? "secondary" : "default"}>{member.role}</Badge>
       </TableCell>
        <TableCell className="text-right w-[50px]">
          {!member.isCurrentUser && (

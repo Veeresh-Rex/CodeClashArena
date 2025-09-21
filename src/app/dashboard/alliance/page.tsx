@@ -22,7 +22,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus, Ban, UserCheck, UserXIcon } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload, LogOut, Check, X, UserPlus, Ban, UserCheck, UserXIcon, MoreVertical } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -196,11 +196,11 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
         if (!isOpen) {
             setTimeout(() => {
                 setView('details');
-            }, 300); 
+            }, 300);
         }
         onOpenChange(isOpen);
     }
-    
+
     const handleRequestJoin = () => {
         setRequestSent(prev => !prev);
     }
@@ -489,6 +489,7 @@ const EditNoticeDialog = ({ notice, onSave }: { notice: string, onSave: (newNoti
 
 const InviteMembersDialog = () => {
     const [invited, setInvited] = useState<string[]>([]);
+    const router = useRouter();
     
     const handleToggleInvite = (userId: string) => {
         setInvited(prev => 
@@ -502,62 +503,67 @@ const InviteMembersDialog = () => {
         const isInvited = invited.includes(user.id);
 
         return (
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <TableRow className="cursor-pointer">
-                        <TableCell>
-                            <div className="flex items-center gap-3">
-                                <Avatar className="h-10 w-10">
-                                    <AvatarImage src={user.avatar} alt={user.name} />
-                                    <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
-                                </Avatar>
-                                <div>
-                                    <p className="font-medium">{user.name}</p>
-                                    <p className="text-sm text-muted-foreground">@{user.username}</p>
-                                </div>
-                            </div>
-                        </TableCell>
-                        <TableCell>{user.powerScore.toLocaleString()}</TableCell>
-                        <TableCell className="text-right">
-                             <Button 
-                                variant={isInvited ? "secondary" : "outline"} 
-                                size="sm" 
-                                onClick={(e) => { e.stopPropagation(); handleToggleInvite(user.id); }}
-                            >
-                                {isInvited ? (
-                                    <>
-                                        <Check className="mr-2 h-4 w-4" />
-                                        Invited
-                                    </>
-                                ) : (
-                                    <>
-                                     <UserPlus className="mr-2 h-4 w-4" />
-                                     Invite
-                                    </>
-                                )}
-                            </Button>
-                        </TableCell>
-                    </TableRow>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/chat?user=${encodeURIComponent(user.name)}`}>
-                            <MessageSquare className="mr-2 h-4 w-4" />
-                            <span>Chat</span>
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                        <Link href={`/dashboard/profile?user=${user.id}`}>
-                            <User className="mr-2 h-4 w-4" />
-                            <span>See Profile</span>
-                        </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
-                        <Ban className="mr-2 h-4 w-4" />
-                        <span>Block user to join</span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+            <TableRow>
+                <TableCell>
+                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push(`/dashboard/profile?user=${user.id}`)}>
+                        <Avatar className="h-10 w-10">
+                            <AvatarImage src={user.avatar} alt={user.name} />
+                            <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <p className="font-medium">{user.name}</p>
+                            <p className="text-sm text-muted-foreground">@{user.username}</p>
+                        </div>
+                    </div>
+                </TableCell>
+                <TableCell>{user.powerScore.toLocaleString()}</TableCell>
+                <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
+                        <Button 
+                            variant={isInvited ? "secondary" : "outline"} 
+                            size="sm" 
+                            onClick={() => handleToggleInvite(user.id)}
+                        >
+                            {isInvited ? (
+                                <>
+                                    <Check className="mr-2 h-4 w-4" />
+                                    Invited
+                                </>
+                            ) : (
+                                <>
+                                 <UserPlus className="mr-2 h-4 w-4" />
+                                 Invite
+                                </>
+                            )}
+                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                    <MoreVertical className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem asChild>
+                                    <Link href={`/dashboard/chat?user=${encodeURIComponent(user.name)}`}>
+                                        <MessageSquare className="mr-2 h-4 w-4" />
+                                        <span>Chat</span>
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href={`/dashboard/profile?user=${user.id}`}>
+                                        <User className="mr-2 h-4 w-4" />
+                                        <span>See Profile</span>
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
+                                    <Ban className="mr-2 h-4 w-4" />
+                                    <span>Block user to join</span>
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
+                </TableCell>
+            </TableRow>
         );
     };
 
@@ -651,7 +657,7 @@ export default function AlliancePage() {
 
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canManage = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
-  
+
   const handleUpdateNotice = (newNotice: string) => {
     setMyAlliance(prev => ({
         ...prev,

@@ -33,6 +33,14 @@ const pageTitles: { [key: string]: string } = {
   '/dashboard/notifications': 'Notifications',
 };
 
+const friendsList = [
+    { name: "Byte Baron", avatar: "https://picsum.photos/seed/4/100/100", online: true },
+    { name: "Syntax Slayer", avatar: "https://picsum.photos/seed/2/100/100", online: false },
+    { name: "Algo Queen", avatar: "https://picsum.photos/seed/3/100/100", online: true },
+    { name: "Pixel Pioneer", avatar: "https://picsum.photos/seed/5/100/100", online: false },
+    { name: "Data Diva", avatar: "https://picsum.photos/seed/14/100/100", online: true },
+];
+
 export function Header() {
   const pathname = usePathname();
   const title = pageTitles[pathname] || 'CodeClash Arena';
@@ -59,6 +67,38 @@ export function Header() {
             />
           </div>
         </form>
+         <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Users className="h-5 w-5" />
+              <span className="sr-only">Toggle friends list</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuLabel>Friends</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {friendsList.map(friend => (
+                <DropdownMenuItem key={friend.name} asChild>
+                    <Link href="/dashboard/chat" className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Avatar className="h-8 w-8">
+                                <AvatarImage src={friend.avatar} alt={friend.name} />
+                                <AvatarFallback>{friend.name.substring(0,2)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{friend.name}</span>
+                        </div>
+                        {friend.online && <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />}
+                    </Link>
+                </DropdownMenuItem>
+            ))}
+             <DropdownMenuSeparator />
+             <DropdownMenuItem asChild className="justify-center text-sm text-muted-foreground hover:text-primary">
+                <Link href="/dashboard/chat">
+                    Go to Chat
+                </Link>
+             </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">

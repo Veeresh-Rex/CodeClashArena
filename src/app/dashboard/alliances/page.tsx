@@ -76,7 +76,7 @@ const dummyMembers = [
 
 const MemberRow = ({ member }: { member: (typeof myAlliance.membersList)[0] }) => {
   const content = (
-    <TableRow className="cursor-pointer">
+    <TableRow className={cn("cursor-pointer", member.isCurrentUser && "bg-primary/10 hover:bg-primary/20")}>
       <TableCell className="font-medium">
         <div className="flex items-center gap-3">
           <div className="relative">
@@ -358,7 +358,15 @@ export default function AlliancesPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {myAlliance.membersList.map((member) => (
+                    {myAlliance.membersList.slice().sort((a, b) => {
+                        if (a.isCurrentUser) return -1;
+                        if (b.isCurrentUser) return 1;
+                        if (a.role === 'Leader') return -1;
+                        if (b.role === 'Leader') return 1;
+                        if (a.role === 'Co-Leader') return -1;
+                        if (b.role === 'Co-Leader') return 1;
+                        return 0;
+                    }).map((member) => (
                         <MemberRow key={member.name} member={member} />
                     ))}
                 </TableBody>
@@ -392,6 +400,3 @@ export default function AlliancesPage() {
     </div>
   );
 }
-
-    
-

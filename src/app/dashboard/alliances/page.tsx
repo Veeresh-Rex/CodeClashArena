@@ -439,7 +439,7 @@ const LeaveAllianceDialog = () => (
 
 
 export default function AlliancesPage() {
-  const [hasAlliance] = useState(true); // Toggle this to see the 'no alliance' state
+  const [hasAlliance] = useState(false); // Toggle this to see the 'no alliance' state
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
   const isLeader = currentUser?.role === 'Leader';

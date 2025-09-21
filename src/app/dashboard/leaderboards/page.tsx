@@ -1,3 +1,4 @@
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -61,7 +62,7 @@ export default function LeaderboardsPage() {
             <Tabs defaultValue="individual">
             <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="individual">Individual</TabsTrigger>
-                <TabsTrigger value="alliance">Alliances</TabsTrigger>
+                <TabsTrigger value="alliance">Alliance</TabsTrigger>
             </TabsList>
             <TabsContent value="individual">
                 <Table>
@@ -130,3 +131,5 @@ export default function LeaderboardsPage() {
     </div>
   );
 }
+
+    

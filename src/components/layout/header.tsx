@@ -30,7 +30,7 @@ import { cn } from "@/lib/utils";
 const pageTitles: { [key: string]: string } = {
   '/dashboard': 'Dashboard',
   '/dashboard/leaderboards': 'Leaderboards',
-  '/dashboard/alliances': 'Alliances',
+  '/dashboard/alliance': 'Alliance',
   '/dashboard/chat': 'Chat',
   '/dashboard/recommendations': 'AI Mentor',
   '/dashboard/profile': 'My Profile',
@@ -194,3 +194,5 @@ export function Header() {
     </header>
   );
 }
+
+    

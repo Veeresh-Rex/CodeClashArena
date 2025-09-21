@@ -244,7 +244,7 @@ const NoAllianceChat = () => (
         <h3 className="text-xl font-semibold">Join an Alliance to Chat</h3>
         <p className="text-muted-foreground mt-2 max-w-sm">You must be a member of an alliance to access the alliance chat. Find an alliance to join and start collaborating with your new teammates!</p>
         <Button asChild className="mt-6">
-            <Link href="/dashboard/alliances">Find an Alliance</Link>
+            <Link href="/dashboard/alliance">Find an Alliance</Link>
         </Button>
     </div>
 );
@@ -256,7 +256,7 @@ const ChatPageContent = () => {
 
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('worldwide');
-  const [hasAlliance] = useState(true); // Toggle this to see the 'no alliance' state
+  const [hasAlliance] = useState(true);
 
   useEffect(() => {
     if (user) {

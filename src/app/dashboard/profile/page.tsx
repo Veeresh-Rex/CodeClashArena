@@ -66,7 +66,7 @@ export default function ProfilePage() {
                         <span className="font-semibold">{userProfile.alliance}</span>
                     </div>
                     <Button asChild variant="outline" size="sm" className="w-full">
-                        <Link href="/dashboard/alliances">View Alliance</Link>
+                        <Link href="/dashboard/alliance">View Alliance</Link>
                     </Button>
                 </CardContent>
             </Card>
@@ -153,3 +153,5 @@ export default function ProfilePage() {
     </div>
   );
 }
+
+    

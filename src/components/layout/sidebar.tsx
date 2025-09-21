@@ -31,7 +31,7 @@ import { Button } from "@/components/ui/button";
 const menuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/leaderboards", label: "Leaderboards", icon: Trophy },
-  { href: "/dashboard/alliances", label: "Alliances", icon: Users },
+  { href: "/dashboard/alliance", label: "Alliance", icon: Users },
   { href: "/dashboard/chat", label: "Chat", icon: MessageSquare },
   { href: "/dashboard/recommendations", label: "AI Mentor", icon: BrainCircuit },
 ];
@@ -84,3 +84,5 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+    

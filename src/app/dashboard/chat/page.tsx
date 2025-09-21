@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, Send, UserPlus, User, ShieldX, Users } from "lucide-react";
+import { ArrowLeft, Send, User, ShieldX, Users } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -79,11 +79,11 @@ const allianceChat = [
 ];
 
 const contacts = [
-    { name: "Byte Baron", avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM", allianceCode: "TCC" },
-    { name: "Syntax Slayer", avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday", allianceCode: "TCC" },
-    { name: "Algo Queen", avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday", allianceCode: "TCC" },
-    { name: "Pixel Pioneer", avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday", allianceCode: "TCC" },
-    { name: "Data Diva", avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24", allianceCode: "PYPH" },
+    { name: "Byte Baron", username: 'byte_baron', avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM", allianceCode: "TCC" },
+    { name: "Syntax Slayer", username: 'syntax_slayer', avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday", allianceCode: "TCC" },
+    { name: "Algo Queen", username: 'algo_queen', avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday", allianceCode: "TCC" },
+    { name: "Pixel Pioneer", username: 'pixel_pioneer', avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday", allianceCode: "TCC" },
+    { name: "Data Diva", username: 'data_diva', avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24", allianceCode: "PYPH" },
 ];
 
 const getPersonalChat = (contactName: string) => {
@@ -223,6 +223,7 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
                            {contact.allianceCode && <span className="text-muted-foreground mr-1">[{contact.allianceCode}]</span>}
                            {contact.name}
                         </p>
+                        <p className="text-sm text-muted-foreground truncate">@{contact.username}</p>
                         <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
                     </div>
                     <div className="text-xs text-muted-foreground">{contact.time}</div>
@@ -254,8 +255,11 @@ const ChatPageContent = () => {
 
   useEffect(() => {
     if (user) {
-      setSelectedContact(user);
-      setActiveTab('personal');
+      const contact = contacts.find(c => c.name === user || c.username === user);
+      if (contact) {
+        setSelectedContact(contact.name);
+        setActiveTab('personal');
+      }
     }
   }, [user]);
   

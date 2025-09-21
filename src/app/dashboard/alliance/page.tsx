@@ -68,11 +68,11 @@ const myAllianceData = {
   noticeLastModifiedTime: "2 hours ago",
   avatar: "https://picsum.photos/seed/1/100/100",
   membersList: [
-    { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
-    { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
-    { name: "Algo Queen", role: "Member", avatar: "https://picsum.photos/seed/3/100/100", powerScore: 2600, online: true },
-    { name: "Byte Baron", role: "Member", avatar: "https://picsum.photos/seed/4/100/100", powerScore: 2550, online: false },
-    { name: "Pixel Pioneer", role: "Member", avatar: "https://picsum.photos/seed/5/100/100", powerScore: 2400, online: true },
+    { name: "Syntax Slayer", username: "syntax_slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
+    { name: "Cody Clash", username: "cody_clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
+    { name: "Algo Queen", username: "algo_queen", role: "Member", avatar: "https://picsum.photos/seed/3/100/100", powerScore: 2600, online: true },
+    { name: "Byte Baron", username: "byte_baron", role: "Member", avatar: "https://picsum.photos/seed/4/100/100", powerScore: 2550, online: false },
+    { name: "Pixel Pioneer", username: "pixel_pioneer", role: "Member", avatar: "https://picsum.photos/seed/5/100/100", powerScore: 2400, online: true },
   ],
 };
 
@@ -85,10 +85,10 @@ const otherAlliances = [
 ];
 
 const dummyMembers = [
-    { name: "Gadget Guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
-    { name: "Loop Legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
-    { name: "Function Fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
-    { name: "Pointer Prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
+    { name: "Gadget Guru", username: "gadget_guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
+    { name: "Loop Legend", username: "loop_legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
+    { name: "Function Fox", username: "function_fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
+    { name: "Pointer Prodigy", username: "pointer_prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
 ];
 
 const usersWithoutAlliance = [
@@ -107,9 +107,9 @@ const initialJoinRequests = [
 
 const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData.membersList)[0], currentUserRole?: string }) => {
   const content = (
-    <TableRow className={cn("cursor-pointer", member.isCurrentUser && "bg-primary/10 hover:bg-primary/20")}>
+    <TableRow className={cn(member.isCurrentUser && "bg-primary/10 hover:bg-primary/20")}>
       <TableCell className="font-medium">
-        <div className="flex items-center gap-3">
+        <Link href={`/dashboard/profile?user=${member.username}`} className="flex items-center gap-3">
           <div className="relative">
               <Avatar className="h-10 w-10">
                 <AvatarImage src={member.avatar} alt={member.name} />
@@ -119,69 +119,71 @@ const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData
           </div>
           <div>
             <p className="font-semibold">{member.name}</p>
+            <p className="text-sm text-muted-foreground">@{member.username}</p>
             <div className="flex items-center text-sm text-muted-foreground">
               <Star className="w-4 h-4 mr-1 text-primary" />
               <span>{member.powerScore.toLocaleString()}</span>
             </div>
           </div>
-        </div>
+        </Link>
       </TableCell>
       <TableCell className="text-right">
         <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
       </TableCell>
+       <TableCell className="text-right w-[50px]">
+         {!member.isCurrentUser && (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                        <MoreVertical className="h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                     <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/chat?user=${encodeURIComponent(member.name)}`}>
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            <span>Chat</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/profile?user=${member.username}`}>
+                            <User className="mr-2 h-4 w-4" />
+                            <span>See Profile</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
+                        <ShieldX className="mr-2 h-4 w-4" />
+                        <span>Block</span>
+                    </DropdownMenuItem>
+                    {(currentUserRole === 'Leader' || currentUserRole === 'Co-Leader') && member.role !== 'Leader' && (
+                        <>
+                            <DropdownMenuSeparator />
+                            {member.role === 'Member' && currentUserRole === 'Leader' && (
+                                <DropdownMenuItem>
+                                    <ArrowUpCircle className="mr-2 h-4 w-4" />
+                                    <span>Promote to Co-Leader</span>
+                                </DropdownMenuItem>
+                            )}
+                            {member.role === 'Co-Leader' && currentUserRole === 'Leader' && (
+                                 <DropdownMenuItem>
+                                    <ArrowDownCircle className="mr-2 h-4 w-4" />
+                                    <span>Demote to Member</span>
+                                </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
+                                <UserMinus className="mr-2 h-4 w-4" />
+                                <span>Remove from Alliance</span>
+                            </DropdownMenuItem>
+                        </>
+                    )}
+                </DropdownMenuContent>
+            </DropdownMenu>
+         )}
+        </TableCell>
     </TableRow>
   );
 
-  if (member.isCurrentUser) {
-      return content;
-  }
-
-  return (
-    <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-            {content}
-        </DropdownMenuTrigger>
-        <DropdownMenuContent>
-             <DropdownMenuItem asChild>
-                <Link href={`/dashboard/chat?user=${encodeURIComponent(member.name)}`}>
-                    <MessageSquare className="mr-2 h-4 w-4" />
-                    <span>Chat</span>
-                </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-                <Link href="/dashboard/profile">
-                    <User className="mr-2 h-4 w-4" />
-                    <span>See Profile</span>
-                </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
-                <ShieldX className="mr-2 h-4 w-4" />
-                <span>Block</span>
-            </DropdownMenuItem>
-            {(currentUserRole === 'Leader' || currentUserRole === 'Co-Leader') && member.role !== 'Leader' && (
-                <>
-                    <DropdownMenuSeparator />
-                    {member.role === 'Member' && currentUserRole === 'Leader' && (
-                        <DropdownMenuItem>
-                            <ArrowUpCircle className="mr-2 h-4 w-4" />
-                            <span>Promote to Co-Leader</span>
-                        </DropdownMenuItem>
-                    )}
-                    {member.role === 'Co-Leader' && currentUserRole === 'Leader' && (
-                         <DropdownMenuItem>
-                            <ArrowDownCircle className="mr-2 h-4 w-4" />
-                            <span>Demote to Member</span>
-                        </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
-                        <UserMinus className="mr-2 h-4 w-4" />
-                        <span>Remove from Alliance</span>
-                    </DropdownMenuItem>
-                </>
-            )}
-        </DropdownMenuContent>
-    </DropdownMenu>
-  )
+  return content;
 }
 
 type Alliance = typeof otherAlliances[0];
@@ -264,6 +266,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
                         </Avatar>
                         <div>
                             <p className="font-semibold">{member.name}</p>
+                            <p className="text-sm text-muted-foreground">@{member.username}</p>
                             <div className="flex items-center text-sm text-muted-foreground">
                             <Star className="w-4 h-4 mr-1 text-primary" />
                             <span>{member.powerScore.toLocaleString()}</span>
@@ -505,7 +508,7 @@ const InviteMembersDialog = () => {
         return (
             <TableRow>
                 <TableCell>
-                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push(`/dashboard/profile?user=${user.id}`)}>
+                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => router.push(`/dashboard/profile?user=${user.username}`)}>
                         <Avatar className="h-10 w-10">
                             <AvatarImage src={user.avatar} alt={user.name} />
                             <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
@@ -550,7 +553,7 @@ const InviteMembersDialog = () => {
                                     </Link>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem asChild>
-                                    <Link href={`/dashboard/profile?user=${user.id}`}>
+                                    <Link href={`/dashboard/profile?user=${user.username}`}>
                                         <User className="mr-2 h-4 w-4" />
                                         <span>See Profile</span>
                                     </Link>
@@ -621,7 +624,7 @@ const JoinRequestsCard = () => {
             <CardContent className="space-y-4">
                 {requests.map(req => (
                     <div key={req.id} className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-lg hover:bg-muted/50">
-                        <Link href={`/dashboard/profile?user=${req.id}`} className="flex items-center gap-3 flex-1 min-w-[150px]">
+                        <Link href={`/dashboard/profile?user=${req.username}`} className="flex items-center gap-3 flex-1 min-w-[150px]">
                             <Avatar className="h-10 w-10">
                                 <AvatarImage src={req.avatar} alt={req.name} />
                                 <AvatarFallback>{req.name.substring(0, 2)}</AvatarFallback>
@@ -757,6 +760,7 @@ export default function AlliancePage() {
                     <TableRow>
                     <TableHead>Member</TableHead>
                     <TableHead className="text-right">Role</TableHead>
+                    <TableHead className="w-[50px]"></TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>

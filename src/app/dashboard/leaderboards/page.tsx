@@ -40,56 +40,56 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const individualData = [
-  { id: 'u10', rank: 1, name: "Alpha Coder", powerScore: 5200, problems: 950, avatar: "https://picsum.photos/seed/10/100/100" },
-  { id: 'u11', rank: 2, name: "Syntax Samurai", powerScore: 5150, problems: 920, avatar: "https://picsum.photos/seed/11/100/100" },
-  { id: 'u12', rank: 3, name: "Boolean Bard", powerScore: 4980, problems: 880, avatar: "https://picsum.photos/seed/12/100/100" },
-  { id: 'u13', rank: 4, name: "Logic Lord", powerScore: 4950, problems: 875, avatar: "https://picsum.photos/seed/13/100/100" },
-  { id: 'u14', rank: 5, name: "Data Diva", powerScore: 4800, problems: 850, avatar: "https://picsum.photos/seed/14/100/100" },
-  { id: 'u15', rank: 6, name: "Kernel Knight", powerScore: 4750, problems: 840, avatar: "https://picsum.photos/seed/15/100/100" },
-  { id: 'u16', rank: 7, name: "Script Savant", powerScore: 4700, problems: 830, avatar: "https://picsum.photos/seed/16/100/100" },
-  { id: 'u17', rank: 8, name: "Bit Bender", powerScore: 4650, problems: 820, avatar: "https://picsum.photos/seed/17/100/100" },
-  { id: 'u18', rank: 9, name: "Code Conjurer", powerScore: 4600, problems: 810, avatar: "https://picsum.photos/seed/18/100/100" },
-  { id: 'u19', rank: 10, name: "Function Fox", powerScore: 4550, problems: 800, avatar: "https://picsum.photos/seed/19/100/100" },
-  { id: 'u20', rank: 11, name: 'Cache King', powerScore: 4500, problems: 790, avatar: 'https://picsum.photos/seed/20/100/100' },
-  { id: 'u21', rank: 12, name: 'Pointer Prince', powerScore: 4450, problems: 780, avatar: 'https://picsum.photos/seed/21/100/100' },
-  { id: 'u22', rank: 13, name: 'Stream Sorceress', powerScore: 4400, problems: 770, avatar: 'https://picsum.photos/seed/22/100/100' },
-  { id: 'u23', rank: 14, name: 'Async Ace', powerScore: 4350, problems: 760, avatar: 'https://picsum.photos/seed/23/100/100' },
-  { id: 'u24', rank: 15, name: 'React Ranger', powerScore: 4300, problems: 750, avatar: 'https://picsum.photos/seed/24/100/100' },
-  { id: 'u25', rank: 16, name: 'Vue Virtuoso', powerScore: 4250, problems: 740, avatar: 'https://picsum.photos/seed/25/100/100' },
-  { id: 'u26', rank: 17, name: 'Docker Duke', powerScore: 4200, problems: 730, avatar: 'https://picsum.photos/seed/26/100/100' },
-  { id: 'u27', rank: 18, name: 'Kube Kingpin', powerScore: 4150, problems: 720, avatar: 'https://picsum.photos/seed/27/100/100' },
-  { id: 'u28', rank: 19, name: 'Go Guru', powerScore: 4100, problems: 710, avatar: 'https://picsum.photos/seed/28/100/100' },
-  { id: 'u29', rank: 20, name: 'Rust Rockstar', powerScore: 4050, problems: 700, avatar: 'https://picsum.photos/seed/29/100/100' },
-  { id: 'u30', rank: 21, name: 'Swift Shogun', powerScore: 4000, problems: 690, avatar: 'https://picsum.photos/seed/30/100/100' },
-  { id: 'u31', rank: 22, name: 'Kotlin Commander', powerScore: 3950, problems: 680, avatar: 'https://picsum.photos/seed/31/100/100' },
-  { id: 'u32', rank: 23, name: 'API Admiral', powerScore: 3900, problems: 670, avatar: 'https://picsum.photos/seed/32/100/100' },
-  { id: 'u33', rank: 24, name: 'DB Dominator', powerScore: 3850, problems: 660, avatar: 'https://picsum.photos/seed/33/100/100' },
-  { id: 'u34', rank: 25, name: 'ML Maestro', powerScore: 3800, problems: 650, avatar: 'https://picsum.photos/seed/34/100/100' },
-  { id: 'u35', rank: 26, name: 'AI Artisan', powerScore: 3750, problems: 640, avatar: 'https://picsum.photos/seed/35/100/100' },
-  { id: 'u36', rank: 27, name: 'DevOps Dynamo', powerScore: 3700, problems: 630, avatar: 'https://picsum.photos/seed/36/100/100' },
-  { id: 'u37', rank: 28, name: 'Security Sage', powerScore: 3650, problems: 620, avatar: 'https://picsum.photos/seed/37/100/100' },
-  { id: 'u38', rank: 29, name: 'Cloud Captain', powerScore: 3600, problems: 610, avatar: 'https://picsum.photos/seed/38/100/100' },
-  { id: 'u39', rank: 30, name: 'Serverless Sensei', powerScore: 3550, problems: 600, avatar: 'https://picsum.photos/seed/39/100/100' },
-  { id: 'u40', rank: 31, name: 'Frontend Flash', powerScore: 3500, problems: 590, avatar: 'https://picsum.photos/seed/40/100/100' },
-  { id: 'u41', rank: 32, name: 'Backend Baron', powerScore: 3450, problems: 580, avatar: 'https://picsum.photos/seed/41/100/100' },
-  { id: 'u42', rank: 33, name: 'Fullstack Phantom', powerScore: 3400, problems: 570, avatar: 'https://picsum.photos/seed/42/100/100' },
-  { id: 'u43', rank: 34, name: 'Agile Alchemist', powerScore: 3350, problems: 560, avatar: 'https://picsum.photos/seed/43/100/100' },
-  { id: 'u44', rank: 35, name: 'Scrum Sovereign', powerScore: 3300, problems: 550, avatar: 'https://picsum.photos/seed/44/100/100' },
-  { id: 'u45', rank: 36, name: 'Kanban Knight', powerScore: 3250, problems: 540, avatar: 'https://picsum.photos/seed/45/100/100' },
-  { id: 'u46', rank: 37, name: 'TDD Titan', powerScore: 3200, problems: 530, avatar: 'https://picsum.photos/seed/46/100/100' },
-  { id: 'u47', rank: 38, name: 'BDD Baroness', powerScore: 3150, problems: 520, avatar: 'https://picsum.photos/seed/47/100/100' },
-  { id: 'u48', rank: 39, name: 'CI/CD Crusader', powerScore: 3100, problems: 510, avatar: 'https://picsum.photos/seed/48/100/100' },
-  { id: 'u49', rank: 40, name: 'Git Gladiator', powerScore: 3050, problems: 500, avatar: 'https://picsum.photos/seed/49/100/100' },
-  { id: 'u50', rank: 41, name: 'Version Voyager', powerScore: 3000, problems: 490, avatar: 'https://picsum.photos/seed/50/100/100' },
-  { id: 'u51', rank: 42, name: 'Shell Shaman', powerScore: 2950, problems: 480, avatar: 'https://picsum.photos/seed/51/100/100' },
-  { id: 'u1', rank: 43, name: "Cody Clash", powerScore: 2900, problems: 573, isCurrentUser: true, avatar: "https://picsum.photos/seed/1/100/100" },
-  { id: 'u52', rank: 44, name: 'PowerShell Paladin', powerScore: 2850, problems: 470, avatar: 'https://picsum.photos/seed/52/100/100' },
-  { id: 'u53', rank: 45, name: 'Regex Ruler', powerScore: 2800, problems: 460, avatar: 'https://picsum.photos/seed/53/100/100' },
-  { id: 'u54', rank: 46, name: 'Markup Master', powerScore: 2750, problems: 450, avatar: 'https://picsum.photos/seed/54/100/100' },
-  { id: 'u55', rank: 47, name: 'CSS Centurion', powerScore: 2700, problems: 440, avatar: 'https://picsum.photos/seed/55/100/100' },
-  { id: 'u56', rank: 48, name: 'Sass Specialist', powerScore: 2650, problems: 430, avatar: 'https://picsum.photos/seed/56/100/100' },
-  { id: 'u57', rank: 49, name: 'LESS Leader', powerScore: 2600, problems: 420, avatar: 'https://picsum.photos/seed/57/100/100' },
-  { id: 'u58', rank: 50, name: 'Web Wizard', powerScore: 2550, problems: 410, avatar: 'https://picsum.photos/seed/58/100/100' },
+  { id: 'u10', rank: 1, name: "Alpha Coder", username: "alpha_coder", powerScore: 5200, problems: 950, avatar: "https://picsum.photos/seed/10/100/100" },
+  { id: 'u11', rank: 2, name: "Syntax Samurai", username: "syntax_samurai", powerScore: 5150, problems: 920, avatar: "https://picsum.photos/seed/11/100/100" },
+  { id: 'u12', rank: 3, name: "Boolean Bard", username: "boolean_bard", powerScore: 4980, problems: 880, avatar: "https://picsum.photos/seed/12/100/100" },
+  { id: 'u13', rank: 4, name: "Logic Lord", username: "logic_lord", powerScore: 4950, problems: 875, avatar: "https://picsum.photos/seed/13/100/100" },
+  { id: 'u14', rank: 5, name: "Data Diva", username: "data_diva", powerScore: 4800, problems: 850, avatar: "https://picsum.photos/seed/14/100/100" },
+  { id: 'u15', rank: 6, name: "Kernel Knight", username: "kernel_knight", powerScore: 4750, problems: 840, avatar: "https://picsum.photos/seed/15/100/100" },
+  { id: 'u16', rank: 7, name: "Script Savant", username: "script_savant", powerScore: 4700, problems: 830, avatar: "https://picsum.photos/seed/16/100/100" },
+  { id: 'u17', rank: 8, name: "Bit Bender", username: "bit_bender", powerScore: 4650, problems: 820, avatar: "https://picsum.photos/seed/17/100/100" },
+  { id: 'u18', rank: 9, name: "Code Conjurer", username: "code_conjurer", powerScore: 4600, problems: 810, avatar: "https://picsum.photos/seed/18/100/100" },
+  { id: 'u19', rank: 10, name: "Function Fox", username: "function_fox", powerScore: 4550, problems: 800, avatar: "https://picsum.photos/seed/19/100/100" },
+  { id: 'u20', rank: 11, name: 'Cache King', username: 'cache_king', powerScore: 4500, problems: 790, avatar: 'https://picsum.photos/seed/20/100/100' },
+  { id: 'u21', rank: 12, name: 'Pointer Prince', username: 'pointer_prince', powerScore: 4450, problems: 780, avatar: 'https://picsum.photos/seed/21/100/100' },
+  { id: 'u22', rank: 13, name: 'Stream Sorceress', username: 'stream_sorceress', powerScore: 4400, problems: 770, avatar: 'https://picsum.photos/seed/22/100/100' },
+  { id: 'u23', rank: 14, name: 'Async Ace', username: 'async_ace', powerScore: 4350, problems: 760, avatar: 'https://picsum.photos/seed/23/100/100' },
+  { id: 'u24', rank: 15, name: 'React Ranger', username: 'react_ranger', powerScore: 4300, problems: 750, avatar: 'https://picsum.photos/seed/24/100/100' },
+  { id: 'u25', rank: 16, name: 'Vue Virtuoso', username: 'vue_virtuoso', powerScore: 4250, problems: 740, avatar: 'https://picsum.photos/seed/25/100/100' },
+  { id: 'u26', rank: 17, name: 'Docker Duke', username: 'docker_duke', powerScore: 4200, problems: 730, avatar: 'https://picsum.photos/seed/26/100/100' },
+  { id: 'u27', rank: 18, name: 'Kube Kingpin', username: 'kube_kingpin', powerScore: 4150, problems: 720, avatar: 'https://picsum.photos/seed/27/100/100' },
+  { id: 'u28', rank: 19, name: 'Go Guru', username: 'go_guru', powerScore: 4100, problems: 710, avatar: 'https://picsum.photos/seed/28/100/100' },
+  { id: 'u29', rank: 20, name: 'Rust Rockstar', username: 'rust_rockstar', powerScore: 4050, problems: 700, avatar: 'https://picsum.photos/seed/29/100/100' },
+  { id: 'u30', rank: 21, name: 'Swift Shogun', username: 'swift_shogun', powerScore: 4000, problems: 690, avatar: 'https://picsum.photos/seed/30/100/100' },
+  { id: 'u31', rank: 22, name: 'Kotlin Commander', username: 'kotlin_commander', powerScore: 3950, problems: 680, avatar: 'https://picsum.photos/seed/31/100/100' },
+  { id: 'u32', rank: 23, name: 'API Admiral', username: 'api_admiral', powerScore: 3900, problems: 670, avatar: 'https://picsum.photos/seed/32/100/100' },
+  { id: 'u33', rank: 24, name: 'DB Dominator', username: 'db_dominator', powerScore: 3850, problems: 660, avatar: 'https://picsum.photos/seed/33/100/100' },
+  { id: 'u34', rank: 25, name: 'ML Maestro', username: 'ml_maestro', powerScore: 3800, problems: 650, avatar: 'https://picsum.photos/seed/34/100/100' },
+  { id: 'u35', rank: 26, name: 'AI Artisan', username: 'ai_artisan', powerScore: 3750, problems: 640, avatar: 'https://picsum.photos/seed/35/100/100' },
+  { id: 'u36', rank: 27, name: 'DevOps Dynamo', username: 'devops_dynamo', powerScore: 3700, problems: 630, avatar: 'https://picsum.photos/seed/36/100/100' },
+  { id: 'u37', rank: 28, name: 'Security Sage', username: 'security_sage', powerScore: 3650, problems: 620, avatar: 'https://picsum.photos/seed/37/100/100' },
+  { id: 'u38', rank: 29, name: 'Cloud Captain', username: 'cloud_captain', powerScore: 3600, problems: 610, avatar: 'https://picsum.photos/seed/38/100/100' },
+  { id: 'u39', rank: 30, name: 'Serverless Sensei', username: 'serverless_sensei', powerScore: 3550, problems: 600, avatar: 'https://picsum.photos/seed/39/100/100' },
+  { id: 'u40', rank: 31, name: 'Frontend Flash', username: 'frontend_flash', powerScore: 3500, problems: 590, avatar: 'https://picsum.photos/seed/40/100/100' },
+  { id: 'u41', rank: 32, name: 'Backend Baron', username: 'backend_baron', powerScore: 3450, problems: 580, avatar: 'https://picsum.photos/seed/41/100/100' },
+  { id: 'u42', rank: 33, name: 'Fullstack Phantom', username: 'fullstack_phantom', powerScore: 3400, problems: 570, avatar: 'https://picsum.photos/seed/42/100/100' },
+  { id: 'u43', rank: 34, name: 'Agile Alchemist', username: 'agile_alchemist', powerScore: 3350, problems: 560, avatar: 'https://picsum.photos/seed/43/100/100' },
+  { id: 'u44', rank: 35, name: 'Scrum Sovereign', username: 'scrum_sovereign', powerScore: 3300, problems: 550, avatar: 'https://picsum.photos/seed/44/100/100' },
+  { id: 'u45', rank: 36, name: 'Kanban Knight', username: 'kanban_knight', powerScore: 3250, problems: 540, avatar: 'https://picsum.photos/seed/45/100/100' },
+  { id: 'u46', rank: 37, name: 'TDD Titan', username: 'tdd_titan', powerScore: 3200, problems: 530, avatar: 'https://picsum.photos/seed/46/100/100' },
+  { id: 'u47', rank: 38, name: 'BDD Baroness', username: 'bdd_baroness', powerScore: 3150, problems: 520, avatar: 'https://picsum.photos/seed/47/100/100' },
+  { id: 'u48', rank: 39, name: 'CI/CD Crusader', username: 'cicd_crusader', powerScore: 3100, problems: 510, avatar: 'https://picsum.photos/seed/48/100/100' },
+  { id: 'u49', rank: 40, name: 'Git Gladiator', username: 'git_gladiator', powerScore: 3050, problems: 500, avatar: 'https://picsum.photos/seed/49/100/100' },
+  { id: 'u50', rank: 41, name: 'Version Voyager', username: 'version_voyager', powerScore: 3000, problems: 490, avatar: 'https://picsum.photos/seed/50/100/100' },
+  { id: 'u51', rank: 42, name: 'Shell Shaman', username: 'shell_shaman', powerScore: 2950, problems: 480, avatar: 'https://picsum.photos/seed/51/100/100' },
+  { id: 'u1', rank: 43, name: "Cody Clash", username: "cody_clash", powerScore: 2900, problems: 573, isCurrentUser: true, avatar: "https://picsum.photos/seed/1/100/100" },
+  { id: 'u52', rank: 44, name: 'PowerShell Paladin', username: 'powershell_paladin', powerScore: 2850, problems: 470, avatar: 'https://picsum.photos/seed/52/100/100' },
+  { id: 'u53', rank: 45, name: 'Regex Ruler', username: 'regex_ruler', powerScore: 2800, problems: 460, avatar: 'https://picsum.photos/seed/53/100/100' },
+  { id: 'u54', rank: 46, name: 'Markup Master', username: 'markup_master', powerScore: 2750, problems: 450, avatar: 'https://picsum.photos/seed/54/100/100' },
+  { id: 'u55', rank: 47, name: 'CSS Centurion', username: 'css_centurion', powerScore: 2700, problems: 440, avatar: 'https://picsum.photos/seed/55/100/100' },
+  { id: 'u56', rank: 48, name: 'Sass Specialist', username: 'sass_specialist', powerScore: 2650, problems: 430, avatar: 'https://picsum.photos/seed/56/100/100' },
+  { id: 'u57', rank: 49, name: 'LESS Leader', username: 'less_leader', powerScore: 2600, problems: 420, avatar: 'https://picsum.photos/seed/57/100/100' },
+  { id: 'u58', rank: 50, name: 'Web Wizard', username: 'web_wizard', powerScore: 2550, problems: 410, avatar: 'https://picsum.photos/seed/58/100/100' },
 ].sort((a,b) => a.rank - b.rank);
 
 const allianceData = [
@@ -107,10 +107,10 @@ const allianceData = [
 ].sort((a,b) => a.rank - b.rank);
 
 const dummyMembers = [
-    { name: "Gadget Guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
-    { name: "Loop Legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
-    { name: "Function Fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
-    { name: "Pointer Prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
+    { name: "Gadget Guru", username: "gadget_guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
+    { name: "Loop Legend", username: "loop_legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
+    { name: "Function Fox", username: "function_fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
+    { name: "Pointer Prodigy", username: "pointer_prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
 ];
 
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
@@ -120,12 +120,15 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
         )}>
             <TableCell className="font-medium text-lg w-[80px]">#{user.rank}</TableCell>
             <TableCell>
-                <Link href={`/dashboard/profile?user=${user.id}`} className="flex items-center gap-3 hover:underline">
+                <Link href={`/dashboard/profile?user=${user.username}`} className="flex items-center gap-3 hover:underline">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
                     </Avatar>
-                    <span className="font-medium">{user.name}</span>
+                    <div>
+                        <span className="font-medium">{user.name}</span>
+                        <p className="text-sm text-muted-foreground">@{user.username}</p>
+                    </div>
                     {user.isCurrentUser && <Badge>You</Badge>}
                 </Link>
             </TableCell>
@@ -147,7 +150,7 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
                                 </Link>
                             </DropdownMenuItem>
                             <DropdownMenuItem asChild>
-                                <Link href={`/dashboard/profile?user=${user.id}`}>
+                                <Link href={`/dashboard/profile?user=${user.username}`}>
                                     <User className="mr-2 h-4 w-4" />
                                     <span>See Profile</span>
                                 </Link>
@@ -256,6 +259,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
                         </Avatar>
                         <div>
                             <p className="font-semibold">{member.name}</p>
+                            <p className="text-sm text-muted-foreground">@{member.username}</p>
                             <div className="flex items-center text-sm text-muted-foreground">
                             <Star className="w-4 h-4 mr-1 text-primary" />
                             <span>{member.powerScore.toLocaleString()}</span>

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -23,8 +23,9 @@ import {
 
 
 const userProfileData = {
-    'Cody Clash': {
+    'cody_clash': {
         name: 'Cody Clash',
+        username: 'cody_clash',
         isCurrentUser: true,
         avatar: 'https://picsum.photos/seed/1/100/100',
         bio: 'Full-stack developer with a passion for competitive programming and open-source.',
@@ -50,8 +51,9 @@ const userProfileData = {
             { icon: Twitter, handle: 'cody_clash_tw', url: '#' },
         ]
     },
-    'Syntax Slayer': {
+    'syntax_slayer': {
         name: 'Syntax Slayer',
+        username: 'syntax_slayer',
         isFriend: true,
         online: false,
         avatar: 'https://picsum.photos/seed/2/100/100',
@@ -65,7 +67,7 @@ const userProfileData = {
         achievements: [ { icon: Medal, title: 'Top 5% Rank', description: 'Achieved a global rank in the top 5%.' } ],
         connectedAccounts: [ { icon: Github, handle: 'syntax-slayer', url: '#' } ],
     },
-    'Quantum Coder': {
+    'quantum_coder': {
         name: 'Quantum Coder',
         username: 'quantum_coder',
         isFriend: false,
@@ -85,12 +87,11 @@ const userProfileData = {
 
 const ProfileContent = () => {
     const searchParams = useSearchParams();
-    const userName = searchParams.get('user');
+    const username = searchParams.get('user');
     const [friendRequestSent, setFriendRequestSent] = useState(false);
-
-    const profileKey = userName && (userName in userProfileData) ? userName : 'Cody Clash';
+    
     // @ts-ignore
-    const userProfile = userProfileData[profileKey];
+    const userProfile = userProfileData[username] || userProfileData['cody_clash'];
 
     const handleFriendRequest = () => {
         setFriendRequestSent(prev => !prev);
@@ -110,12 +111,13 @@ const ProfileContent = () => {
                                 <AvatarImage src={userProfile.avatar} alt={userProfile.name} />
                                 <AvatarFallback>{userProfile.name.substring(0,2)}</AvatarFallback>
                             </Avatar>
-                            {userProfile.online && (userProfile.isFriend) && (
+                            {userProfile.online && userProfile.isFriend && (
                                 <div className="absolute bottom-4 right-4 w-5 h-5 bg-green-500 rounded-full border-4 border-card" />
                             )}
                         </div>
                         <h2 className="text-2xl font-bold">{userProfile.name}</h2>
-                        <p className="text-muted-foreground">{userProfile.bio}</p>
+                        <p className="text-muted-foreground">@{userProfile.username}</p>
+                        <p className="text-muted-foreground mt-2">{userProfile.bio}</p>
                         <div className="mt-4">
                             {userProfile.isCurrentUser ? (
                                 <Button>Edit Profile</Button>

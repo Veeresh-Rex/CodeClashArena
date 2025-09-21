@@ -101,7 +101,6 @@ const allianceData = [
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
     return (
         <TableRow className={cn(
-            user.isCurrentUser && !isSticky && 'bg-primary/10', 
             isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))] hover:bg-secondary'
         )}>
             <TableCell className="font-medium text-lg w-[80px]">#{user.rank}</TableCell>
@@ -146,8 +145,31 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
     );
 }
 
+const AllianceRow = ({ alliance, isSticky = false }: { alliance: typeof allianceData[0], isSticky?: boolean }) => {
+    return (
+         <TableRow className={cn(
+            isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))] hover:bg-secondary'
+        )}>
+            <TableCell className="font-medium text-lg w-[80px]">#{alliance.rank}</TableCell>
+            <TableCell>
+                <Link href="/dashboard/alliance" className="flex items-center gap-3 hover:underline">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                        <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium">{alliance.name}</span>
+                    {alliance.isCurrentAlliance && <Badge>Your Alliance</Badge>}
+                </Link>
+            </TableCell>
+            <TableCell className="text-right">{alliance.members}</TableCell>
+            <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
+        </TableRow>
+    )
+}
+
 export default function LeaderboardsPage() {
     const currentUser = individualData.find(user => user.isCurrentUser);
+    const currentAlliance = allianceData.find(alliance => alliance.isCurrentAlliance);
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -202,25 +224,20 @@ export default function LeaderboardsPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {allianceData.map((alliance) => (
-                    <TableRow key={alliance.rank} className={cn(alliance.isCurrentAlliance && 'bg-primary/10')}>
-                        <TableCell className="font-medium text-lg">#{alliance.rank}</TableCell>
-                        <TableCell>
-                        <Link href="/dashboard/alliance" className="flex items-center gap-3 hover:underline">
-                            <Avatar className="h-8 w-8">
-                                <AvatarImage src={alliance.avatar} alt={alliance.name} />
-                                <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{alliance.name}</span>
-                            {alliance.isCurrentAlliance && <Badge>Your Alliance</Badge>}
-                        </Link>
-                        </TableCell>
-                        <TableCell className="text-right">{alliance.members}</TableCell>
-                        <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
-                    </TableRow>
+                    {allianceData.filter(a => !a.isCurrentAlliance).map((alliance) => (
+                        <AllianceRow key={alliance.rank} alliance={alliance} />
                     ))}
                 </TableBody>
                 </Table>
+                {currentAlliance && (
+                    <div className="sticky bottom-0 -mx-6 -mb-6 mt-4">
+                        <Table>
+                            <TableBody>
+                                 <AllianceRow alliance={currentAlliance} isSticky />
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
             </TabsContent>
             </Tabs>
         </CardContent>
@@ -228,5 +245,3 @@ export default function LeaderboardsPage() {
     </div>
   );
 }
-
-    

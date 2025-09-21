@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Shield } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export default function LoginPage() {
   return (
@@ -30,13 +31,17 @@ export default function LoginPage() {
               <Input id="email" type="email" placeholder="m@example.com" required />
             </div>
             <div className="space-y-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
-                <Link href="#" className="ml-auto inline-block text-sm underline">
-                  Forgot your password?
-                </Link>
-              </div>
+              <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" required />
+              <Link href="#" className="inline-block text-sm underline text-muted-foreground hover:text-primary">
+                  Forgot your password?
+              </Link>
+            </div>
+            <div className="flex items-center space-x-2">
+              <Checkbox id="remember-me" />
+              <Label htmlFor="remember-me" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                Remember me
+              </Label>
             </div>
             <Button type="submit" className="w-full" asChild>
                 <Link href="/dashboard">Log In</Link>

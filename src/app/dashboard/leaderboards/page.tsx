@@ -85,26 +85,26 @@ const individualData = [
 ].sort((a,b) => a.rank - b.rank);
 
 const allianceData = [
-  { rank: 1, name: "Recursive Renegades", powerScore: 250000, members: 50 },
-  { rank: 2, name: "Binary Brigade", powerScore: 210500, members: 42 },
-  { rank: 3, name: "Python Phantoms", powerScore: 180300, members: 33 },
-  { rank: 12, name: "The Code Crusaders", powerScore: 125800, members: 24, isCurrentAlliance: true },
-  { rank: 4, name: "Java Jesters", powerScore: 98200, members: 15 },
-  { rank: 5, name: "CSS Sorcerers", powerScore: 85400, members: 18 },
-  { rank: 6, name: "Terminal Titans", powerScore: 82000, members: 20 },
-  { rank: 7, name: "Git Gurus", powerScore: 79500, members: 22 },
-  { rank: 8, name: "API Avengers", powerScore: 75000, members: 12 },
-  { rank: 9, name: "Data Dragons", powerScore: 72300, members: 28 },
-  { rank: 10, name: "Stack Survivors", powerScore: 68000, members: 35 },
+  { rank: 1, name: "Recursive Renegades", powerScore: 250000, members: 50, avatar: "https://picsum.photos/seed/23/100/100" },
+  { rank: 2, name: "Binary Brigade", powerScore: 210500, members: 42, avatar: "https://picsum.photos/seed/20/100/100" },
+  { rank: 3, name: "Python Phantoms", powerScore: 180300, members: 33, avatar: "https://picsum.photos/seed/22/100/100" },
+  { rank: 12, name: "The Code Crusaders", powerScore: 125800, members: 24, isCurrentAlliance: true, avatar: "https://picsum.photos/seed/1/100/100" },
+  { rank: 4, name: "Java Jesters", powerScore: 98200, members: 15, avatar: "https://picsum.photos/seed/21/100/100" },
+  { rank: 5, name: "CSS Sorcerers", powerScore: 85400, members: 18, avatar: "https://picsum.photos/seed/24/100/100" },
+  { rank: 6, name: "Terminal Titans", powerScore: 82000, members: 20, avatar: "https://picsum.photos/seed/60/100/100" },
+  { rank: 7, name: "Git Gurus", powerScore: 79500, members: 22, avatar: "https://picsum.photos/seed/61/100/100" },
+  { rank: 8, name: "API Avengers", powerScore: 75000, members: 12, avatar: "https://picsum.photos/seed/62/100/100" },
+  { rank: 9, name: "Data Dragons", powerScore: 72300, members: 28, avatar: "https://picsum.photos/seed/63/100/100" },
+  { rank: 10, name: "Stack Survivors", powerScore: 68000, members: 35, avatar: "https://picsum.photos/seed/64/100/100" },
 ].sort((a,b) => a.rank - b.rank);
 
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
     return (
         <TableRow className={cn(
             user.isCurrentUser && !isSticky && 'bg-primary/10', 
-            isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))]'
+            isSticky && 'sticky bottom-0 z-10 bg-secondary shadow-[0_-8px_16px_-4px_hsl(var(--background))] hover:bg-secondary'
         )}>
-            <TableCell className="font-medium text-lg">#{user.rank}</TableCell>
+            <TableCell className="font-medium text-lg w-[80px]">#{user.rank}</TableCell>
             <TableCell>
                 <Link href={`/dashboard/profile?user=${user.id}`} className="flex items-center gap-3 hover:underline">
                     <Avatar className="h-8 w-8">
@@ -117,7 +117,7 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
             </TableCell>
             <TableCell className="text-right">{user.problems}</TableCell>
             <TableCell className="text-right font-semibold">{user.powerScore.toLocaleString()}</TableCell>
-            <TableCell className="text-right">
+            <TableCell className="text-right w-[50px]">
                 {!user.isCurrentUser && !isSticky && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -208,6 +208,7 @@ export default function LeaderboardsPage() {
                         <TableCell>
                         <Link href="/dashboard/alliance" className="flex items-center gap-3 hover:underline">
                             <Avatar className="h-8 w-8">
+                                <AvatarImage src={alliance.avatar} alt={alliance.name} />
                                 <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
                             </Avatar>
                             <span className="font-medium">{alliance.name}</span>
@@ -227,3 +228,5 @@ export default function LeaderboardsPage() {
     </div>
   );
 }
+
+    

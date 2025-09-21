@@ -522,7 +522,7 @@ const InviteMembersDialog = () => {
                         <Button 
                             variant={isInvited ? "secondary" : "outline"} 
                             size="sm" 
-                            onClick={() => handleToggleInvite(user.id)}
+                            onClick={(e) => { e.stopPropagation(); handleToggleInvite(user.id); }}
                         >
                             {isInvited ? (
                                 <>
@@ -621,7 +621,7 @@ const JoinRequestsCard = () => {
             <CardContent className="space-y-4">
                 {requests.map(req => (
                     <div key={req.id} className="flex flex-wrap items-center justify-between gap-4 p-2 rounded-lg hover:bg-muted/50">
-                        <Link href={`/dashboard/profile?user=${req.id}`} className="flex items-center gap-3">
+                        <Link href={`/dashboard/profile?user=${req.id}`} className="flex items-center gap-3 flex-1 min-w-[150px]">
                             <Avatar className="h-10 w-10">
                                 <AvatarImage src={req.avatar} alt={req.name} />
                                 <AvatarFallback>{req.name.substring(0, 2)}</AvatarFallback>
@@ -793,3 +793,5 @@ export default function AlliancePage() {
     </div>
   );
 }
+
+    

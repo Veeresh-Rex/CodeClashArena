@@ -120,7 +120,7 @@ const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individual
         )}>
             <TableCell className="font-medium text-lg w-[80px]">#{user.rank}</TableCell>
             <TableCell>
-                <Link href={`/dashboard/profile?user=${user.username}`} className="flex items-center gap-3 hover:underline">
+                <Link href={`/dashboard/profile?user=${user.username}`} className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                         <AvatarImage src={user.avatar} alt={user.name} />
                         <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
@@ -239,7 +239,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
                     <p className="text-lg font-bold">{alliance.powerScore.toLocaleString()}</p>
                 </div>
             </div>
-             <DialogFooter className="grid grid-cols-2 gap-2">
+             <DialogFooter className={cn("grid gap-2", (!hasAlliance || alliance.isCurrentAlliance) ? "grid-cols-2" : "grid-cols-1")}>
                  <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
                 {alliance.isCurrentAlliance ? (
                     <Button asChild>

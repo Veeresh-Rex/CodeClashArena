@@ -1,7 +1,8 @@
+
 "use client";
 
 import Link from "next/link";
-import { Bell, Search } from "lucide-react";
+import { Bell, Search, UserPlus, Users, Trophy } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -56,10 +57,43 @@ export function Header() {
             />
           </div>
         </form>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Toggle notifications</span>
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" className="rounded-full">
+              <Bell className="h-5 w-5" />
+              <span className="sr-only">Toggle notifications</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-80">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>
+                <UserPlus className="mr-3 h-5 w-5 text-primary" />
+                <div className="flex flex-col">
+                  <span className="font-medium">New friend request</span>
+                  <span className="text-xs text-muted-foreground">From @syntax_samurai</span>
+                </div>
+            </DropdownMenuItem>
+             <DropdownMenuItem>
+                <Users className="mr-3 h-5 w-5 text-primary" />
+                 <div className="flex flex-col">
+                  <span className="font-medium">Alliance Announcement</span>
+                  <span className="text-xs text-muted-foreground">New event starting soon!</span>
+                </div>
+            </DropdownMenuItem>
+             <DropdownMenuItem>
+                <Trophy className="mr-3 h-5 w-5 text-accent" />
+                 <div className="flex flex-col">
+                  <span className="font-medium">You've been promoted!</span>
+                  <span className="text-xs text-muted-foreground">New rank: #1200</span>
+                </div>
+            </DropdownMenuItem>
+             <DropdownMenuSeparator />
+             <DropdownMenuItem className="justify-center text-sm text-muted-foreground hover:text-primary">
+                See all notifications
+             </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="rounded-full">

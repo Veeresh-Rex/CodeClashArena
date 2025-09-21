@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from "next/link";
@@ -29,6 +30,7 @@ const pageTitles: { [key: string]: string } = {
   '/dashboard/chat': 'Chat',
   '/dashboard/recommendations': 'AI Mentor',
   '/dashboard/profile': 'My Profile',
+  '/dashboard/notifications': 'Notifications',
 };
 
 export function Header() {
@@ -89,8 +91,10 @@ export function Header() {
                 </div>
             </DropdownMenuItem>
              <DropdownMenuSeparator />
-             <DropdownMenuItem className="justify-center text-sm text-muted-foreground hover:text-primary">
-                See all notifications
+             <DropdownMenuItem asChild className="justify-center text-sm text-muted-foreground hover:text-primary">
+                <Link href="/dashboard/notifications">
+                    See all notifications
+                </Link>
              </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

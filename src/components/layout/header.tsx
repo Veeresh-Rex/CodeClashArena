@@ -3,7 +3,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Search, UserPlus, Users, Trophy } from "lucide-react";
+import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -19,6 +19,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
@@ -34,11 +38,11 @@ const pageTitles: { [key: string]: string } = {
 };
 
 const friendsList = [
-    { name: "Byte Baron", avatar: "https://picsum.photos/seed/4/100/100", online: true },
-    { name: "Syntax Slayer", avatar: "https://picsum.photos/seed/2/100/100", online: false },
-    { name: "Algo Queen", avatar: "https://picsum.photos/seed/3/100/100", online: true },
-    { name: "Pixel Pioneer", avatar: "https://picsum.photos/seed/5/100/100", online: false },
-    { name: "Data Diva", avatar: "https://picsum.photos/seed/14/100/100", online: true },
+    { name: "Byte Baron", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/4/100/100", online: true },
+    { name: "Syntax Slayer", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/2/100/100", online: false },
+    { name: "Algo Queen", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/3/100/100", online: true },
+    { name: "Pixel Pioneer", alliance: "The Code Crusaders", avatar: "https://picsum.photos/seed/5/100/100", online: false },
+    { name: "Data Diva", alliance: "Binary Brigade", avatar: "https://picsum.photos/seed/14/100/100", online: true },
 ];
 
 export function Header() {
@@ -78,23 +82,35 @@ export function Header() {
             <DropdownMenuLabel>Friends</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {friendsList.map(friend => (
-                <DropdownMenuItem key={friend.name} asChild>
-                    <Link href="/dashboard/chat" className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                            <Avatar className="h-8 w-8">
-                                <AvatarImage src={friend.avatar} alt={friend.name} />
-                                <AvatarFallback>{friend.name.substring(0,2)}</AvatarFallback>
-                            </Avatar>
-                            <span className="font-medium">{friend.name}</span>
+                <DropdownMenuSub key={friend.name}>
+                    <DropdownMenuSubTrigger>
+                        <div className="flex items-center justify-between w-full">
+                            <div className="flex items-center gap-3">
+                                <Avatar className="h-8 w-8">
+                                    <AvatarImage src={friend.avatar} alt={friend.name} />
+                                    <AvatarFallback>{friend.name.substring(0,2)}</AvatarFallback>
+                                </Avatar>
+                                <div>
+                                    <span className="font-medium text-sm text-muted-foreground">[{friend.alliance.substring(0,5)}]</span>
+                                    <span className="font-medium ml-1">{friend.name}</span>
+                                </div>
+                            </div>
+                            {friend.online && <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />}
                         </div>
-                        {friend.online && <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />}
-                    </Link>
-                </DropdownMenuItem>
+                    </DropdownMenuSubTrigger>
+                     <DropdownMenuPortal>
+                        <DropdownMenuSubContent>
+                             <DropdownMenuItem asChild><Link href="/dashboard/profile"><User className="mr-2 h-4 w-4" />See Profile</Link></DropdownMenuItem>
+                             <DropdownMenuItem className="text-red-500 focus:text-red-500"><UserX className="mr-2 h-4 w-4" />Unfriend</DropdownMenuItem>
+                             <DropdownMenuItem className="text-red-500 focus:text-red-500"><ShieldX className="mr-2 h-4 w-4" />Block</DropdownMenuItem>
+                        </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                </DropdownMenuSub>
             ))}
              <DropdownMenuSeparator />
              <DropdownMenuItem asChild className="justify-center text-sm text-muted-foreground hover:text-primary">
-                <Link href="/dashboard/chat">
-                    Go to Chat
+                <Link href="/dashboard/notifications">
+                    See Friend Requests
                 </Link>
              </DropdownMenuItem>
           </DropdownMenuContent>

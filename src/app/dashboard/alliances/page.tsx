@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -238,7 +239,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
                                 Withdraw Request
                             </>
                         ) : (
-                            "Request to Join"
+                             "Request to Join"
                         )}
                     </Button>
                 )}
@@ -504,10 +505,15 @@ const EditNoticeDialog = ({ notice, onSave }: { notice: string, onSave: (newNoti
 
 const InviteMembersDialog = () => {
     const [invited, setInvited] = useState<string[]>([]);
+    const router = useRouter();
     
     const handleInvite = (userId: string) => {
         setInvited(prev => [...prev, userId]);
     }
+
+    const handleRowClick = (userId: string) => {
+        router.push(`/dashboard/profile?user=${userId}`);
+    };
 
     return (
         <Dialog>
@@ -533,7 +539,7 @@ const InviteMembersDialog = () => {
                     </TableHeader>
                     <TableBody>
                         {usersWithoutAlliance.map((user) => (
-                            <TableRow key={user.id}>
+                            <TableRow key={user.id} onClick={() => handleRowClick(user.id)} className="cursor-pointer">
                                 <TableCell>
                                     <div className="flex items-center gap-3">
                                         <Avatar className="h-10 w-10">
@@ -546,12 +552,12 @@ const InviteMembersDialog = () => {
                                 <TableCell>{user.powerScore.toLocaleString()}</TableCell>
                                 <TableCell className="text-right">
                                     {invited.includes(user.id) ? (
-                                        <Button variant="secondary" disabled>
+                                        <Button variant="secondary" disabled onClick={(e) => e.stopPropagation()}>
                                             <Check className="mr-2 h-4 w-4" />
                                             Invited
                                         </Button>
                                     ) : (
-                                        <Button variant="outline" size="sm" onClick={() => handleInvite(user.id)}>Invite</Button>
+                                        <Button variant="outline" size="sm" onClick={(e) => { e.stopPropagation(); handleInvite(user.id); }}>Invite</Button>
                                     )}
                                 </TableCell>
                             </TableRow>
@@ -705,5 +711,7 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    
 
     

@@ -28,27 +28,6 @@ const features = [
   },
 ];
 
-const testimonials = [
-  {
-    name: 'Alpha Coder',
-    avatar: 'https://picsum.photos/seed/10/100/100',
-    title: 'Top Ranked Coder',
-    quote: 'CodeClash Arena transformed my competitive programming journey. The community and AI mentor are game-changers!',
-  },
-  {
-    name: 'Syntax Samurai',
-    avatar: 'https://picsum.photos/seed/11/100/100',
-    title: 'Alliance Leader',
-    quote: 'Our alliance has never been more coordinated. The features make it easy to strategize and dominate the competition.',
-  },
-  {
-    name: 'Data Diva',
-    avatar: 'https://picsum.photos/seed/14/100/100',
-    title: 'Rising Star',
-    quote: "The AI recommendations helped me identify my weak spots and turn them into strengths. I'm climbing the ranks faster than ever.",
-  },
-];
-
 export default function HomePage() {
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -60,7 +39,6 @@ export default function HomePage() {
           </Link>
           <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
             <Link href="#features" className="transition-colors hover:text-primary">Features</Link>
-            <Link href="#testimonials" className="transition-colors hover:text-primary">Testimonials</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Button variant="outline" asChild>
@@ -115,39 +93,6 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section id="testimonials" className="py-16 md:py-24">
-            <div className="container mx-auto px-4 md:px-6">
-                 <div className="mx-auto max-w-3xl text-center">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Loved by Coders Worldwide</h2>
-                    <p className="mt-4 text-muted-foreground md:text-lg">
-                        Don't just take our word for it. Here's what our users are saying.
-                    </p>
-                </div>
-                <div className="mt-12 grid gap-8 md:grid-cols-1 lg:grid-cols-3">
-                    {testimonials.map((testimonial) => (
-                        <Card key={testimonial.name}>
-                            <CardContent className="pt-6">
-                                <div className="flex items-center gap-4">
-                                     <Avatar className="h-12 w-12">
-                                        <AvatarImage src={testimonial.avatar} alt={testimonial.name} />
-                                        <AvatarFallback>{testimonial.name.substring(0,2)}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <p className="font-semibold">{testimonial.name}</p>
-                                        <p className="text-sm text-muted-foreground">{testimonial.title}</p>
-                                    </div>
-                                </div>
-                                <blockquote className="mt-4 border-l-2 pl-4 italic text-muted-foreground">
-                                    "{testimonial.quote}"
-                                </blockquote>
-                            </CardContent>
-                        </Card>
-                    ))}
-                </div>
-            </div>
         </section>
 
          {/* CTA Section */}

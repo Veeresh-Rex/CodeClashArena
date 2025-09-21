@@ -99,15 +99,15 @@ const ChatMessage = ({ msg }: { msg: { sender: string; message: string; avatar: 
 
 
 const ChatTabContent = ({ messages }: { messages: any[] }) => (
-  <div className="flex flex-col h-[60vh]">
+    <div className="flex flex-col h-full">
     <ScrollArea className="flex-1">
-      <div className="space-y-2">
+      <div className="p-4 space-y-2">
         {messages.map((msg, index) => (
           <ChatMessage key={index} msg={msg} />
         ))}
       </div>
     </ScrollArea>
-    <div className="mt-4 flex items-center gap-2">
+    <div className="p-4 flex items-center gap-2 border-t">
       <Input placeholder="Type a message..." className="flex-1" />
       <Button><Send className="h-4 w-4" /></Button>
     </div>
@@ -116,31 +116,25 @@ const ChatTabContent = ({ messages }: { messages: any[] }) => (
 
 export default function ChatPage() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Chat</CardTitle>
-        <CardDescription>
-          Communicate with other coders from around the world.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="worldwide">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
-            <TabsTrigger value="alliance">Alliance</TabsTrigger>
-            <TabsTrigger value="personal">Personal</TabsTrigger>
-          </TabsList>
-          <TabsContent value="worldwide">
+    <div className="flex flex-col h-full">
+       <Tabs defaultValue="worldwide" className="flex flex-col flex-1">
+          <div className="p-4 border-b">
+            <TabsList className="grid w-full grid-cols-3">
+                <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
+                <TabsTrigger value="alliance">Alliance</TabsTrigger>
+                <TabsTrigger value="personal">Personal</TabsTrigger>
+            </TabsList>
+          </div>
+          <TabsContent value="worldwide" className="flex-1 mt-0">
             <ChatTabContent messages={worldChat} />
           </TabsContent>
-          <TabsContent value="alliance">
+          <TabsContent value="alliance" className="flex-1 mt-0">
             <ChatTabContent messages={allianceChat} />
           </TabsContent>
-          <TabsContent value="personal">
+          <TabsContent value="personal" className="flex-1 mt-0">
             <ChatTabContent messages={personalChat} />
           </TabsContent>
         </Tabs>
-      </CardContent>
-    </Card>
+    </div>
   );
 }

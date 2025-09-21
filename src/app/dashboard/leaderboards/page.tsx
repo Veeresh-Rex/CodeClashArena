@@ -49,82 +49,84 @@ const allianceData = [
 
 export default function LeaderboardsPage() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Leaderboards</CardTitle>
-        <CardDescription>
-          See how you and your alliance rank against the world.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="individual">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="individual">Individual</TabsTrigger>
-            <TabsTrigger value="alliance">Alliances</TabsTrigger>
-          </TabsList>
-          <TabsContent value="individual">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">Rank</TableHead>
-                  <TableHead>User</TableHead>
-                  <TableHead className="text-right">Problems Solved</TableHead>
-                  <TableHead className="text-right">Power Score</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {individualData.map((user) => (
-                  <TableRow key={user.rank} className={cn(user.isCurrentUser && 'bg-primary/10')}>
-                    <TableCell className="font-medium text-lg">#{user.rank}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                        <Avatar className="h-8 w-8">
-                          <AvatarImage src={user.avatar} alt={user.name} />
-                           <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
-                        </Avatar>
-                        <span className="font-medium">{user.name}</span>
-                        {user.isCurrentUser && <Badge>You</Badge>}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">{user.problems}</TableCell>
-                    <TableCell className="text-right font-semibold">{user.powerScore.toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
-          <TabsContent value="alliance">
-             <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[80px]">Rank</TableHead>
-                  <TableHead>Alliance</TableHead>
-                  <TableHead className="text-right">Members</TableHead>
-                  <TableHead className="text-right">Total Power</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {allianceData.map((alliance) => (
-                  <TableRow key={alliance.rank} className={cn(alliance.isCurrentAlliance && 'bg-primary/10')}>
-                    <TableCell className="font-medium text-lg">#{alliance.rank}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-3">
-                         <Avatar className="h-8 w-8">
-                            <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
-                         </Avatar>
-                        <span className="font-medium">{alliance.name}</span>
-                        {alliance.isCurrentAlliance && <Badge>Your Alliance</Badge>}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">{alliance.members}</TableCell>
-                    <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
+    <div className="p-4 md:p-6 lg:p-8">
+        <Card>
+        <CardHeader>
+            <CardTitle>Leaderboards</CardTitle>
+            <CardDescription>
+            See how you and your alliance rank against the world.
+            </CardDescription>
+        </CardHeader>
+        <CardContent>
+            <Tabs defaultValue="individual">
+            <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="individual">Individual</TabsTrigger>
+                <TabsTrigger value="alliance">Alliances</TabsTrigger>
+            </TabsList>
+            <TabsContent value="individual">
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead className="w-[80px]">Rank</TableHead>
+                    <TableHead>User</TableHead>
+                    <TableHead className="text-right">Problems Solved</TableHead>
+                    <TableHead className="text-right">Power Score</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {individualData.map((user) => (
+                    <TableRow key={user.rank} className={cn(user.isCurrentUser && 'bg-primary/10')}>
+                        <TableCell className="font-medium text-lg">#{user.rank}</TableCell>
+                        <TableCell>
+                        <div className="flex items-center gap-3">
+                            <Avatar className="h-8 w-8">
+                            <AvatarImage src={user.avatar} alt={user.name} />
+                            <AvatarFallback>{user.name.substring(0,2)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{user.name}</span>
+                            {user.isCurrentUser && <Badge>You</Badge>}
+                        </div>
+                        </TableCell>
+                        <TableCell className="text-right">{user.problems}</TableCell>
+                        <TableCell className="text-right font-semibold">{user.powerScore.toLocaleString()}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            </TabsContent>
+            <TabsContent value="alliance">
+                <Table>
+                <TableHeader>
+                    <TableRow>
+                    <TableHead className="w-[80px]">Rank</TableHead>
+                    <TableHead>Alliance</TableHead>
+                    <TableHead className="text-right">Members</TableHead>
+                    <TableHead className="text-right">Total Power</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {allianceData.map((alliance) => (
+                    <TableRow key={alliance.rank} className={cn(alliance.isCurrentAlliance && 'bg-primary/10')}>
+                        <TableCell className="font-medium text-lg">#{alliance.rank}</TableCell>
+                        <TableCell>
+                        <div className="flex items-center gap-3">
+                            <Avatar className="h-8 w-8">
+                                <AvatarFallback>{alliance.name.substring(0,1)}</AvatarFallback>
+                            </Avatar>
+                            <span className="font-medium">{alliance.name}</span>
+                            {alliance.isCurrentAlliance && <Badge>Your Alliance</Badge>}
+                        </div>
+                        </TableCell>
+                        <TableCell className="text-right">{alliance.members}</TableCell>
+                        <TableCell className="text-right font-semibold">{alliance.powerScore.toLocaleString()}</TableCell>
+                    </TableRow>
+                    ))}
+                </TableBody>
+                </Table>
+            </TabsContent>
+            </Tabs>
+        </CardContent>
+        </Card>
+    </div>
   );
 }

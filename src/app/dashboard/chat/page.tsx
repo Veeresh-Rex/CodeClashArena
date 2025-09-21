@@ -1,3 +1,7 @@
+
+"use client";
+
+import { useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { Send } from "lucide-react";
+import { ArrowLeft, Send } from "lucide-react";
 
 const worldChat = [
   {
@@ -57,23 +61,52 @@ const allianceChat = [
   },
 ];
 
-const personalChat = [
-  {
-    sender: "Cody Clash",
-    message: "Hey, did you solve that DP problem we discussed?",
-    avatar: "https://picsum.photos/seed/1/100/100",
-    time: "Yesterday 2:15 PM",
-    isCurrentUser: true,
-  },
-  {
-    sender: "Byte Baron",
-    message: "Almost! I'm stuck on the state transition. Can you give me a hint?",
-    avatar: "https://picsum.photos/seed/4/100/100",
-    time: "Yesterday 2:20 PM",
-  },
+const contacts = [
+    { name: "Byte Baron", avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM" },
+    { name: "Syntax Slayer", avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday" },
+    { name: "Algo Queen", avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday" },
+    { name: "Pixel Pioneer", avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday" },
+    { name: "Data Diva", avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24" },
 ];
 
-const ChatMessage = ({ msg }: { msg: { sender: string; message: string; avatar: string; time: string; isCurrentUser?: boolean } }) => {
+const getPersonalChat = (contactName: string) => {
+    if (contactName === 'Byte Baron') {
+        return [
+            {
+                sender: "Cody Clash",
+                message: "Hey, did you solve that DP problem we discussed?",
+                avatar: "https://picsum.photos/seed/1/100/100",
+                time: "Yesterday 2:15 PM",
+                isCurrentUser: true,
+            },
+            {
+                sender: "Byte Baron",
+                message: "Almost! I'm stuck on the state transition. Can you give me a hint?",
+                avatar: "https://picsum.photos/seed/4/100/100",
+                time: "Yesterday 2:20 PM",
+            },
+        ]
+    }
+    return [
+        {
+            sender: "Cody Clash",
+            message: `Hey ${contactName}, how's it going?`,
+            avatar: "https://picsum.photos/seed/1/100/100",
+            time: "1:00 PM",
+            isCurrentUser: true,
+        },
+        {
+            sender: contactName,
+            message: `Hey Cody! All good. You?`,
+            avatar: contacts.find(c => c.name === contactName)?.avatar || '',
+            time: "1:01 PM",
+        },
+    ]
+};
+
+
+type ChatMessageProps = { msg: { sender: string; message: string; avatar: string; time: string; isCurrentUser?: boolean } };
+const ChatMessage = ({ msg }: ChatMessageProps) => {
   return (
     <div className={cn("flex items-start gap-4 p-4", msg.isCurrentUser && "justify-end")}>
       {!msg.isCurrentUser && (
@@ -98,23 +131,64 @@ const ChatMessage = ({ msg }: { msg: { sender: string; message: string; avatar: 
 };
 
 
-const ChatTabContent = ({ messages }: { messages: any[] }) => (
+const ChatWindow = ({ messages, contactName, onBack }: { messages: any[], contactName?: string, onBack?: () => void }) => (
     <div className="flex flex-col h-full">
-    <ScrollArea className="flex-1">
-      <div className="p-4 space-y-2">
-        {messages.map((msg, index) => (
-          <ChatMessage key={index} msg={msg} />
-        ))}
-      </div>
-    </ScrollArea>
-    <div className="p-4 flex items-center gap-2 border-t">
-      <Input placeholder="Type a message..." className="flex-1" />
-      <Button><Send className="h-4 w-4" /></Button>
+        {contactName && onBack && (
+            <div className="p-4 border-b flex items-center gap-4">
+                <Button variant="ghost" size="icon" onClick={onBack}>
+                    <ArrowLeft className="h-5 w-5" />
+                </Button>
+                <h2 className="text-lg font-semibold">{contactName}</h2>
+            </div>
+        )}
+        <ScrollArea className="flex-1">
+            <div className="p-4 space-y-2">
+                {messages.map((msg, index) => (
+                    <ChatMessage key={index} msg={msg} />
+                ))}
+            </div>
+        </ScrollArea>
+        <div className="p-4 flex items-center gap-2 border-t">
+            <Input placeholder="Type a message..." className="flex-1" />
+            <Button><Send className="h-4 w-4" /></Button>
+        </div>
     </div>
-  </div>
 );
 
+
+const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectContact: (name: string) => void }) => (
+    <ScrollArea className="h-full">
+        <div className="p-4 space-y-1">
+            {contacts.map(contact => (
+                <div key={contact.name} onClick={() => onSelectContact(contact.name)} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted cursor-pointer">
+                    <Avatar className="h-12 w-12 relative">
+                        <AvatarImage src={contact.avatar} alt={contact.name} />
+                        <AvatarFallback>{contact.name.substring(0, 2)}</AvatarFallback>
+                        {contact.online && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />}
+                    </Avatar>
+                    <div className="flex-1 overflow-hidden">
+                        <p className="font-semibold truncate">{contact.name}</p>
+                        <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
+                    </div>
+                    <div className="text-xs text-muted-foreground">{contact.time}</div>
+                </div>
+            ))}
+        </div>
+    </ScrollArea>
+)
+
+
 export default function ChatPage() {
+  const [selectedContact, setSelectedContact] = useState<string | null>(null);
+
+  const handleSelectContact = (name: string) => {
+    setSelectedContact(name);
+  };
+
+  const handleBack = () => {
+    setSelectedContact(null);
+  }
+
   return (
     <div className="flex flex-col h-full">
        <Tabs defaultValue="worldwide" className="flex flex-col flex-1">
@@ -122,19 +196,24 @@ export default function ChatPage() {
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
                 <TabsTrigger value="alliance">Alliance</TabsTrigger>
-                <TabsTrigger value="personal">Personal</TabsTrigger>
+                <TabsTrigger value="personal" onClick={() => setSelectedContact(null)}>Personal</TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="worldwide" className="flex-1 mt-0">
-            <ChatTabContent messages={worldChat} />
+            <ChatWindow messages={worldChat} />
           </TabsContent>
           <TabsContent value="alliance" className="flex-1 mt-0">
-            <ChatTabContent messages={allianceChat} />
+            <ChatWindow messages={allianceChat} />
           </TabsContent>
           <TabsContent value="personal" className="flex-1 mt-0">
-            <ChatTabContent messages={personalChat} />
+            {selectedContact ? (
+                <ChatWindow messages={getPersonalChat(selectedContact)} contactName={selectedContact} onBack={handleBack} />
+            ) : (
+                <ContactList contacts={contacts} onSelectContact={handleSelectContact} />
+            )}
           </TabsContent>
         </Tabs>
     </div>
   );
 }
+

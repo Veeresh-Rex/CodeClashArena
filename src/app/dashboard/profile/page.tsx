@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { Suspense } from 'react';
@@ -85,11 +86,11 @@ const userProfileData = {
 
 const ProfileContent = () => {
     const searchParams = useSearchParams();
-    const userId = searchParams.get('user');
+    const userName = searchParams.get('user');
 
-    const profileKey = userId || 'Cody Clash';
+    const profileKey = userName && (userName in userProfileData) ? userName : 'Cody Clash';
     // @ts-ignore
-    const userProfile = userProfileData[profileKey] || userProfileData['Cody Clash'];
+    const userProfile = userProfileData[profileKey];
 
 
     return (

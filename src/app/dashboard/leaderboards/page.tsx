@@ -100,7 +100,10 @@ const allianceData = [
 
 const IndividualUserRow = ({ user, isSticky = false }: { user: typeof individualData[0], isSticky?: boolean }) => {
     return (
-        <TableRow className={cn(user.isCurrentUser && 'bg-primary/10', isSticky && 'sticky bottom-0 z-10 bg-card shadow-lg')}>
+        <TableRow className={cn(
+            user.isCurrentUser && 'bg-primary/10', 
+            isSticky && 'sticky bottom-0 z-10 bg-primary/20 shadow-lg shadow-primary/20'
+        )}>
             <TableCell className="font-medium text-lg">#{user.rank}</TableCell>
             <TableCell>
                 <Link href={`/dashboard/profile?user=${user.name}`} className="flex items-center gap-3 hover:underline">

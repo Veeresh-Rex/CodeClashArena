@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { ArrowLeft, Send, UserPlus, User, ShieldX } from "lucide-react";
+import { ArrowLeft, Send, UserPlus, User, ShieldX, Users } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -166,15 +166,15 @@ const UserAvatar = ({ msg }: {msg: { sender: string; avatar: string; isCurrentUs
   );
 };
 
-type ChatMessageProps = { msg: { sender: string; message: string; avatar: string; time: string; isCurrentUser?: boolean, isFriend?: boolean, allianceCode?: string } };
-const ChatMessage = ({ msg }: ChatMessageProps) => {
+type ChatMessageProps = { msg: { sender: string; message: string; avatar: string; time: string; isCurrentUser?: boolean, isFriend?: boolean, allianceCode?: string }, showAllianceCode?: boolean };
+const ChatMessage = ({ msg, showAllianceCode = true }: ChatMessageProps) => {
   return (
     <div className={cn("flex items-start gap-4 p-4", msg.isCurrentUser && "justify-end")}>
       {!msg.isCurrentUser && <UserAvatar msg={msg} />}
       <div className={cn("rounded-lg p-3 max-w-[75%]", msg.isCurrentUser ? "bg-primary text-primary-foreground" : "bg-muted")}>
         {!msg.isCurrentUser && (
             <p className="font-semibold text-sm mb-1">
-                {msg.allianceCode && <span className="text-muted-foreground mr-1">[{msg.allianceCode}]</span>}
+                {showAllianceCode && msg.allianceCode && <span className="text-muted-foreground mr-1">[{msg.allianceCode}]</span>}
                 {msg.sender}
             </p>
         )}
@@ -187,7 +187,7 @@ const ChatMessage = ({ msg }: ChatMessageProps) => {
 };
 
 
-const ChatWindow = ({ messages, contactName, onBack }: { messages: any[], contactName?: string, onBack?: () => void }) => (
+const ChatWindow = ({ messages, contactName, onBack, showAllianceCode = true }: { messages: any[], contactName?: string, onBack?: () => void, showAllianceCode?: boolean }) => (
     <div className="flex flex-col h-full">
         {contactName && onBack && (
             <div className="p-4 border-b flex items-center gap-4">
@@ -200,7 +200,7 @@ const ChatWindow = ({ messages, contactName, onBack }: { messages: any[], contac
         <ScrollArea className="flex-1">
             <div className="p-4 space-y-2">
                 {messages.map((msg, index) => (
-                    <ChatMessage key={index} msg={msg} />
+                    <ChatMessage key={index} msg={msg} showAllianceCode={showAllianceCode} />
                 ))}
             </div>
         </ScrollArea>
@@ -238,12 +238,25 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
     </ScrollArea>
 )
 
+const NoAllianceChat = () => (
+    <div className="flex flex-col items-center justify-center h-full text-center p-8">
+        <Users className="h-16 w-16 text-muted-foreground mb-4" />
+        <h3 className="text-xl font-semibold">Join an Alliance to Chat</h3>
+        <p className="text-muted-foreground mt-2 max-w-sm">You must be a member of an alliance to access the alliance chat. Find an alliance to join and start collaborating with your new teammates!</p>
+        <Button asChild className="mt-6">
+            <Link href="/dashboard/alliances">Find an Alliance</Link>
+        </Button>
+    </div>
+);
+
+
 const ChatPageContent = () => {
   const searchParams = useSearchParams();
   const user = searchParams.get('user');
 
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('worldwide');
+  const [hasAlliance] = useState(false); // Toggle this to see the 'no alliance' state
 
   useEffect(() => {
     if (user) {
@@ -251,6 +264,12 @@ const ChatPageContent = () => {
       setActiveTab('personal');
     }
   }, [user]);
+  
+  useEffect(() => {
+    if (!hasAlliance && activeTab === 'alliance') {
+        setActiveTab('worldwide');
+    }
+  }, [hasAlliance, activeTab]);
 
   const handleSelectContact = (name: string) => {
     setSelectedContact(name);
@@ -266,7 +285,7 @@ const ChatPageContent = () => {
           <div className="p-4 border-b">
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
-                <TabsTrigger value="alliance">Alliance</TabsTrigger>
+                <TabsTrigger value="alliance" disabled={!hasAlliance}>Alliance</TabsTrigger>
                 <TabsTrigger value="personal" onClick={() => setSelectedContact(null)}>Personal</TabsTrigger>
             </TabsList>
           </div>
@@ -274,7 +293,7 @@ const ChatPageContent = () => {
             <ChatWindow messages={worldChat} />
           </TabsContent>
           <TabsContent value="alliance" className="flex-1 mt-0">
-            <ChatWindow messages={allianceChat} />
+            {hasAlliance ? <ChatWindow messages={allianceChat} showAllianceCode={false} /> : <NoAllianceChat />}
           </TabsContent>
           <TabsContent value="personal" className="flex-1 mt-0">
             {selectedContact ? (

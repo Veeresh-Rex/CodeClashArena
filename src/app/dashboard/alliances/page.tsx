@@ -84,9 +84,9 @@ const otherAlliances = [
 
 const dummyMembers = [
     { name: "Gadget Guru", role: "Member", avatar: "https://picsum.photos/seed/31/100/100", powerScore: 2100 },
-    { name: "Loop Legend", role: "Member", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
+    { name: "Loop Legend", role: "Co-Leader", avatar: "https://picsum.photos/seed/32/100/100", powerScore: 2050 },
     { name: "Function Fox", role: "Member", avatar: "https://picsum.photos/seed/33/100/100", powerScore: 1980 },
-    { name: "Pointer Prodigy", role: "Member", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
+    { name: "Pointer Prodigy", role: "Leader", avatar: "https://picsum.photos/seed/34/100/100", powerScore: 1950 },
 ];
 
 
@@ -218,6 +218,53 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: All
         </>
     );
 
+    const roleOrder: { [key: string]: number } = { 'Leader': 1, 'Co-Leader': 2, 'Member': 3 };
+
+    const OtherAllianceMemberRow = ({ member }: { member: (typeof dummyMembers)[0] }) => {
+        const content = (
+            <TableRow className="cursor-pointer">
+                <TableCell className="font-medium">
+                    <div className="flex items-center gap-3">
+                        <Avatar className="h-10 w-10">
+                            <AvatarImage src={member.avatar} alt={member.name} />
+                            <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <p className="font-semibold">{member.name}</p>
+                            <div className="flex items-center text-sm text-muted-foreground">
+                            <Star className="w-4 h-4 mr-1 text-primary" />
+                            <span>{member.powerScore.toLocaleString()}</span>
+                            </div>
+                        </div>
+                    </div>
+                </TableCell>
+                <TableCell className="text-right">
+                    <Badge variant={member.role === "Leader" ? "default" : "secondary"}>{member.role}</Badge>
+                </TableCell>
+            </TableRow>
+        );
+
+        return (
+            <DropdownMenu>
+                <DropdownMenuTrigger asChild>{content}</DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                        <Link href={`/dashboard/chat?user=${encodeURIComponent(member.name)}`}>
+                            <MessageSquare className="mr-2 h-4 w-4" />
+                            <span>Chat</span>
+                        </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/dashboard/profile">
+                            <User className="mr-2 h-4 w-4" />
+                            <span>See Profile</span>
+                        </Link>
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+        );
+    };
+
     const MembersView = () => (
         <>
             <DialogHeader>
@@ -236,27 +283,15 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange }: { alliance: All
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {dummyMembers.map(member => (
-                         <TableRow key={member.name}>
-                            <TableCell className="font-medium">
-                                <div className="flex items-center gap-3">
-                                    <Avatar className="h-10 w-10">
-                                        <AvatarImage src={member.avatar} alt={member.name} />
-                                        <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <p className="font-semibold">{member.name}</p>
-                                        <div className="flex items-center text-sm text-muted-foreground">
-                                        <Star className="w-4 h-4 mr-1 text-primary" />
-                                        <span>{member.powerScore.toLocaleString()}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </TableCell>
-                            <TableCell className="text-right">
-                                <Badge variant="secondary">{member.role}</Badge>
-                            </TableCell>
-                        </TableRow>
+                    {dummyMembers.slice().sort((a, b) => {
+                        const roleA = roleOrder[a.role] || 99;
+                        const roleB = roleOrder[b.role] || 99;
+                        if (roleA !== roleB) {
+                            return roleA - roleB;
+                        }
+                        return a.name.localeCompare(b.name);
+                    }).map(member => (
+                        <OtherAllianceMemberRow key={member.name} member={member} />
                     ))}
                 </TableBody>
             </Table>

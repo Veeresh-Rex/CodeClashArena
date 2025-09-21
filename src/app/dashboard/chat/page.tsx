@@ -61,6 +61,7 @@ const allianceChat = [
     avatar: "https://picsum.photos/seed/2/100/100",
     time: "10:00 AM",
     isFriend: true,
+    allianceCode: "TCC",
   },
   {
     sender: "Cody Clash",
@@ -68,6 +69,7 @@ const allianceChat = [
     avatar: "https://picsum.photos/seed/1/100/100",
     time: "10:01 AM",
     isCurrentUser: true,
+    allianceCode: "TCC",
   },
   {
     sender: "Algo Queen",
@@ -75,18 +77,20 @@ const allianceChat = [
     avatar: "https://picsum.photos/seed/3/100/100",
     time: "10:02 AM",
     isFriend: true,
+    allianceCode: "TCC",
   },
 ];
 
 const contacts = [
-    { name: "Byte Baron", avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM" },
-    { name: "Syntax Slayer", avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday" },
-    { name: "Algo Queen", avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday" },
-    { name: "Pixel Pioneer", avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday" },
-    { name: "Data Diva", avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24" },
+    { name: "Byte Baron", avatar: "https://picsum.photos/seed/4/100/100", online: true, lastMessage: "Almost! I'm stuck on...", time: "2:20 PM", allianceCode: "TCC" },
+    { name: "Syntax Slayer", avatar: "https://picsum.photos/seed/2/100/100", online: false, lastMessage: "See you in the arena.", time: "Yesterday", allianceCode: "TCC" },
+    { name: "Algo Queen", avatar: "https://picsum.photos/seed/3/100/100", online: true, lastMessage: "Good luck on the contest!", time: "Monday", allianceCode: "TCC" },
+    { name: "Pixel Pioneer", avatar: "https://picsum.photos/seed/5/100/100", online: false, lastMessage: "Wanna duo?", time: "Monday", allianceCode: "TCC" },
+    { name: "Data Diva", avatar: "https://picsum.photos/seed/14/100/100", online: true, lastMessage: "That was a fun match.", time: "4/28/24", allianceCode: "PYPH" },
 ];
 
 const getPersonalChat = (contactName: string) => {
+    const contact = contacts.find(c => c.name === contactName);
     if (contactName === 'Byte Baron') {
         return [
             {
@@ -95,6 +99,7 @@ const getPersonalChat = (contactName: string) => {
                 avatar: "https://picsum.photos/seed/1/100/100",
                 time: "Yesterday 2:15 PM",
                 isCurrentUser: true,
+                allianceCode: "TCC",
             },
             {
                 sender: "Byte Baron",
@@ -102,6 +107,7 @@ const getPersonalChat = (contactName: string) => {
                 avatar: "https://picsum.photos/seed/4/100/100",
                 time: "Yesterday 2:20 PM",
                 isFriend: true,
+                allianceCode: contact?.allianceCode,
             },
         ]
     }
@@ -112,13 +118,15 @@ const getPersonalChat = (contactName: string) => {
             avatar: "https://picsum.photos/seed/1/100/100",
             time: "1:00 PM",
             isCurrentUser: true,
+            allianceCode: "TCC",
         },
         {
             sender: contactName,
             message: `Hey Cody! All good. You?`,
-            avatar: contacts.find(c => c.name === contactName)?.avatar || '',
+            avatar: contact?.avatar || '',
             time: "1:01 PM",
             isFriend: true,
+            allianceCode: contact?.allianceCode,
         },
     ]
 };
@@ -220,7 +228,10 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
                         {contact.online && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />}
                     </div>
                     <div className="flex-1 overflow-hidden">
-                        <p className="font-semibold truncate">{contact.name}</p>
+                        <p className="font-semibold truncate">
+                           {contact.allianceCode && <span className="text-muted-foreground mr-1">[{contact.allianceCode}]</span>}
+                           {contact.name}
+                        </p>
                         <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
                     </div>
                     <div className="text-xs text-muted-foreground">{contact.time}</div>

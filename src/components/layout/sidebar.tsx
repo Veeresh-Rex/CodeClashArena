@@ -34,7 +34,6 @@ const menuItems = [
   { href: "/dashboard/alliances", label: "Alliances", icon: Users },
   { href: "/dashboard/chat", label: "Chat", icon: MessageSquare },
   { href: "/dashboard/recommendations", label: "AI Mentor", icon: BrainCircuit },
-  { href: "/dashboard/profile", label: "Profile", icon: User },
 ];
 
 function Brand() {

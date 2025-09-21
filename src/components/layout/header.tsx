@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
 const pageTitles: { [key: string]: string } = {
   '/dashboard': 'Dashboard',
@@ -40,7 +41,7 @@ export function Header() {
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
       <div className="flex items-center gap-2">
-        {isClient && <SidebarTrigger />}
+        <SidebarTrigger className={cn(!isClient && "hidden")} />
         <h1 className="text-lg font-semibold md:text-xl">{title}</h1>
       </div>
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">

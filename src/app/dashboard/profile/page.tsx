@@ -27,9 +27,9 @@ const userProfile = {
         { icon: Trophy, title: 'Contest Winner', description: 'Won 1st place in a weekly contest.' },
     ],
     connectedAccounts: [
-        { icon: Github, handle: 'cody-clash', url: '#' },
-        { icon: Linkedin, handle: 'cody-clash', url: '#' },
-        { icon: Twitter, handle: 'cody_clash', url: '#' },
+        { icon: Github, handle: 'cody-clash-gh', url: '#' },
+        { icon: Linkedin, handle: 'cody-clash-li', url: '#' },
+        { icon: Twitter, handle: 'cody_clash_tw', url: '#' },
     ]
 }
 

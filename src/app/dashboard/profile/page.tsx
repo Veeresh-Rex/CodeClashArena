@@ -4,7 +4,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { BarChart, Github, Linkedin, Medal, Star, Target, Trophy, Twitter } from "lucide-react";
+import { BarChart, Github, Linkedin, Medal, Star, Target, Trophy, Twitter, Users } from "lucide-react";
+import Link from "next/link";
 
 const userProfile = {
     name: 'Cody Clash',
@@ -51,6 +52,23 @@ export default function ProfilePage() {
                     <p className="text-muted-foreground">{userProfile.bio}</p>
                     <div className="mt-4">
                         <Button>Edit Profile</Button>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Alliance</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <Users className="h-6 w-6 text-primary" />
+                            <span className="font-semibold">{userProfile.alliance}</span>
+                        </div>
+                        <Button asChild variant="outline" size="sm">
+                            <Link href="/dashboard/alliances">View Alliance</Link>
+                        </Button>
                     </div>
                 </CardContent>
             </Card>

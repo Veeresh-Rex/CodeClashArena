@@ -26,6 +26,7 @@ const worldChat = [
     avatar: "https://picsum.photos/seed/10/100/100",
     time: "5:30 PM",
     isFriend: false,
+    allianceCode: "RECR",
   },
   {
     sender: "Syntax Samurai",
@@ -33,6 +34,7 @@ const worldChat = [
     avatar: "https://picsum.photos/seed/11/100/100",
     time: "5:31 PM",
     isFriend: true,
+    allianceCode: "BINB",
   },
   {
     sender: "Cody Clash",
@@ -40,6 +42,7 @@ const worldChat = [
     avatar: "https://picsum.photos/seed/1/100/100",
     time: "5:32 PM",
     isCurrentUser: true,
+    allianceCode: "TCC",
   },
   {
     sender: "Data Diva",
@@ -47,6 +50,7 @@ const worldChat = [
     avatar: "https://picsum.photos/seed/14/100/100",
     time: "5:33 PM",
     isFriend: false,
+    allianceCode: "PYPH",
   },
 ];
 
@@ -157,13 +161,18 @@ const UserAvatar = ({ msg }: {msg: { sender: string; avatar: string; isCurrentUs
   );
 };
 
-type ChatMessageProps = { msg: { sender: string; message: string; avatar: string; time: string; isCurrentUser?: boolean, isFriend?: boolean } };
+type ChatMessageProps = { msg: { sender: string; message: string; avatar: string; time: string; isCurrentUser?: boolean, isFriend?: boolean, allianceCode?: string } };
 const ChatMessage = ({ msg }: ChatMessageProps) => {
   return (
     <div className={cn("flex items-start gap-4 p-4", msg.isCurrentUser && "justify-end")}>
       {!msg.isCurrentUser && <UserAvatar msg={msg} />}
       <div className={cn("rounded-lg p-3 max-w-[75%]", msg.isCurrentUser ? "bg-primary text-primary-foreground" : "bg-muted")}>
-        {!msg.isCurrentUser && <p className="font-semibold text-sm mb-1">{msg.sender}</p>}
+        {!msg.isCurrentUser && (
+            <p className="font-semibold text-sm mb-1">
+                {msg.allianceCode && <span className="text-muted-foreground mr-1">[{msg.allianceCode}]</span>}
+                {msg.sender}
+            </p>
+        )}
         <p className="text-sm">{msg.message}</p>
         <p className={cn("text-xs mt-2", msg.isCurrentUser ? "text-primary-foreground/70" : "text-muted-foreground")}>{msg.time}</p>
       </div>
@@ -203,15 +212,15 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
         <div className="p-4 space-y-1">
             {contacts.map(contact => (
                 <div key={contact.name} onClick={() => onSelectContact(contact.name)} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted cursor-pointer">
-                    <Avatar className="h-12 w-12">
-                        <AvatarImage src={contact.avatar} alt={contact.name} />
-                        <AvatarFallback>{contact.name.substring(0, 2)}</AvatarFallback>
-                    </Avatar>
+                    <div className="relative">
+                        <Avatar className="h-12 w-12">
+                            <AvatarImage src={contact.avatar} alt={contact.name} />
+                            <AvatarFallback>{contact.name.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        {contact.online && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />}
+                    </div>
                     <div className="flex-1 overflow-hidden">
-                        <div className="flex items-center gap-2">
-                            <p className="font-semibold truncate">{contact.name}</p>
-                            {contact.online && <div className="w-2.5 h-2.5 bg-green-500 rounded-full" />}
-                        </div>
+                        <p className="font-semibold truncate">{contact.name}</p>
                         <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
                     </div>
                     <div className="text-xs text-muted-foreground">{contact.time}</div>

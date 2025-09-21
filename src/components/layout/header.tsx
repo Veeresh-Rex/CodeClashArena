@@ -47,6 +47,7 @@ const pageTitles: { [key: string]: string } = {
   '/dashboard/recommendations': 'AI Mentor',
   '/dashboard/profile': 'My Profile',
   '/dashboard/notifications': 'Notifications',
+  '/dashboard/settings': 'Settings',
 };
 
 const friendRequests = [
@@ -306,7 +307,7 @@ export function Header() {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild><Link href="/dashboard/profile">Profile</Link></DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href="/dashboard/settings">Settings</Link></DropdownMenuItem>
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>
                 <Sun className="h-4 w-4 mr-2 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />

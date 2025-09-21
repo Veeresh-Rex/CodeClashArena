@@ -21,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle, Upload } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,6 +40,8 @@ import {
 } from "@/components/ui/dialog";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 
 const myAlliance = {
@@ -51,6 +53,7 @@ const myAlliance = {
   notice: "The next Alliance War starts this Friday! Be ready to crush it. We will be focusing on graph problems.",
   noticeLastModifiedBy: "Syntax Slayer",
   noticeLastModifiedTime: "2 hours ago",
+  avatar: "https://picsum.photos/seed/1/100/100",
   membersList: [
     { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
     { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
@@ -321,9 +324,52 @@ const FindAlliancesDialog = () => {
     )
 }
 
+const ManageAllianceDialog = ({ alliance }: { alliance: typeof myAlliance }) => (
+    <Dialog>
+        <DialogTrigger asChild>
+            <Button>Manage Alliance</Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-2xl">
+            <DialogHeader>
+                <DialogTitle>Manage Alliance</DialogTitle>
+                <DialogDescription>Update your alliance settings here.</DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-6 py-4">
+                <div className="flex items-center gap-6">
+                    <Avatar className="h-20 w-20">
+                        <AvatarImage src={alliance.avatar} alt={alliance.name} />
+                        <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <Button variant="outline"><Upload className="mr-2 h-4 w-4" /> Change Avatar</Button>
+                </div>
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="alliance-name">Alliance Name</Label>
+                        <Input id="alliance-name" defaultValue={alliance.name} maxLength={20} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="alliance-code">Alliance Code</Label>
+                        <Input id="alliance-code" defaultValue={alliance.name.substring(0,5).toUpperCase()} maxLength={5} />
+                    </div>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="alliance-description">Alliance Description</Label>
+                    <Textarea id="alliance-description" defaultValue={alliance.description} className="min-h-24" />
+                </div>
+            </div>
+            <DialogFooter>
+                <Button variant="outline">Cancel</Button>
+                <Button>Save Changes</Button>
+            </DialogFooter>
+        </DialogContent>
+    </Dialog>
+);
+
+
 export default function AlliancesPage() {
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
+  const isLeader = currentUser?.role === 'Leader';
 
   return (
     <div className="p-4 md:p-6 lg:p-8">
@@ -356,7 +402,7 @@ export default function AlliancesPage() {
                 <CardTitle className="text-2xl">{myAlliance.name}</CardTitle>
                 <CardDescription>{myAlliance.description}</CardDescription>
                 </div>
-                <Button>Manage Alliance</Button>
+                {isLeader && <ManageAllianceDialog alliance={myAlliance} />}
             </CardHeader>
             <CardContent>
                 <div className="grid gap-4 md:grid-cols-3 mb-6">
@@ -433,3 +479,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

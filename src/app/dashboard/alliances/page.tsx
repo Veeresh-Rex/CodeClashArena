@@ -79,7 +79,7 @@ export default function AlliancesPage() {
               </div>
             </div>
             <h3 className="text-lg font-semibold mb-4">Members</h3>
-             <Table>
+            <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Member</TableHead>
@@ -92,8 +92,8 @@ export default function AlliancesPage() {
                     <TableCell className="font-medium">
                       <div className="flex items-center gap-3">
                         <Avatar className="h-10 w-10">
-                          <AvatarImage src={member.avatar} alt={member.name}/>
-                          <AvatarFallback>{member.name.substring(0,2)}</AvatarFallback>
+                          <AvatarImage src={member.avatar} alt={member.name} />
+                          <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="font-semibold">{member.name}</p>
@@ -122,12 +122,12 @@ export default function AlliancesPage() {
             <CardDescription>Search for an alliance to join.</CardDescription>
           </CardHeader>
           <CardContent>
-             <div className="relative mb-4">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search by name..." className="pl-8" />
-              </div>
+            <div className="relative mb-4">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input placeholder="Search by name..." className="pl-8" />
+            </div>
             <Table>
-               <TableHeader>
+              <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
                   <TableHead className="text-right">Members</TableHead>
@@ -151,11 +151,11 @@ export default function AlliancesPage() {
         <Card>
           <CardHeader>
             <CardTitle>Create Alliance</CardTitle>
-             <CardDescription>Can't find one? Create your own!</CardDescription>
+            <CardDescription>Can't find one? Create your own!</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-             <Input placeholder="Alliance Name" />
-             <Button className="w-full">Create</Button>
+            <Input placeholder="Alliance Name" />
+            <Button className="w-full">Create</Button>
           </CardContent>
         </Card>
       </div>

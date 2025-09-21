@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from "next/link";
@@ -6,6 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   BrainCircuit,
   LayoutDashboard,
+  MessageSquare,
   PanelLeftClose,
   PanelRightClose,
   Terminal,
@@ -30,6 +32,7 @@ const menuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/leaderboards", label: "Leaderboards", icon: Trophy },
   { href: "/dashboard/alliances", label: "Alliances", icon: Users },
+  { href: "/dashboard/chat", label: "Chat", icon: MessageSquare },
   { href: "/dashboard/recommendations", label: "AI Mentor", icon: BrainCircuit },
   { href: "/dashboard/profile", label: "Profile", icon: User },
 ];

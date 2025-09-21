@@ -25,6 +25,7 @@ const pageTitles: { [key: string]: string } = {
   '/dashboard': 'Dashboard',
   '/dashboard/leaderboards': 'Leaderboards',
   '/dashboard/alliances': 'Alliances',
+  '/dashboard/chat': 'Chat',
   '/dashboard/recommendations': 'AI Mentor',
   '/dashboard/profile': 'My Profile',
 };

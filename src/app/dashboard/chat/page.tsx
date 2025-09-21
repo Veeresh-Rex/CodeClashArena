@@ -2,6 +2,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -127,7 +128,7 @@ const UserAvatar = ({ msg }: {msg: { sender: string; avatar: string; isCurrentUs
   );
 
   if (msg.isCurrentUser) {
-    return content;
+    return <Link href="/dashboard/profile">{content}</Link>;
   }
 
   return (
@@ -140,9 +141,11 @@ const UserAvatar = ({ msg }: {msg: { sender: string; avatar: string; isCurrentUs
             <span>Send Friend Request</span>
           </DropdownMenuItem>
         )}
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
-          <span>See Profile</span>
+        <DropdownMenuItem asChild>
+            <Link href="/dashboard/profile">
+                <User className="mr-2 h-4 w-4" />
+                <span>See Profile</span>
+            </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
           <ShieldX className="mr-2 h-4 w-4" />

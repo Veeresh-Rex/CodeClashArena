@@ -37,6 +37,7 @@ import {
   DialogTrigger,
   DialogDescription,
   DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 import {
   AlertDialog,
@@ -55,7 +56,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 
 
-const myAlliance = {
+const myAllianceData = {
   name: "The Code Crusaders",
   members: 24,
   rank: 12,
@@ -90,7 +91,7 @@ const dummyMembers = [
 ];
 
 
-const MemberRow = ({ member, currentUserRole }: { member: (typeof myAlliance.membersList)[0], currentUserRole?: string }) => {
+const MemberRow = ({ member, currentUserRole }: { member: (typeof myAllianceData.membersList)[0], currentUserRole?: string }) => {
   const content = (
     <TableRow className={cn("cursor-pointer", member.isCurrentUser && "bg-primary/10 hover:bg-primary/20")}>
       <TableCell className="font-medium">
@@ -181,7 +182,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
         if (!isOpen) {
             setTimeout(() => {
                 setView('details');
-                setRequestSent(false); // Reset on close
+                // Don't reset requestSent on close to preserve state within session
             }, 300); // reset view after dialog closes
         }
         onOpenChange(isOpen);
@@ -222,7 +223,7 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
             <DialogFooter className={cn("grid gap-2", !hasAlliance ? "grid-cols-2" : "grid-cols-1")}>
                 <Button variant="outline" onClick={() => setView('members')}>See Members</Button>
                 {!hasAlliance && (
-                    <Button onClick={handleRequestJoin}>
+                    <Button onClick={handleRequestJoin} variant={requestSent ? "secondary" : "default"}>
                         {requestSent ? (
                             <>
                                 <X className="mr-2 h-4 w-4" />
@@ -392,7 +393,7 @@ const FindAlliancesDialog = ({ hasAlliance }: { hasAlliance: boolean }) => {
     )
 }
 
-const ManageAllianceDialog = ({ alliance }: { alliance: typeof myAlliance }) => (
+const ManageAllianceDialog = ({ alliance }: { alliance: typeof myAllianceData }) => (
     <Dialog>
         <DialogTrigger asChild>
             <Button>Manage Alliance</Button>
@@ -456,12 +457,60 @@ const LeaveAllianceDialog = () => (
     </AlertDialog>
 );
 
+const EditNoticeDialog = ({ notice, onSave }: { notice: string, onSave: (newNotice: string) => void }) => {
+    const [editedNotice, setEditedNotice] = useState(notice);
+
+    const handleSave = () => {
+        onSave(editedNotice);
+    };
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="ghost" size="icon">
+                    <Pencil className="h-5 w-5 text-primary" />
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Edit Alliance Notice</DialogTitle>
+                    <DialogDescription>Update the announcement for your entire alliance.</DialogDescription>
+                </DialogHeader>
+                <Textarea
+                    value={editedNotice}
+                    onChange={(e) => setEditedNotice(e.target.value)}
+                    className="min-h-[150px] my-4"
+                />
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                    </DialogClose>
+                    <DialogClose asChild>
+                        <Button onClick={handleSave}>Save Changes</Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+};
+
 
 export default function AlliancesPage() {
-  const [hasAlliance, setHasAlliance] = useState(true); // Toggle this to see the 'no alliance' state
+  const [hasAlliance, setHasAlliance] = useState(true);
+  const [myAlliance, setMyAlliance] = useState(myAllianceData);
+
   const currentUser = myAlliance.membersList.find(m => m.isCurrentUser);
   const canEditNotice = currentUser?.role === 'Leader' || currentUser?.role === 'Co-Leader';
   const isLeader = currentUser?.role === 'Leader';
+  
+  const handleUpdateNotice = (newNotice: string) => {
+    setMyAlliance(prev => ({
+        ...prev,
+        notice: newNotice,
+        noticeLastModifiedBy: currentUser?.name || "Unknown",
+        noticeLastModifiedTime: "Just now",
+    }));
+  };
 
   if (!hasAlliance) {
     return (
@@ -508,9 +557,7 @@ export default function AlliancesPage() {
                         </div>
                     </div>
                     {canEditNotice && (
-                         <Button variant="ghost" size="icon">
-                            <Pencil className="h-5 w-5 text-primary" />
-                        </Button>
+                        <EditNoticeDialog notice={myAlliance.notice} onSave={handleUpdateNotice} />
                     )}
                 </CardHeader>
                 <CardContent>
@@ -590,5 +637,3 @@ export default function AlliancesPage() {
     </div>
   );
 }
-
-    

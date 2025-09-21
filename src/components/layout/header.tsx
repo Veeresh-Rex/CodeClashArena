@@ -3,7 +3,7 @@
 "use client";
 
 import Link from "next/link";
-import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX } from "lucide-react";
+import { Bell, Search, UserPlus, Users, Trophy, User, ShieldX, UserX, MessageSquare } from "lucide-react";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from "react";
 
@@ -100,6 +100,7 @@ export function Header() {
                     </DropdownMenuSubTrigger>
                      <DropdownMenuPortal>
                         <DropdownMenuSubContent>
+                             <DropdownMenuItem asChild><Link href={`/dashboard/chat?user=${encodeURIComponent(friend.name)}`}><MessageSquare className="mr-2 h-4 w-4" />Chat</Link></DropdownMenuItem>
                              <DropdownMenuItem asChild><Link href="/dashboard/profile"><User className="mr-2 h-4 w-4" />See Profile</Link></DropdownMenuItem>
                              <DropdownMenuItem className="text-red-500 focus:text-red-500"><UserX className="mr-2 h-4 w-4" />Unfriend</DropdownMenuItem>
                              <DropdownMenuItem className="text-red-500 focus:text-red-500"><ShieldX className="mr-2 h-4 w-4" />Block</DropdownMenuItem>

@@ -1,8 +1,9 @@
 
 "use client";
 
-import { useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -220,9 +221,19 @@ const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectC
     </ScrollArea>
 )
 
+const ChatPageContent = () => {
+  const searchParams = useSearchParams();
+  const user = searchParams.get('user');
 
-export default function ChatPage() {
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('worldwide');
+
+  useEffect(() => {
+    if (user) {
+      setSelectedContact(user);
+      setActiveTab('personal');
+    }
+  }, [user]);
 
   const handleSelectContact = (name: string) => {
     setSelectedContact(name);
@@ -234,7 +245,7 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col h-full">
-       <Tabs defaultValue="worldwide" className="flex flex-col flex-1">
+       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1">
           <div className="p-4 border-b">
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
@@ -258,4 +269,12 @@ export default function ChatPage() {
         </Tabs>
     </div>
   );
+}
+
+export default function ChatPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ChatPageContent />
+    </Suspense>
+  )
 }

@@ -66,8 +66,8 @@ const myAlliance = {
   noticeLastModifiedTime: "2 hours ago",
   avatar: "https://picsum.photos/seed/1/100/100",
   membersList: [
-    { name: "Cody Clash", role: "Leader", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
-    { name: "Syntax Slayer", role: "Co-Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
+    { name: "Syntax Slayer", role: "Leader", avatar: "https://picsum.photos/seed/2/100/100", powerScore: 2750, online: false },
+    { name: "Cody Clash", role: "Member", avatar: "https://picsum.photos/seed/1/100/100", powerScore: 2900, online: true, isCurrentUser: true },
     { name: "Algo Queen", role: "Member", avatar: "https://picsum.photos/seed/3/100/100", powerScore: 2600, online: true },
     { name: "Byte Baron", role: "Member", avatar: "https://picsum.photos/seed/4/100/100", powerScore: 2550, online: false },
     { name: "Pixel Pioneer", role: "Member", avatar: "https://picsum.photos/seed/5/100/100", powerScore: 2400, online: true },
@@ -498,7 +498,7 @@ export default function AlliancesPage() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <FindAlliancesDialog />
-                    <LeaveAllianceDialog />
+                    {!isLeader && <LeaveAllianceDialog />}
                 </CardContent>
             </Card>
             <Card>
@@ -517,3 +517,5 @@ export default function AlliancesPage() {
     </div>
   );
 }
+
+    

@@ -54,7 +54,7 @@ export default function HomePage() {
       <main className="flex-1">
         {/* Hero Section */}
         <section className="py-20 md:py-32 lg:py-40 bg-gradient-to-b from-background to-primary/10">
-          <div className="container mx-auto text-center px-4 md:px-6">
+          <div className="container mx-auto text-center px-4 md:px-6 animate-fade-in-up">
             <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
               Unleash Your Competitive Spirit
             </h1>
@@ -75,15 +75,15 @@ export default function HomePage() {
         {/* Features Section */}
         <section id="features" className="py-16 md:py-24 bg-card">
           <div className="container mx-auto px-4 md:px-6">
-            <div className="mx-auto max-w-3xl text-center">
+            <div className="mx-auto max-w-3xl text-center animate-fade-in-up [animation-delay:200ms]">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">The Ultimate Arena for Coders</h2>
                 <p className="mt-4 text-muted-foreground md:text-lg">
                     Everything you need to level up your coding skills, all in one place.
                 </p>
             </div>
             <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-              {features.map((feature) => (
-                <div key={feature.title} className="flex flex-col items-center text-center">
+              {features.map((feature, i) => (
+                <div key={feature.title} className="flex flex-col items-center text-center animate-fade-in-up" style={{animationDelay: `${300 + i * 100}ms`}}>
                   <div className="mb-4 rounded-full bg-primary/10 p-4 text-primary">
                     <feature.icon className="h-8 w-8" />
                   </div>
@@ -97,7 +97,7 @@ export default function HomePage() {
 
          {/* CTA Section */}
         <section className="py-16 md:py-24 bg-primary/10">
-          <div className="container mx-auto text-center px-4 md:px-6">
+          <div className="container mx-auto text-center px-4 md:px-6 animate-fade-in-up">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Ready to Join the Arena?
             </h2>

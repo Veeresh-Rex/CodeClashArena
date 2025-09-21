@@ -21,12 +21,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil } from "lucide-react";
+import { Flame, Search, Star, Users, MessageSquare, User, ShieldX, ArrowLeft, Megaphone, Pencil, UserMinus, ArrowUpCircle, ArrowDownCircle } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
   Dialog,
@@ -75,7 +76,7 @@ const dummyMembers = [
 ];
 
 
-const MemberRow = ({ member }: { member: (typeof myAlliance.membersList)[0] }) => {
+const MemberRow = ({ member, currentUserRole }: { member: (typeof myAlliance.membersList)[0], currentUserRole?: string }) => {
   const content = (
     <TableRow className={cn("cursor-pointer", member.isCurrentUser && "bg-primary/10 hover:bg-primary/20")}>
       <TableCell className="font-medium">
@@ -128,6 +129,27 @@ const MemberRow = ({ member }: { member: (typeof myAlliance.membersList)[0] }) =
                 <ShieldX className="mr-2 h-4 w-4" />
                 <span>Block</span>
             </DropdownMenuItem>
+            {currentUserRole === 'Leader' && member.role !== 'Leader' && (
+                <>
+                    <DropdownMenuSeparator />
+                    {member.role === 'Member' && (
+                        <DropdownMenuItem>
+                            <ArrowUpCircle className="mr-2 h-4 w-4" />
+                            <span>Promote to Co-Leader</span>
+                        </DropdownMenuItem>
+                    )}
+                    {member.role === 'Co-Leader' && (
+                         <DropdownMenuItem>
+                            <ArrowDownCircle className="mr-2 h-4 w-4" />
+                            <span>Demote to Member</span>
+                        </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem className="text-red-500 focus:text-red-500 focus:bg-red-500/10">
+                        <UserMinus className="mr-2 h-4 w-4" />
+                        <span>Remove from Alliance</span>
+                    </DropdownMenuItem>
+                </>
+            )}
         </DropdownMenuContent>
     </DropdownMenu>
   )
@@ -378,7 +400,7 @@ export default function AlliancesPage() {
                         if (b.role === 'Co-Leader') return 1;
                         return 0;
                     }).map((member) => (
-                        <MemberRow key={member.name} member={member} />
+                        <MemberRow key={member.name} member={member} currentUserRole={currentUser?.role} />
                     ))}
                 </TableBody>
                 </Table>

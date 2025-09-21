@@ -106,6 +106,7 @@ export function Header() {
   const title = pageTitles[pathname] || 'CodeClash Arena';
   const [isClient, setIsClient] = useState(false);
   const [requests, setRequests] = useState(friendRequests);
+  const [isFriendRequestsOpen, setIsFriendRequestsOpen] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -120,6 +121,10 @@ export function Header() {
   const handleRequest = (requestId: string) => {
     setRequests(prev => prev.filter(r => r.id !== requestId));
   }
+
+  const handleProfileClick = () => {
+    setIsFriendRequestsOpen(false);
+  };
 
   return (
     <header className="sticky top-0 z-10 flex h-16 items-center gap-4 border-b bg-background/80 backdrop-blur-sm px-4 md:px-6">
@@ -194,10 +199,10 @@ export function Header() {
               ))}
             </ScrollArea>
              <DropdownMenuSeparator />
-             <Dialog>
+             <Dialog open={isFriendRequestsOpen} onOpenChange={setIsFriendRequestsOpen}>
                 <DialogTrigger asChild>
                     <DropdownMenuItem 
-                        onSelect={(e) => e.preventDefault()} 
+                        onSelect={(e) => { e.preventDefault(); setIsFriendRequestsOpen(true); }} 
                         className="justify-center text-sm text-muted-foreground hover:text-primary focus:bg-accent focus:text-primary"
                     >
                         See Friend Requests
@@ -214,7 +219,7 @@ export function Header() {
                         <div className="space-y-4 py-4 pr-6">
                             {requests.length > 0 ? requests.map(req => (
                                 <div key={req.id} className="flex items-center justify-between">
-                                     <Link href={`/dashboard/profile?user=${req.username}`} className="flex items-center gap-3">
+                                     <Link href={`/dashboard/profile?user=${req.username}`} onClick={handleProfileClick} className="flex items-center gap-3">
                                         <Avatar className="h-10 w-10">
                                             <AvatarImage src={req.avatar} alt={req.name} />
                                             <AvatarFallback>{req.name.substring(0,2)}</AvatarFallback>

@@ -1,12 +1,12 @@
 
 "use client";
 
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Github, Linkedin, Medal, Star, Target, Trophy, Twitter, Users, UserPlus, UserX, MessageSquare } from "lucide-react";
+import { BarChart, Github, Linkedin, Medal, Star, Target, Trophy, Twitter, Users, UserPlus, UserX, MessageSquare, Check } from "lucide-react";
 import Link from "next/link";
 import { cn } from '@/lib/utils';
 import {
@@ -86,10 +86,15 @@ const userProfileData = {
 const ProfileContent = () => {
     const searchParams = useSearchParams();
     const userName = searchParams.get('user');
+    const [friendRequestSent, setFriendRequestSent] = useState(false);
 
     const profileKey = userName && (userName in userProfileData) ? userName : 'Cody Clash';
     // @ts-ignore
     const userProfile = userProfileData[profileKey];
+
+    const handleFriendRequest = () => {
+        setFriendRequestSent(prev => !prev);
+    }
 
 
     return (
@@ -105,7 +110,7 @@ const ProfileContent = () => {
                                 <AvatarImage src={userProfile.avatar} alt={userProfile.name} />
                                 <AvatarFallback>{userProfile.name.substring(0,2)}</AvatarFallback>
                             </Avatar>
-                            {userProfile.online && (userProfile.isCurrentUser || userProfile.isFriend) && (
+                            {userProfile.online && (userProfile.isFriend) && (
                                 <div className="absolute bottom-4 right-4 w-5 h-5 bg-green-500 rounded-full border-4 border-card" />
                             )}
                         </div>
@@ -137,7 +142,19 @@ const ProfileContent = () => {
                                 </div>
                             ) : (
                                 <div className="flex flex-wrap gap-2 justify-center">
-                                    <Button><UserPlus className="mr-2 h-4 w-4" />Send Friend Request</Button>
+                                     <Button onClick={handleFriendRequest} variant={friendRequestSent ? "secondary" : "default"}>
+                                        {friendRequestSent ? (
+                                            <>
+                                                <Check className="mr-2 h-4 w-4" />
+                                                Request Sent
+                                            </>
+                                        ) : (
+                                            <>
+                                                <UserPlus className="mr-2 h-4 w-4" />
+                                                Send Friend Request
+                                            </>
+                                        )}
+                                    </Button>
                                     <Button asChild variant="secondary">
                                         <Link href={`/dashboard/chat?user=${encodeURIComponent(userProfile.name)}`}><MessageSquare className="mr-2 h-4 w-4" />Chat</Link>
                                     </Button>
@@ -256,5 +273,3 @@ export default function ProfilePage() {
         </Suspense>
     )
 }
-
-    

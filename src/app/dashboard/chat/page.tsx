@@ -250,6 +250,7 @@ const ChatPageContent = () => {
   const [selectedContact, setSelectedContact] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('worldwide');
   const [hasAlliance] = useState(true);
+  const [hasNewMessages, setHasNewMessages] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -269,20 +270,32 @@ const ChatPageContent = () => {
 
   const handleSelectContact = (name: string) => {
     setSelectedContact(name);
+    setHasNewMessages(false);
   };
 
   const handleBack = () => {
     setSelectedContact(null);
   }
+  
+  const handleTabChange = (value: string) => {
+    if(value === 'personal') {
+        setHasNewMessages(false);
+    }
+    setActiveTab(value);
+  }
+
 
   return (
     <div className="flex flex-col h-full">
-       <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1">
+       <Tabs value={activeTab} onValueChange={handleTabChange} className="flex flex-col flex-1">
           <div className="p-4 border-b">
             <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
                 <TabsTrigger value="alliance" disabled={!hasAlliance}>Alliance</TabsTrigger>
-                <TabsTrigger value="personal" onClick={() => setSelectedContact(null)}>Personal</TabsTrigger>
+                <TabsTrigger value="personal" onClick={() => setSelectedContact(null)} className="relative">
+                    Personal
+                    {hasNewMessages && <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />}
+                </TabsTrigger>
             </TabsList>
           </div>
           <TabsContent value="worldwide" className="flex-1 mt-0">

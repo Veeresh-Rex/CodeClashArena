@@ -32,7 +32,7 @@ const menuItems = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/dashboard/leaderboards", label: "Leaderboards", icon: Trophy },
   { href: "/dashboard/alliance", label: "Alliance", icon: Users },
-  { href: "/dashboard/chat", label: "Chat", icon: MessageSquare },
+  { href: "/dashboard/chat", label: "Chat", icon: MessageSquare, badge: true },
   { href: "/dashboard/recommendations", label: "AI Mentor", icon: BrainCircuit },
 ];
 
@@ -69,8 +69,18 @@ export function AppSidebar() {
                 <Link href={item.href}>
                   <item.icon />
                   <span>{item.label}</span>
+                   {item.badge && state === 'expanded' && (
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                          <div className="w-2 h-2 bg-red-500 rounded-full" />
+                      </div>
+                  )}
                 </Link>
               </SidebarMenuButton>
+               {item.badge && state === 'collapsed' && (
+                  <div className="absolute right-2 top-2">
+                      <div className="w-2 h-2 bg-red-500 rounded-full" />
+                  </div>
+              )}
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
@@ -84,5 +94,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-    

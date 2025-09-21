@@ -20,6 +20,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
   SidebarTrigger,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -32,16 +33,25 @@ const menuItems = [
   { href: "/dashboard/profile", label: "Profile", icon: User },
 ];
 
+function Brand() {
+  const { state } = useSidebar();
+  return (
+    <Link href="/dashboard" className="flex items-center gap-2">
+      <Terminal className="w-8 h-8 text-primary" />
+      {state === 'expanded' && (
+        <h1 className="text-xl font-semibold font-headline">CodeClash Arena</h1>
+      )}
+    </Link>
+  );
+}
+
 export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar>
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <Link href="/dashboard" className="flex items-center gap-2">
-          <Terminal className="w-8 h-8 text-primary" />
-          <h1 className="text-xl font-semibold font-headline">CodeClash Arena</h1>
-        </Link>
+        <Brand />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -64,18 +74,18 @@ export function AppSidebar() {
       <SidebarFooter>
          <div className="flex items-center justify-between p-2">
             <Link href="/dashboard/profile" className="flex-1">
-              <div className="flex items-center gap-3 rounded-lg hover:bg-sidebar-accent cursor-pointer">
+              <div className="flex items-center gap-3 rounded-lg hover:bg-sidebar-accent cursor-pointer group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-2">
                 <Avatar className="h-10 w-10">
                   <AvatarImage src="https://picsum.photos/seed/1/100/100" data-ai-hint="profile avatar" alt="User Avatar" />
                   <AvatarFallback>CA</AvatarFallback>
                 </Avatar>
-                <div className="overflow-hidden">
+                <div className="overflow-hidden group-data-[collapsible=icon]:hidden">
                   <p className="font-semibold truncate">Cody Clash</p>
                   <Badge variant="outline" className="border-primary/50 text-primary">Pro</Badge>
                 </div>
               </div>
             </Link>
-            <SidebarTrigger className="hidden md:flex" />
+            <SidebarTrigger className="hidden md:flex group-data-[collapsible=icon]:hidden" />
           </div>
       </SidebarFooter>
     </Sidebar>

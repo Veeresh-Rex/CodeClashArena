@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -189,59 +189,103 @@ const ChatMessage = ({ msg, showAllianceCode = true }: ChatMessageProps) => {
 };
 
 
-const ChatWindow = ({ messages, contactName, onBack, showAllianceCode = true }: { messages: any[], contactName?: string, onBack?: () => void, showAllianceCode?: boolean }) => (
-    <div className="flex flex-col h-full">
+const ChatWindow = ({ messages, contactName, onBack, showAllianceCode = true, onSendMessage }: { messages: any[], contactName?: string, onBack?: () => void, showAllianceCode?: boolean, onSendMessage?: (message: string) => void }) => {
+  const [inputMessage, setInputMessage] = useState('');
+  const scrollAreaRef = React.useRef<HTMLDivElement>(null);
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim() && onSendMessage) {
+      onSendMessage(inputMessage.trim());
+      setInputMessage('');
+    }
+  };
+
+  return (
+    <div className="h-full flex flex-col">
+        {/* Optional header for personal chat */}
         {contactName && onBack && (
-            <div className="p-4 border-b flex items-center gap-4">
+            <div className="flex-shrink-0 p-4 border-b flex items-center gap-4 bg-background">
                 <Button variant="ghost" size="icon" onClick={onBack}>
                     <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <h2 className="text-lg font-semibold">{contactName}</h2>
             </div>
         )}
-        <ScrollArea className="flex-1">
-            <div className="p-4 space-y-2">
-                {messages.map((msg, index) => (
-                    <ChatMessage key={index} msg={msg} showAllianceCode={showAllianceCode} />
-                ))}
-            </div>
-        </ScrollArea>
-        <div className="p-4 flex items-center gap-2 border-t">
-            <Input placeholder="Type a message..." className="flex-1" />
-            <Button><Send className="h-4 w-4" /></Button>
+        
+        {/* Scrollable messages area */}
+        <div className="flex-1 overflow-hidden">
+            <ScrollArea className="h-full" ref={scrollAreaRef}>
+                <div className="p-4 space-y-2">
+                    {messages.map((msg, index) => (
+                        <ChatMessage key={index} msg={msg} showAllianceCode={showAllianceCode} />
+                    ))}
+                    <div ref={messagesEndRef} />
+                </div>
+            </ScrollArea>
+        </div>
+        
+        {/* Sticky input at bottom */}
+        <div className="flex-shrink-0 p-4 flex items-center gap-2 border-t bg-background">
+            <Input 
+              placeholder="Type a message..." 
+              className="flex-1" 
+              value={inputMessage} 
+              onChange={(e) => setInputMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+            />
+            <Button onClick={handleSendMessage}><Send className="h-4 w-4" /></Button>
         </div>
     </div>
-);
+  );
+};
 
 
 const ContactList = ({ contacts, onSelectContact }: { contacts: any[], onSelectContact: (name: string) => void }) => (
-    <ScrollArea className="h-full">
-        <div className="p-4 space-y-1">
-            {contacts.map(contact => (
-                <div key={contact.name} onClick={() => onSelectContact(contact.name)} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted cursor-pointer">
-                    <div className="relative">
-                        <Avatar className="h-12 w-12">
-                            <AvatarImage src={contact.avatar} alt={contact.name} />
-                            <AvatarFallback>{contact.name.substring(0, 2)}</AvatarFallback>
-                        </Avatar>
-                        {contact.online && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />}
+    <div className="h-full overflow-hidden">
+        <ScrollArea className="h-full">
+            <div className="p-4 space-y-1">
+                {contacts.map(contact => (
+                    <div key={contact.name} onClick={() => onSelectContact(contact.name)} className="flex items-center gap-4 p-2 rounded-lg hover:bg-muted cursor-pointer">
+                        <div className="relative">
+                            <Avatar className="h-12 w-12">
+                                <AvatarImage src={contact.avatar} alt={contact.name} />
+                                <AvatarFallback>{contact.name.substring(0, 2)}</AvatarFallback>
+                            </Avatar>
+                            {contact.online && <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-background" />}
+                        </div>
+                        <div className="flex-1 overflow-hidden">
+                            <p className="font-semibold truncate">
+                               {contact.name}
+                            </p>
+                            <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-1">
+                            <span className="text-xs text-muted-foreground">{contact.time}</span>
+                            {contact.newMessageCount > 0 && (
+                                <Badge className="bg-red-500 text-white hover:bg-red-500/80">{contact.newMessageCount}</Badge>
+                            )}
+                        </div>
                     </div>
-                    <div className="flex-1 overflow-hidden">
-                        <p className="font-semibold truncate">
-                           {contact.name}
-                        </p>
-                        <p className="text-sm text-muted-foreground truncate">{contact.lastMessage}</p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1">
-                        <span className="text-xs text-muted-foreground">{contact.time}</span>
-                        {contact.newMessageCount > 0 && (
-                            <Badge className="bg-red-500 text-white hover:bg-red-500/80">{contact.newMessageCount}</Badge>
-                        )}
-                    </div>
-                </div>
-            ))}
-        </div>
-    </ScrollArea>
+                ))}
+            </div>
+        </ScrollArea>
+    </div>
 )
 
 const NoAllianceChat = () => (
@@ -264,8 +308,41 @@ const ChatPageContent = () => {
   const [activeTab, setActiveTab] = useState('worldwide');
   const [hasAlliance] = useState(true);
   const [contacts, setContacts] = useState(initialContacts);
+  const [worldMessages, setWorldMessages] = useState(worldChat);
+  const [allianceMessages, setAllianceMessages] = useState(allianceChat);
+  const [personalMessages, setPersonalMessages] = useState<{[contactName: string]: any[]}>({});
   
   const hasNewMessages = contacts.some(c => c.newMessageCount > 0);
+
+  // Helper function to create a new message
+  const createMessage = (message: string) => ({
+    sender: "Cody Clash",
+    message,
+    avatar: "https://picsum.photos/seed/1/100/100",
+    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    isCurrentUser: true,
+    allianceCode: "TCC"
+  });
+
+  // Message handlers
+  const handleSendWorldMessage = (message: string) => {
+    const newMessage = createMessage(message);
+    setWorldMessages(prev => [...prev, newMessage]);
+  };
+
+  const handleSendAllianceMessage = (message: string) => {
+    const newMessage = createMessage(message);
+    setAllianceMessages(prev => [...prev, newMessage]);
+  };
+
+  const handleSendPersonalMessage = (message: string) => {
+    if (!selectedContact) return;
+    const newMessage = createMessage(message);
+    setPersonalMessages(prev => ({
+      ...prev,
+      [selectedContact]: [...(prev[selectedContact] || getPersonalChat(selectedContact)), newMessage]
+    }));
+  };
 
   useEffect(() => {
     if (user) {
@@ -302,32 +379,45 @@ const ChatPageContent = () => {
 
 
   return (
-    <div className="flex flex-col h-full">
-       <Tabs value={activeTab} onValueChange={handleTabChange} className="flex flex-col flex-1">
-          <div className="p-4 border-b">
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
-                <TabsTrigger value="alliance" disabled={!hasAlliance}>Alliance</TabsTrigger>
-                <TabsTrigger value="personal" className="relative">
-                    Personal
-                    {hasNewMessages && <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />}
-                </TabsTrigger>
-            </TabsList>
-          </div>
-          <TabsContent value="worldwide" className="flex-1 mt-0">
-            <ChatWindow messages={worldChat} />
+    <div className="h-full flex flex-col">
+      <Tabs value={activeTab} onValueChange={handleTabChange} className="h-full flex flex-col">
+        {/* Fixed Header - Tabs */}
+        <div className="flex-shrink-0 p-4 border-b bg-background">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="worldwide">Worldwide</TabsTrigger>
+            <TabsTrigger value="alliance" disabled={!hasAlliance}>Alliance</TabsTrigger>
+            <TabsTrigger value="personal" className="relative">
+              Personal
+              {hasNewMessages && <div className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />}
+            </TabsTrigger>
+          </TabsList>
+        </div>
+        
+        {/* Dynamic Content - Scrollable Area */}
+        <div className="flex-1 min-h-0">
+          <TabsContent value="worldwide" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+            <ChatWindow messages={worldMessages} onSendMessage={handleSendWorldMessage} />
           </TabsContent>
-          <TabsContent value="alliance" className="flex-1 mt-0">
-            {hasAlliance ? <ChatWindow messages={allianceChat} showAllianceCode={false} /> : <NoAllianceChat />}
+          <TabsContent value="alliance" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
+            {hasAlliance ? 
+              <ChatWindow messages={allianceMessages} showAllianceCode={false} onSendMessage={handleSendAllianceMessage} /> : 
+              <NoAllianceChat />
+            }
           </TabsContent>
-          <TabsContent value="personal" className="flex-1 mt-0">
+          <TabsContent value="personal" className="h-full m-0 data-[state=active]:flex data-[state=active]:flex-col">
             {selectedContact ? (
-                <ChatWindow messages={getPersonalChat(selectedContact)} contactName={selectedContact} onBack={handleBack} />
+              <ChatWindow 
+                messages={personalMessages[selectedContact] || getPersonalChat(selectedContact)} 
+                contactName={selectedContact} 
+                onBack={handleBack} 
+                onSendMessage={handleSendPersonalMessage}
+              />
             ) : (
-                <ContactList contacts={contacts} onSelectContact={handleSelectContact} />
+              <ContactList contacts={contacts} onSelectContact={handleSelectContact} />
             )}
           </TabsContent>
-        </Tabs>
+        </div>
+      </Tabs>
     </div>
   );
 }

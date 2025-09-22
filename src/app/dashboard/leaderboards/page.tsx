@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import { useState } from "react";
@@ -21,7 +22,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { MoreVertical, MessageSquare, User, Users, Flame, Star, ArrowLeft } from "lucide-react";
+import { MoreVertical, MessageSquare, User, Users, Flame, Star, ArrowLeft, Crown } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -324,6 +325,47 @@ const AllianceDetailsDialog = ({ alliance, open, onOpenChange, hasAlliance }: { 
     );
 };
 
+const TopPlayerCard = ({ user, rankColor, crownSize }: { user: any, rankColor: string, crownSize: string }) => (
+    <Card className={cn("relative flex flex-col items-center justify-center p-4 text-center border-2", crownSize === 'lg' ? 'pt-12' : 'pt-10')} style={{ borderColor: rankColor }}>
+        <div className="absolute top-[-1.5rem] flex items-center justify-center">
+            <Crown size={crownSize === 'lg' ? 48 : 40} className="drop-shadow-lg" style={{ color: rankColor, fill: rankColor }} />
+            <span className={cn("absolute text-white font-bold", crownSize === 'lg' ? 'text-lg top-2' : 'text-base top-1.5')}>{user.rank}</span>
+        </div>
+        <Link href={`/dashboard/profile?user=${user.username}`} className="contents">
+            <Avatar className="h-20 w-20 mb-3 border-2" style={{ borderColor: rankColor }}>
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback>{user.name.substring(0, 2)}</AvatarFallback>
+            </Avatar>
+            <p className="font-bold text-lg">{user.name}</p>
+            <p className="text-sm text-muted-foreground mb-2">@{user.username}</p>
+            <div className="flex items-center justify-center gap-1 font-semibold text-base">
+                <Star className="w-4 h-4" style={{ color: rankColor }} />
+                <span>{user.powerScore.toLocaleString()}</span>
+            </div>
+        </Link>
+    </Card>
+);
+
+const TopAllianceCard = ({ alliance, rankColor, crownSize, onViewDetails }: { alliance: any, rankColor: string, crownSize: string, onViewDetails: (alliance: Alliance) => void }) => (
+    <Card className={cn("relative flex flex-col items-center justify-center p-4 text-center border-2 cursor-pointer", crownSize === 'lg' ? 'pt-12' : 'pt-10')} style={{ borderColor: rankColor }} onClick={() => onViewDetails(alliance)}>
+        <div className="absolute top-[-1.5rem] flex items-center justify-center">
+            <Crown size={crownSize === 'lg' ? 48 : 40} className="drop-shadow-lg" style={{ color: rankColor, fill: rankColor }} />
+            <span className={cn("absolute text-white font-bold", crownSize === 'lg' ? 'text-lg top-2' : 'text-base top-1.5')}>{alliance.rank}</span>
+        </div>
+        <Avatar className="h-20 w-20 mb-3 border-2" style={{ borderColor: rankColor }}>
+            <AvatarImage src={alliance.avatar} alt={alliance.name} />
+            <AvatarFallback>{alliance.name.substring(0, 2)}</AvatarFallback>
+        </Avatar>
+        <p className="font-bold text-lg">{alliance.name}</p>
+        <p className="font-mono text-xs text-muted-foreground bg-muted px-1.5 py-0.5 rounded-sm mb-2">[{alliance.code}]</p>
+        <div className="flex items-center justify-center gap-1 font-semibold text-base">
+            <Star className="w-4 h-4" style={{ color: rankColor }} />
+            <span>{alliance.powerScore.toLocaleString()}</span>
+        </div>
+    </Card>
+);
+
+
 export default function LeaderboardsPage() {
     const currentUser = individualData.find(user => user.isCurrentUser);
     const currentAlliance = allianceData.find(alliance => alliance.isCurrentAlliance);
@@ -336,8 +378,14 @@ export default function LeaderboardsPage() {
         setIsAllianceDetailsOpen(true);
     };
 
+    const topThreeUsers = individualData.slice(0, 3);
+    const restOfUsers = individualData.slice(3);
+
+    const topThreeAlliances = allianceData.slice(0, 3);
+    const restOfAlliances = allianceData.slice(3);
+
   return (
-    <div className="p-4 md:p-6 lg:p-8">
+    <div>
         <Card>
         <CardHeader>
             <CardTitle>Leaderboards</CardTitle>
@@ -351,7 +399,25 @@ export default function LeaderboardsPage() {
                 <TabsTrigger value="individual">Individual</TabsTrigger>
                 <TabsTrigger value="alliance">Alliance</TabsTrigger>
             </TabsList>
-            <TabsContent value="individual" className="relative">
+            <TabsContent value="individual" className="relative pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 mb-8">
+                    {topThreeUsers.length > 1 && (
+                        <div className="md:mt-4">
+                           <TopPlayerCard user={topThreeUsers[1]} rankColor="silver" crownSize="md" />
+                        </div>
+                    )}
+                    {topThreeUsers.length > 0 && (
+                         <div>
+                            <TopPlayerCard user={topThreeUsers[0]} rankColor="#FFD700" crownSize="lg" />
+                         </div>
+                    )}
+                     {topThreeUsers.length > 2 && (
+                        <div className="md:mt-4">
+                            <TopPlayerCard user={topThreeUsers[2]} rankColor="#CD7F32" crownSize="md" />
+                        </div>
+                    )}
+                </div>
+
                 <Table>
                 <TableHeader>
                     <TableRow>
@@ -363,7 +429,7 @@ export default function LeaderboardsPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {individualData.filter(u => !u.isCurrentUser).map((user) => (
+                    {restOfUsers.filter(u => !u.isCurrentUser).map((user) => (
                         <IndividualUserRow key={user.rank} user={user} />
                     ))}
                 </TableBody>
@@ -378,7 +444,24 @@ export default function LeaderboardsPage() {
                     </div>
                 )}
             </TabsContent>
-            <TabsContent value="alliance">
+            <TabsContent value="alliance" className="relative pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 mb-8">
+                    {topThreeAlliances.length > 1 && (
+                        <div className="md:mt-4">
+                            <TopAllianceCard alliance={topThreeAlliances[1]} rankColor="silver" crownSize="md" onViewDetails={handleViewAllianceDetails} />
+                        </div>
+                    )}
+                    {topThreeAlliances.length > 0 && (
+                         <div>
+                            <TopAllianceCard alliance={topThreeAlliances[0]} rankColor="#FFD700" crownSize="lg" onViewDetails={handleViewAllianceDetails} />
+                         </div>
+                    )}
+                    {topThreeAlliances.length > 2 && (
+                        <div className="md:mt-4">
+                           <TopAllianceCard alliance={topThreeAlliances[2]} rankColor="#CD7F32" crownSize="md" onViewDetails={handleViewAllianceDetails} />
+                        </div>
+                    )}
+                </div>
                 <Table>
                 <TableHeader>
                     <TableRow>
@@ -389,7 +472,7 @@ export default function LeaderboardsPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {allianceData.filter(a => !a.isCurrentAlliance).map((alliance) => (
+                    {restOfAlliances.filter(a => !a.isCurrentAlliance).map((alliance) => (
                         <AllianceRow key={alliance.rank} alliance={alliance} onViewDetails={handleViewAllianceDetails}/>
                     ))}
                 </TableBody>
@@ -411,5 +494,3 @@ export default function LeaderboardsPage() {
     </div>
   );
 }
-
-    
